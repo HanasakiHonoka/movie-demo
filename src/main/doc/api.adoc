@@ -1,0 +1,75 @@
+= 影视分析平台
+
+
+[[_overview]]
+== Overview
+后端模块
+
+
+=== Version information
+[%hardbreaks]
+__Version__ : 1.0
+
+
+=== URI scheme
+[%hardbreaks]
+__Host__ : localhost:8080
+__BasePath__ : /
+
+
+=== Tags
+
+* 电影接口 : Movie Controller
+
+
+
+
+[[_paths]]
+== Resources
+
+[[_f1c2d4f95697034a58357385c9341f70]]
+=== 电影接口
+Movie Controller
+
+
+[[_searchforinfousingget]]
+==== 获取查询
+....
+GET /search
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^4"]
+|===
+|Type|Name|Schema
+|**Query**|**type** +
+__optional__|integer (int32)
+|**Query**|**words** +
+__optional__|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|object
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+
+
+
+
+
