@@ -41,7 +41,7 @@ GET /movie/{id}
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**id**  <br>*required*|id|string|
+|**Path**|**id**  <br>*optional*|电影ID|string|
 
 
 ##### Responses

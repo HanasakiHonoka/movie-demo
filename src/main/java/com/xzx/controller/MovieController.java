@@ -6,6 +6,8 @@ import com.xzx.vo.MovieListVo;
 import com.xzx.vo.ResultVo;
 import com.xzx.vo.SearchVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,22 +39,18 @@ public class MovieController {
 
     @ApiOperation(value = "搜索结果")
     @GetMapping("/search")
-    //public ResultVo<MovieListVo> getMovies(SearchVo searchVo) {
     public MovieListVo getMovies(SearchVo searchVo) {
         MovieListVo movieListVo = new MovieListVo();
         if(searchVo.getType() == 1) {
             movieListVo.setMsg("1");
-            //System.out.println(searchVo.getWords());
             List<Movie> moviesWithLimit = movieService.getLikeMovieWithLimit(searchVo);
             List<Movie> movies = movieService.getLikeMovie(searchVo);
-            //System.out.println(movies.size());
             movieListVo.setMovies(moviesWithLimit);
             movieListVo.setSize(movies.size());
         }else {
 
             movieListVo.setMsg("0");
         }
-        //return new ResultVo<MovieListVo>(movieListVo);
 
         return movieListVo;
     }
@@ -60,8 +58,9 @@ public class MovieController {
     @ApiOperation("按id获取电影信息")
     @GetMapping("/movie/{id}")
     //public ResultVo<Movie> getMovie(@PathVariable String id) {
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "电影ID"))
 
-    public Movie getMovie(@PathVariable String id) {
+    public Movie getMovie(@PathVariable(value = "id") String id) {
         //return new ResultVo<Movie>(movieService.getMovie(Integer.parseInt(id)));
         return movieService.getMovie(Integer.parseInt(id));
     }
