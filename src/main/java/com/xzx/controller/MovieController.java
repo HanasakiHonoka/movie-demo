@@ -24,23 +24,6 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @ApiOperation(value = "搜索结果")
-    @GetMapping("/search")
-    public MovieListVo getMovies(SearchVo searchVo) {
-        MovieListVo movieListVo = new MovieListVo();
-        if(searchVo.getType() == 1) {
-            movieListVo.setMsg("1");
-            List<Movie> moviesWithLimit = movieService.getLikeMovieWithLimit(searchVo);
-            List<Movie> movies = movieService.getLikeMovie(searchVo);
-            movieListVo.setMovies(moviesWithLimit);
-            movieListVo.setSize(movies.size());
-        }else {
-
-            movieListVo.setMsg("0");
-        }
-
-        return movieListVo;
-    }
 
     @ApiOperation("按id获取电影信息")
     @GetMapping("/movie/{id}")
