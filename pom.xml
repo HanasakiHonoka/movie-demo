@@ -144,9 +144,9 @@
                         <!-- wiki格式文档 -->
                         <!--<swagger2markup.markupLanguage>CONFLUENCE_MARKUP</swagger2markup.markupLanguage> -->
                         <!-- ascii格式文档 -->
-                        <!--<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>-->
+                        <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
                         <!-- markdown格式文档 -->
-                        <swagger2markup.markupLanguage>MARKDOWN</swagger2markup.markupLanguage>
+                        <!--<swagger2markup.markupLanguage>MARKDOWN</swagger2markup.markupLanguage>-->
                         <swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
                     </config>
                 </configuration>
@@ -158,7 +158,7 @@
                 <version>1.5.6</version>
                 <configuration>
                     <!--<sourceDirectory>src/main/doc/apiall</sourceDirectory>-->
-                    <sourceDirectory>src/main/doc/api</sourceDirectory>
+                    <sourceDirectory>src/main/doc</sourceDirectory>
                     <outputDirectory>src/main/doc/api/html</outputDirectory>
                     <backend>html</backend>
                     <sourceHighlighter>coderay</sourceHighlighter>

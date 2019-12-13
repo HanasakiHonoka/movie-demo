@@ -32,22 +32,20 @@ __BasePath__ : /
 Movie Controller
 
 
-[[_searchforinfousingget]]
-==== 获取查询
+[[_getmovieusingget]]
+==== 按id获取电影信息
 ....
-GET /search
+GET /movie/{id}
 ....
 
 
 ===== Parameters
 
-[options="header", cols=".^2,.^3,.^4"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Schema
-|**Query**|**type** +
-__optional__|integer (int32)
-|**Query**|**words** +
-__optional__|string
+|Type|Name|Description|Schema
+|**Path**|**id** +
+__optional__|电影ID|string
 |===
 
 
@@ -56,7 +54,7 @@ __optional__|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|**200**|OK|object
+|**200**|OK|<<_b22074a99a461072432c9de30dd80bf5,电影实体>>
 |**401**|Unauthorized|No Content
 |**403**|Forbidden|No Content
 |**404**|Not Found|No Content
@@ -68,6 +66,105 @@ __optional__|string
 * `*/*`
 
 
+[[_getmoviesusingget]]
+==== 搜索结果
+....
+GET /search
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**page** +
+__optional__|搜索页数|string
+|**Query**|**type** +
+__optional__|类型|integer (int32)
+|**Query**|**words** +
+__optional__|搜索关键词|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_ccdecb5611a33f764e60c47a73067d02,电影列表返回参数>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+
+
+[[_definitions]]
+== Definitions
+
+[[_ccdecb5611a33f764e60c47a73067d02]]
+=== 电影列表返回参数
+电影列表返回参数
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**movies** +
+__optional__|电影列表|< <<_b22074a99a461072432c9de30dd80bf5,电影实体>> > array
+|**msg** +
+__optional__|返回信息|string
+|**size** +
+__optional__|电影总数|integer (int32)
+|===
+
+
+[[_b22074a99a461072432c9de30dd80bf5]]
+=== 电影实体
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**actor** +
+__optional__|string
+|**boxoffice** +
+__optional__|number (float)
+|**duration** +
+__optional__|integer (int32)
+|**firstBoxoffice** +
+__optional__|number (float)
+|**id** +
+__optional__|integer (int32)
+|**isIp** +
+__optional__|boolean
+|**isNetwork** +
+__optional__|boolean
+|**isSequel** +
+__optional__|boolean
+|**issueCompany** +
+__optional__|string
+|**manuCompany** +
+__optional__|string
+|**releaseArea** +
+__optional__|string
+|**releaseTime** +
+__optional__|string (date-time)
+|**secondType** +
+__optional__|string
+|**technology** +
+__optional__|string
+|**title** +
+__optional__|string
+|**type** +
+__optional__|string
+|===
 
 
 

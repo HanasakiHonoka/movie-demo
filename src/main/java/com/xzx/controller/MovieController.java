@@ -24,19 +24,6 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    //@ResponseBody
-    //@RequestMapping("/movie/{id}")
-    //public String getMovieInfo(@PathVariable(value = "id") Integer id) {
-    //    Movie movie = movieService.findById(id);
-    //    if(movie != null) {
-    //        System.out.println(movie.getName());
-    //        return "success";
-    //    }else {
-    //        return "fail";
-    //    }
-    //
-    //}
-
     @ApiOperation(value = "搜索结果")
     @GetMapping("/search")
     public MovieListVo getMovies(SearchVo searchVo) {
