@@ -30,7 +30,7 @@ public class SearchController {
             List<Movie> movies = movieService.getLikeMovie(searchVo);
             movieListVo.setMovies(moviesWithLimit);
             movieListVo.setSize(movies.size());
-        }else {
+        }else if (searchVo.getType() == 2){
 
             movieListVo.setMsg("0");
         }
