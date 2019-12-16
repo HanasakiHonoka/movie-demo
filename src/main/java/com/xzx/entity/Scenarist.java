@@ -1,7 +1,10 @@
 package com.xzx.entity;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.Date;
 
+@ApiModel(value = "编剧实体")
 public class Scenarist {
     /**
      *

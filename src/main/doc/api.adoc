@@ -19,7 +19,11 @@ __BasePath__ : /
 
 === Tags
 
-* 电影接口 : Movie Controller
+* 导演模块 : Director Controller
+* 搜索模块 : Search Controller
+* 演员模块 : Actor Controller
+* 电影模块 : Movie Controller
+* 编剧模块 : Scenarist Controller
 
 
 
@@ -27,8 +31,281 @@ __BasePath__ : /
 [[_paths]]
 == Resources
 
-[[_f1c2d4f95697034a58357385c9341f70]]
-=== 电影接口
+[[_9b043bd6e84fbf20f258524e66e219a9]]
+=== 导演模块
+Director Controller
+
+
+[[_getdirectorusingget]]
+==== 按id获取导演信息
+....
+GET /director/{id}
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**id** +
+__required__|id|integer (int32)
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_bc675cf2eacbf213929dab0ab26f4f0d,导演实体>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_c40024e558be3335c126d476de1f66fb]]
+=== 搜索模块
+Search Controller
+
+
+[[_gettypeandwordsusingget]]
+==== 搜索转发
+....
+GET /search/
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**page** +
+__optional__|搜索页数|string
+|**Query**|**type** +
+__optional__|类型|integer (int32)
+|**Query**|**words** +
+__optional__|搜索关键词|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|string
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getactorsusingget]]
+==== 返回演员搜索结果
+....
+GET /search/actors
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**page** +
+__optional__|搜索页数|string
+|**Query**|**type** +
+__optional__|类型|integer (int32)
+|**Query**|**words** +
+__optional__|搜索关键词|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_671037054159828ebe23bc7d64ca4459,演员列表返回参数>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getdirectorsusingget]]
+==== 返回导演搜索结果
+....
+GET /search/directors
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**page** +
+__optional__|搜索页数|string
+|**Query**|**type** +
+__optional__|类型|integer (int32)
+|**Query**|**words** +
+__optional__|搜索关键词|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_1f6f0c34b2165f7c7215e9de58dc0ced,导演列表返回参数>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getmoviesusingget]]
+==== 返回电影搜索结果
+....
+GET /search/movies
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**page** +
+__optional__|搜索页数|string
+|**Query**|**type** +
+__optional__|类型|integer (int32)
+|**Query**|**words** +
+__optional__|搜索关键词|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_ccdecb5611a33f764e60c47a73067d02,电影列表返回参数>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getscenaristsusingget]]
+==== 返回编剧搜索结果
+....
+GET /search/scenarists
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**page** +
+__optional__|搜索页数|string
+|**Query**|**type** +
+__optional__|类型|integer (int32)
+|**Query**|**words** +
+__optional__|搜索关键词|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_d532ff37c2ede24f6cfcda00a821a620,编剧列表返回参数>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_b4d28ca6b6f8cce03fb4c8ded0fd39b5]]
+=== 演员模块
+Actor Controller
+
+
+[[_getactorusingget]]
+==== 按id获取导演信息
+....
+GET /actor/{id}
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**id** +
+__required__|id|integer (int32)
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_d846822e36bc0d6556e348f882293271,演员实体>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_12cb463d51afa4209559789502453af6]]
+=== 电影模块
 Movie Controller
 
 
@@ -66,10 +343,15 @@ __optional__|电影ID|string
 * `*/*`
 
 
-[[_getmoviesusingget]]
-==== 搜索结果
+[[_d36c5bfac8427c494568f4ed7115f16a]]
+=== 编剧模块
+Scenarist Controller
+
+
+[[_getscenaristusingget]]
+==== 按id获取编剧信息
 ....
-GET /search
+GET /scenarist/{id}
 ....
 
 
@@ -78,12 +360,8 @@ GET /search
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|**Query**|**page** +
-__optional__|搜索页数|string
-|**Query**|**type** +
-__optional__|类型|integer (int32)
-|**Query**|**words** +
-__optional__|搜索关键词|string
+|**Path**|**id** +
+__required__|id|integer (int32)
 |===
 
 
@@ -92,7 +370,7 @@ __optional__|搜索关键词|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|**200**|OK|<<_ccdecb5611a33f764e60c47a73067d02,电影列表返回参数>>
+|**200**|OK|<<_b48c6f2d26957a71f57ce7373e3ad4b9,编剧实体>>
 |**401**|Unauthorized|No Content
 |**403**|Forbidden|No Content
 |**404**|Not Found|No Content
@@ -108,6 +386,92 @@ __optional__|搜索关键词|string
 
 [[_definitions]]
 == Definitions
+
+[[_1f6f0c34b2165f7c7215e9de58dc0ced]]
+=== 导演列表返回参数
+导演列表返回参数
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**directors** +
+__optional__|导演列表|< <<_bc675cf2eacbf213929dab0ab26f4f0d,导演实体>> > array
+|**msg** +
+__optional__|返回信息|string
+|**size** +
+__optional__|导演总数|integer (int64)
+|===
+
+
+[[_bc675cf2eacbf213929dab0ab26f4f0d]]
+=== 导演实体
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**birthday** +
+__optional__|string (date-time)
+|**constellation** +
+__optional__|string
+|**gender** +
+__optional__|string
+|**id** +
+__optional__|integer (int32)
+|**location** +
+__optional__|string
+|**name** +
+__optional__|string
+|**occupation** +
+__optional__|string
+|===
+
+
+[[_671037054159828ebe23bc7d64ca4459]]
+=== 演员列表返回参数
+演员列表返回参数
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**actors** +
+__optional__|演员列表|< <<_d846822e36bc0d6556e348f882293271,演员实体>> > array
+|**msg** +
+__optional__|返回信息|string
+|**size** +
+__optional__|演员总数|integer (int64)
+|===
+
+
+[[_d846822e36bc0d6556e348f882293271]]
+=== 演员实体
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**actAge** +
+__optional__|integer (int32)
+|**actStyle** +
+__optional__|string
+|**birthday** +
+__optional__|string (date-time)
+|**constellation** +
+__optional__|string
+|**gender** +
+__optional__|string
+|**id** +
+__optional__|integer (int32)
+|**location** +
+__optional__|string
+|**name** +
+__optional__|string
+|**occupation** +
+__optional__|string
+|**popularity** +
+__optional__|integer (int32)
+|===
+
 
 [[_ccdecb5611a33f764e60c47a73067d02]]
 === 电影列表返回参数
@@ -163,6 +527,46 @@ __optional__|string
 |**title** +
 __optional__|string
 |**type** +
+__optional__|string
+|===
+
+
+[[_d532ff37c2ede24f6cfcda00a821a620]]
+=== 编剧列表返回参数
+编剧列表返回参数
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**msg** +
+__optional__|返回信息|string
+|**scenarists** +
+__optional__|编剧列表|< <<_b48c6f2d26957a71f57ce7373e3ad4b9,编剧实体>> > array
+|**size** +
+__optional__|编剧总数|integer (int64)
+|===
+
+
+[[_b48c6f2d26957a71f57ce7373e3ad4b9]]
+=== 编剧实体
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**birthday** +
+__optional__|string (date-time)
+|**constellation** +
+__optional__|string
+|**gender** +
+__optional__|string
+|**id** +
+__optional__|integer (int32)
+|**location** +
+__optional__|string
+|**name** +
+__optional__|string
+|**occupation** +
 __optional__|string
 |===
 

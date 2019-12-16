@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@Api(value = "MovieController", tags = "电影接口")
+@Api(value = "MovieController", tags = "电影模块")
 @RestController
 public class MovieController {
 

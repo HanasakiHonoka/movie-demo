@@ -1,7 +1,10 @@
 package com.xzx.entity;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.Date;
 
+@ApiModel(value = "导演实体")
 public class Director {
     /**
      *
