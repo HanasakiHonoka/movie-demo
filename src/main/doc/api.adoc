@@ -13,7 +13,7 @@ __Version__ : 1.0
 
 === URI scheme
 [%hardbreaks]
-__Host__ : localhost:8080
+__Host__ : localhost:10010
 __BasePath__ : /
 
 
