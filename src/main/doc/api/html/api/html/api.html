@@ -540,10 +540,6 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_definitions">Definitions</a>
 <ul class="sectlevel2">
-<li><a href="#_actorwithmovie">ActorWithMovie</a></li>
-<li><a href="#_moviewithactor">MovieWithActor</a></li>
-<li><a href="#_simpleactor">SimpleActor</a></li>
-<li><a href="#_simplemovie">SimpleMovie</a></li>
 <li><a href="#_1f6f0c34b2165f7c7215e9de58dc0ced">导演列表返回参数</a></li>
 <li><a href="#_bc675cf2eacbf213929dab0ab26f4f0d">导演实体</a></li>
 <li><a href="#_671037054159828ebe23bc7d64ca4459">演员列表返回参数</a></li>
@@ -1202,7 +1198,7 @@ table.CodeRay td.code>pre{padding:0}
 <p>Actor Controller</p>
 </div>
 <div class="sect3">
-<h4 id="_getactorusingget">按id获取演员信息</h4>
+<h4 id="_getactorusingget">按id获取导演信息</h4>
 <div class="literalblock">
 <div class="content">
 <pre>GET /actor/{id}</pre>
@@ -1255,7 +1251,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>200</strong></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">OK</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="#_actorwithmovie">ActorWithMovie</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="#_d846822e36bc0d6556e348f882293271">演员实体</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>401</strong></p></td>
@@ -1346,7 +1342,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>200</strong></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">OK</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="#_moviewithactor">MovieWithActor</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="#_b22074a99a461072432c9de30dd80bf5">电影实体</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>401</strong></p></td>
@@ -1475,114 +1471,6 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_definitions">Definitions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_actorwithmovie">ActorWithMovie</h3>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 42.8571%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>actor</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="#_d846822e36bc0d6556e348f882293271">演员实体</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>movies</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">&lt; <a href="#_simplemovie">SimpleMovie</a> &gt; array</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_moviewithactor">MovieWithActor</h3>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 42.8571%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>actors</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">&lt; <a href="#_simpleactor">SimpleActor</a> &gt; array</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>movie</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="#_b22074a99a461072432c9de30dd80bf5">电影实体</a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_simpleactor">SimpleActor</h3>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 42.8571%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>id</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">integer (int32)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>name</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_simplemovie">SimpleMovie</h3>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 42.8571%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>id</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">integer (int32)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>title</strong><br>
-<em>optional</em></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">string</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
 <h3 id="_1f6f0c34b2165f7c7215e9de58dc0ced">导演列表返回参数</h3>
 <div class="paragraph">
 <p>导演列表返回参数</p>
@@ -1697,7 +1585,7 @@ table.CodeRay td.code>pre{padding:0}
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>actors</strong><br>
 <em>optional</em></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">演员列表</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">&lt; <a href="#_actorwithmovie">ActorWithMovie</a> &gt; array</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">&lt; <a href="#_d846822e36bc0d6556e348f882293271">演员实体</a> &gt; array</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>msg</strong><br>
@@ -1804,7 +1692,7 @@ table.CodeRay td.code>pre{padding:0}
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>movies</strong><br>
 <em>optional</em></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">电影列表</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">&lt; <a href="#_moviewithactor">MovieWithActor</a> &gt; array</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">&lt; <a href="#_b22074a99a461072432c9de30dd80bf5">电影实体</a> &gt; array</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>msg</strong><br>
@@ -1816,7 +1704,7 @@ table.CodeRay td.code>pre{padding:0}
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>size</strong><br>
 <em>optional</em></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">电影总数</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">integer (int64)</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">integer (int32)</p></td>
 </tr>
 </tbody>
 </table>
@@ -2015,7 +1903,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-01-01 20:50:56 CST
+Last updated 2019-12-20 08:13:36 CST
 </div>
 </div>
 </body>

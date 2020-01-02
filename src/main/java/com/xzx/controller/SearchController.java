@@ -1,6 +1,10 @@
 package com.xzx.controller;
 
 
+import com.xzx.dto.ActorWithMovie;
+import com.xzx.dto.MovieWithActor;
+import com.xzx.dto.SimpleActor;
+import com.xzx.dto.SimpleMovie;
 import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
 import com.xzx.entity.Movie;
@@ -17,8 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "SearchController", tags = "搜索模块")
@@ -71,9 +75,19 @@ public class SearchController {
         MovieListVo movieListVo = new MovieListVo();
         movieListVo.setMsg("1");
         List<Movie> moviesWithLimit = movieService.getLikeMovieWithLimit(searchVo);
-        List<Movie> movies = movieService.getLikeMovie(searchVo);
-        movieListVo.setMovies(moviesWithLimit);
-        movieListVo.setSize(movies.size());
+        List<MovieWithActor> movieWithActorList = new ArrayList<>();
+        for (Movie movie:moviesWithLimit) {
+            MovieWithActor movieWithActor= new MovieWithActor();
+            movieWithActor.setMovie(movie);
+            List<SimpleActor> actors = actorService.getActorByMovieId(movie.getId());
+            if(actors.size() > 5) {
+                actors = actors.subList(0, 5);
+            }
+            movieWithActor.setActors(actors);
+            movieWithActorList.add(movieWithActor);
+        }
+        movieListVo.setMovies(movieWithActorList);
+        movieListVo.setSize(movieService.getLikeMovieCount(searchVo));
         return movieListVo;
     }
 
@@ -98,7 +112,18 @@ public class SearchController {
         actorListVo.setMsg("3");
         List<Actor> actorsWithLimit =actorService.getLikeActorWithLimit(searchVo);
         long actorSize = actorService.getLikeActorCount(searchVo);
-        actorListVo.setActors(actorsWithLimit);
+        List<ActorWithMovie> actorWithMovieList = new ArrayList<>();
+        for (Actor actor : actorsWithLimit) {
+            ActorWithMovie actorWithMovie = new ActorWithMovie();
+            actorWithMovie.setActor(actor);
+            List<SimpleMovie> movies = movieService.getMovieByActorId(actor.getId());
+            if(movies.size() > 5){
+                movies = movies.subList(0, 5);
+            }
+            actorWithMovie.setMovies(movies);
+            actorWithMovieList.add(actorWithMovie);
+        }
+        actorListVo.setActors(actorWithMovieList);
         actorListVo.setSize(actorSize);
         return actorListVo;
     }

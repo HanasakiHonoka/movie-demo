@@ -2,13 +2,16 @@ package com.xzx.servie.impl;
 
 import com.xzx.entity.Actor;
 import com.xzx.entity.ActorExample;
+import com.xzx.mapper.ActorExtendMapper;
 import com.xzx.mapper.ActorMapper;
 import com.xzx.servie.ActorService;
 import com.xzx.vo.SearchVo;
+import com.xzx.dto.SimpleActor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +19,9 @@ public class ActorServiceImpl implements ActorService {
 
     @Autowired
     private ActorMapper actorMapper;
+
+    @Autowired
+    private ActorExtendMapper actorExtendMapper;
 
     @Override
     public List<Actor> getLikeActorWithLimit(SearchVo searchVo) {
@@ -37,5 +43,15 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public Actor getActor(Integer id) {
         return actorMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<SimpleActor> getActorByMovieId(Integer movieId) {
+        List<Actor> actors = actorExtendMapper.getActorByMovieId(movieId);
+        List<SimpleActor> simpleActors = new ArrayList<>();
+        for (Actor actor: actors) {
+            simpleActors.add(new SimpleActor(actor.getId(), actor.getName()));
+        }
+        return simpleActors;
     }
 }

@@ -1,6 +1,6 @@
 package com.xzx.vo;
 
-import com.xzx.entity.Movie;
+import com.xzx.dto.MovieWithActor;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,25 +10,25 @@ import java.util.List;
 public class MovieListVo {
 
     @ApiModelProperty(value = "电影列表")
-    private List<Movie> movies;
+    private List<MovieWithActor> movies;
     @ApiModelProperty(value = "返回信息")
     private String msg;
     @ApiModelProperty(value = "电影总数")
-    private Integer size;
+    private long size;
 
-    public Integer getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
-    public List<Movie> getMovies() {
+    public List<MovieWithActor> getMovies() {
         return movies;
     }
 
-    public void setMovies(List<Movie> movies) {
+    public void setMovies(List<MovieWithActor> movies) {
         this.movies = movies;
     }
 

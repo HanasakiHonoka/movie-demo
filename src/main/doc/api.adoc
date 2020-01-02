@@ -271,7 +271,7 @@ Actor Controller
 
 
 [[_getactorusingget]]
-==== 按id获取导演信息
+==== 按id获取演员信息
 ....
 GET /actor/{id}
 ....
@@ -292,7 +292,7 @@ __required__|id|integer (int32)
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|**200**|OK|<<_d846822e36bc0d6556e348f882293271,演员实体>>
+|**200**|OK|<<_actorwithmovie,ActorWithMovie>>
 |**401**|Unauthorized|No Content
 |**403**|Forbidden|No Content
 |**404**|Not Found|No Content
@@ -331,7 +331,7 @@ __optional__|电影ID|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|**200**|OK|<<_b22074a99a461072432c9de30dd80bf5,电影实体>>
+|**200**|OK|<<_moviewithactor,MovieWithActor>>
 |**401**|Unauthorized|No Content
 |**403**|Forbidden|No Content
 |**404**|Not Found|No Content
@@ -387,6 +387,58 @@ __required__|id|integer (int32)
 [[_definitions]]
 == Definitions
 
+[[_actorwithmovie]]
+=== ActorWithMovie
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**actor** +
+__optional__|<<_d846822e36bc0d6556e348f882293271,演员实体>>
+|**movies** +
+__optional__|< <<_simplemovie,SimpleMovie>> > array
+|===
+
+
+[[_moviewithactor]]
+=== MovieWithActor
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**actors** +
+__optional__|< <<_simpleactor,SimpleActor>> > array
+|**movie** +
+__optional__|<<_b22074a99a461072432c9de30dd80bf5,电影实体>>
+|===
+
+
+[[_simpleactor]]
+=== SimpleActor
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer (int32)
+|**name** +
+__optional__|string
+|===
+
+
+[[_simplemovie]]
+=== SimpleMovie
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer (int32)
+|**title** +
+__optional__|string
+|===
+
+
 [[_1f6f0c34b2165f7c7215e9de58dc0ced]]
 === 导演列表返回参数
 导演列表返回参数
@@ -436,7 +488,7 @@ __optional__|string
 |===
 |Name|Description|Schema
 |**actors** +
-__optional__|演员列表|< <<_d846822e36bc0d6556e348f882293271,演员实体>> > array
+__optional__|演员列表|< <<_actorwithmovie,ActorWithMovie>> > array
 |**msg** +
 __optional__|返回信息|string
 |**size** +
@@ -482,11 +534,11 @@ __optional__|integer (int32)
 |===
 |Name|Description|Schema
 |**movies** +
-__optional__|电影列表|< <<_b22074a99a461072432c9de30dd80bf5,电影实体>> > array
+__optional__|电影列表|< <<_moviewithactor,MovieWithActor>> > array
 |**msg** +
 __optional__|返回信息|string
 |**size** +
-__optional__|电影总数|integer (int32)
+__optional__|电影总数|integer (int64)
 |===
 
 
