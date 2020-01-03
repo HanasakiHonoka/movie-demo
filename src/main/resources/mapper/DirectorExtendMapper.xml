@@ -16,6 +16,6 @@
         <result column="location" jdbcType="VARCHAR" property="location" />
     </resultMap>
     <select id="getDirectorByMovieId" parameterType="Integer" resultMap="BaseResultMap">
-        select * from d_s_participate dsp, director_table d where dsp.movie_id = #{movieId} and dsp.person_occu = 1 and dsp.person_id = d.id
+        select d.* from d_s_participate dsp, director_table d where dsp.movie_id = #{movieId} and dsp.person_occu = 1 and dsp.person_id = d.id
     </select>
 </mapper>

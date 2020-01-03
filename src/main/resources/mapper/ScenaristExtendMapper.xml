@@ -17,6 +17,6 @@
     </resultMap>
 
     <select id="getScenaristByMovieId" parameterType="Integer" resultMap="BaseResultMap">
-        select * from d_s_participate dsp, scenarist_table s where dsp.movie_id=#{movieId} and dsp.person_occu = 2 and s.id = dsp.person_id
+        select s.* from d_s_participate dsp, scenarist_table s where dsp.movie_id=#{movieId} and dsp.person_occu = 2 and s.id = dsp.person_id
     </select>
 </mapper>

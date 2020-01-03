@@ -22,6 +22,6 @@
 
 
     <select id="getActorByMovieId" resultMap="BaseResultMap" parameterType="Integer">
-        select * from actor_participate ap, actor_table a where ap.movie_id = #{movieId} and ap.actor_id = a.id
+        select a.* from actor_participate ap, actor_table a where ap.movie_id = #{movieId} and ap.actor_id = a.id
     </select>
 </mapper>
