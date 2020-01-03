@@ -1,10 +1,7 @@
 package com.xzx.controller;
 
 
-import com.xzx.dto.ActorWithMovie;
-import com.xzx.dto.MovieWithActor;
-import com.xzx.dto.SimpleActor;
-import com.xzx.dto.SimpleMovie;
+import com.xzx.dto.*;
 import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
 import com.xzx.entity.Movie;
@@ -76,18 +73,37 @@ public class SearchController {
         MovieListVo movieListVo = new MovieListVo();
         movieListVo.setMsg("1");
         List<Movie> moviesWithLimit = movieService.getLikeMovieWithLimit(searchVo);
-        List<MovieWithActor> movieWithActorList = new ArrayList<>();
+        List<MovieWithPeople> movieWithPeopleList = new ArrayList<>();
+        //遍历查询到的电影结果，加入演员编剧信息
         for (Movie movie:moviesWithLimit) {
-            MovieWithActor movieWithActor= new MovieWithActor();
-            movieWithActor.setMovie(movie);
+            MovieWithPeople movieWithPeople = new MovieWithPeople();
+            //加入电影自身
+            movieWithPeople.setMovie(movie);
+            //加入演员信息
             List<SimpleActor> actors = actorService.getSimpleActorByMovieId(movie.getId());
             if(actors.size() > 5) {
                 actors = actors.subList(0, 5);
             }
-            movieWithActor.setActors(actors);
-            movieWithActorList.add(movieWithActor);
+            movieWithPeople.setActors(actors);
+
+            //加入导演信息
+            List<SimpleDirector> directors = directorService.getSimpleDirectorByMovieId(movie.getId());
+            if(directors.size() > 2) {
+                directors = directors.subList(0, 2);
+            }
+            movieWithPeople.setDirectors(directors);
+
+            //加入编剧信息
+            List<SimpleScenarist> scenarists = scenaristService.getSimpleScenaristByMovieId(movie.getId());
+            if(scenarists.size() > 3) {
+                scenarists = scenarists.subList(0, 3);
+            }
+            movieWithPeople.setScenarists(scenarists);
+
+            //加入结果列表
+            movieWithPeopleList.add(movieWithPeople);
         }
-        movieListVo.setMovies(movieWithActorList);
+        movieListVo.setMovies(movieWithPeopleList);
         movieListVo.setSize(movieService.getLikeMovieCount(searchVo));
         return movieListVo;
     }

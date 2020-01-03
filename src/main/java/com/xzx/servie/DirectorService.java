@@ -1,5 +1,6 @@
 package com.xzx.servie;
 
+import com.xzx.dto.SimpleDirector;
 import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
 import com.xzx.vo.HintVo;
@@ -17,6 +18,8 @@ public interface DirectorService {
     public long getLikeDirectorCount(SearchVo searchVo);
 
     public Director getDirector(Integer id);
+
+    public List<SimpleDirector> getSimpleDirectorByMovieId(Integer movieId);
 
     public List<Director> getDirectorByName(String name);
 }

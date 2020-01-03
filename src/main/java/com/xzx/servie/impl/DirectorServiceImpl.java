@@ -1,8 +1,10 @@
 package com.xzx.servie.impl;
 
+import com.xzx.dto.SimpleDirector;
 import com.xzx.entity.Director;
 import com.xzx.entity.DirectorExample;
 import com.xzx.entity.DirectorExample;
+import com.xzx.mapper.DirectorExtendMapper;
 import com.xzx.mapper.DirectorMapper;
 import com.xzx.mapper.DirectorMapper;
 import com.xzx.servie.DirectorService;
@@ -13,6 +15,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +23,9 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Autowired
     private DirectorMapper directorMapper;
+
+    @Autowired
+    private DirectorExtendMapper directorExtendMapper;
 
     @Override
     public List<Director> getLikeDirectorWithLimit(SearchVo searchVo) {
@@ -50,6 +56,16 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public Director getDirector(Integer id) {
         return directorMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<SimpleDirector> getSimpleDirectorByMovieId(Integer movieId) {
+        List<Director> directors = directorExtendMapper.getDirectorByMovieId(movieId);
+        List<SimpleDirector> simpleDirectors = new ArrayList<>();
+        for(Director director:directors) {
+            simpleDirectors.add(new SimpleDirector(director.getId(), director.getName()));
+        }
+        return simpleDirectors;
     }
 
     @Override

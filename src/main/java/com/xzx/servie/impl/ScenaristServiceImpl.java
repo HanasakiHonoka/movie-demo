@@ -1,7 +1,9 @@
 package com.xzx.servie.impl;
 
+import com.xzx.dto.SimpleScenarist;
 import com.xzx.entity.Scenarist;
 import com.xzx.entity.ScenaristExample;
+import com.xzx.mapper.ScenaristExtendMapper;
 import com.xzx.mapper.ScenaristMapper;
 import com.xzx.servie.ScenaristService;
 import com.xzx.vo.HintVo;
@@ -10,6 +12,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +20,9 @@ public class ScenaristServiceImpl implements ScenaristService {
 
     @Autowired
     private ScenaristMapper scenaristMapper;
+
+    @Autowired
+    private ScenaristExtendMapper scenaristExtendMapper;
 
     @Override
     public List<Scenarist> getLikeScenaristWithLimit(SearchVo searchVo) {
@@ -47,6 +53,16 @@ public class ScenaristServiceImpl implements ScenaristService {
     @Override
     public Scenarist getScenarist(Integer id) {
         return scenaristMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<SimpleScenarist> getSimpleScenaristByMovieId(Integer movieId) {
+        List<Scenarist> scenarists = scenaristExtendMapper.getScenaristByMovieId(movieId);
+        List<SimpleScenarist> simpleScenarists = new ArrayList<>();
+        for(Scenarist scenarist:scenarists) {
+            simpleScenarists.add(new SimpleScenarist(scenarist.getId(), scenarist.getName()));
+        }
+        return simpleScenarists;
     }
 
     @Override
