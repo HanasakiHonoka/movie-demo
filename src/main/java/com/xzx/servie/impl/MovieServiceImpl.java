@@ -6,6 +6,7 @@ import com.xzx.entity.MovieExample;
 import com.xzx.mapper.MovieExtendMapper;
 import com.xzx.mapper.MovieMapper;
 import com.xzx.servie.MovieService;
+import com.xzx.vo.HintVo;
 import com.xzx.vo.SearchVo;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,15 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> getFirstLikeMovie(HintVo hintVo) {
+        MovieExample example = new MovieExample();
+        MovieExample.Criteria criteria = example.createCriteria();
+        criteria.andTitleLike(hintVo.getWords() + "%");
+        RowBounds rowBounds = new RowBounds(0,10);
+        return movieMapper.selectByExampleWithRowbounds(example, rowBounds);
+    }
+
+    @Override
     public long getLikeMovieCount(SearchVo searchVo) {
 
         MovieExample example = new MovieExample();
@@ -48,8 +58,28 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<SimpleMovie> getMovieByActorId(Integer actorId) {
+    public List<SimpleMovie> getSimpleMovieByActorId(Integer actorId) {
         List<Movie> movies = movieExtendMapper.getMovieByActorId(actorId);
+        List<SimpleMovie> simpleMovies = new ArrayList<>();
+        for (Movie movie:movies) {
+            simpleMovies.add(new SimpleMovie(movie.getId(), movie.getTitle()));
+        }
+        return simpleMovies;
+    }
+
+    @Override
+    public List<SimpleMovie> getSimpleMovieByDirectorId(Integer directorId) {
+        List<Movie> movies = movieExtendMapper.getMovieByDirectorId(directorId);
+        List<SimpleMovie> simpleMovies = new ArrayList<>();
+        for (Movie movie:movies) {
+            simpleMovies.add(new SimpleMovie(movie.getId(), movie.getTitle()));
+        }
+        return simpleMovies;
+    }
+
+    @Override
+    public List<SimpleMovie> getSimpleMovieByScenaristId(Integer scenaristId) {
+        List<Movie> movies = movieExtendMapper.getMovieByScenaristId(scenaristId);
         List<SimpleMovie> simpleMovies = new ArrayList<>();
         for (Movie movie:movies) {
             simpleMovies.add(new SimpleMovie(movie.getId(), movie.getTitle()));

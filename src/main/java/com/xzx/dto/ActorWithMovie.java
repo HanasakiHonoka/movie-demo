@@ -8,7 +8,9 @@ import java.util.List;
 public class ActorWithMovie {
 
     private Actor actor;
-    private List<SimpleMovie> movies;
+    private List<SimpleMovie> AMovies;
+    private List<SimpleMovie> DMovies;
+    private List<SimpleMovie> SMovies;
 
     public Actor getActor() {
         return actor;
@@ -18,11 +20,27 @@ public class ActorWithMovie {
         this.actor = actor;
     }
 
-    public List<SimpleMovie> getMovies() {
-        return movies;
+    public List<SimpleMovie> getAMovies() {
+        return AMovies;
     }
 
-    public void setMovies(List<SimpleMovie> movies) {
-        this.movies = movies;
+    public void setAMovies(List<SimpleMovie> AMovies) {
+        this.AMovies = AMovies;
+    }
+
+    public List<SimpleMovie> getDMovies() {
+        return DMovies;
+    }
+
+    public void setDMovies(List<SimpleMovie> DMovies) {
+        this.DMovies = DMovies;
+    }
+
+    public List<SimpleMovie> getSMovies() {
+        return SMovies;
+    }
+
+    public void setSMovies(List<SimpleMovie> SMovies) {
+        this.SMovies = SMovies;
     }
 }

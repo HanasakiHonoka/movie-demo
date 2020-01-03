@@ -25,6 +25,16 @@
         <result column="is_network" jdbcType="BIT" property="isNetwork" />
     </resultMap>
     <select id="getMovieByActorId" resultMap="BaseResultMap" parameterType="Integer">
-        select * from actor_participate ap, movie_table m where ap.actor_id = #{actorId} and ap.movie_id = m.id;
+        select * from actor_participate ap, movie_table m where ap.actor_id = #{actorId} and ap.movie_id = m.id
     </select>
+
+    <select id="getMovieByDirectorId" resultMap="BaseResultMap" parameterType="Integer">
+        select * from d_s_participate dsp, movie_table m where dsp.person_occu = 1 and dsp.person_id = #{directorId} and dsp.movie_id = m.id
+    </select>
+
+    <select id="getMovieByScenaristId" resultMap="BaseResultMap" parameterType="Integer">
+        select * from d_s_participate dsp, movie_table m where dsp.person_occu = 2 and dsp.person_id = #{scenaristId} and dsp.movie_id = m.id
+    </select>
+
+
 </mapper>

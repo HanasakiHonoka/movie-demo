@@ -7,6 +7,7 @@ import com.xzx.mapper.DirectorMapper;
 import com.xzx.mapper.DirectorMapper;
 import com.xzx.servie.DirectorService;
 import com.xzx.servie.DirectorService;
+import com.xzx.vo.HintVo;
 import com.xzx.vo.SearchVo;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,15 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
+    public List<Director> getFirstLikeDirector(HintVo hintVo) {
+        DirectorExample example = new DirectorExample();
+        DirectorExample.Criteria criteria = example.createCriteria();
+        criteria.andNameLike(hintVo.getWords() + "%");
+        RowBounds rowBounds = new RowBounds(0,10);
+        return directorMapper.selectByExampleWithRowbounds(example, rowBounds);
+    }
+
+    @Override
     public long getLikeDirectorCount(SearchVo searchVo) {
         DirectorExample example = new DirectorExample();
         DirectorExample.Criteria criteria = example.createCriteria();
@@ -40,5 +50,13 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public Director getDirector(Integer id) {
         return directorMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Director> getDirectorByName(String name) {
+        DirectorExample example = new DirectorExample();
+        DirectorExample.Criteria criteria = example.createCriteria();
+        criteria.andNameEqualTo(name);
+        return directorMapper.selectByExample(example);
     }
 }

@@ -1,7 +1,6 @@
 package com.xzx.controller;
 
 import com.xzx.dto.MovieWithActor;
-import com.xzx.entity.Movie;
 import com.xzx.servie.ActorService;
 import com.xzx.servie.MovieService;
 import io.swagger.annotations.Api;
@@ -31,7 +30,7 @@ public class MovieController {
     public MovieWithActor getMovie(@PathVariable(value = "id") String id) {
         MovieWithActor movieWithActor = new MovieWithActor();
         movieWithActor.setMovie(movieService.getMovie(Integer.parseInt(id)));
-        movieWithActor.setActors(actorService.getActorByMovieId(Integer.parseInt(id)));
+        movieWithActor.setActors(actorService.getSimpleActorByMovieId(Integer.parseInt(id)));
         return movieWithActor;
     }
 

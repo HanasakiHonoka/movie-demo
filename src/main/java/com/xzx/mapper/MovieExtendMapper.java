@@ -7,4 +7,9 @@ import java.util.List;
 public interface MovieExtendMapper {
 
     public List<Movie> getMovieByActorId(Integer actorId);
+
+    public List<Movie> getMovieByDirectorId(Integer directorId);
+
+    public List<Movie> getMovieByScenaristId(Integer ScenaristId);
 }
+

@@ -13,6 +13,7 @@ import com.xzx.servie.ActorService;
 import com.xzx.servie.DirectorService;
 import com.xzx.servie.MovieService;
 import com.xzx.servie.ScenaristService;
+import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,7 +80,7 @@ public class SearchController {
         for (Movie movie:moviesWithLimit) {
             MovieWithActor movieWithActor= new MovieWithActor();
             movieWithActor.setMovie(movie);
-            List<SimpleActor> actors = actorService.getActorByMovieId(movie.getId());
+            List<SimpleActor> actors = actorService.getSimpleActorByMovieId(movie.getId());
             if(actors.size() > 5) {
                 actors = actors.subList(0, 5);
             }
@@ -89,6 +90,18 @@ public class SearchController {
         movieListVo.setMovies(movieWithActorList);
         movieListVo.setSize(movieService.getLikeMovieCount(searchVo));
         return movieListVo;
+    }
+
+    @ApiOperation(value = "返回电影名提示")
+    @GetMapping("/movies/name")
+    @ResponseBody
+    public List<HintResVo> getMoviesName(HintVo hintVo) {
+        List<HintResVo> moviesName = new ArrayList<>();
+        List<Movie> moviesWithLimit = movieService.getFirstLikeMovie(hintVo);
+        for(Movie movie:moviesWithLimit) {
+            moviesName.add(new HintResVo(movie.getTitle()));
+        }
+        return moviesName;
     }
 
     @ApiOperation(value = "返回导演搜索结果")
@@ -104,28 +117,56 @@ public class SearchController {
         return directorListVo;
     }
 
+    @ApiOperation(value = "返回导演名提示")
+    @GetMapping("/directors/name")
+    @ResponseBody
+    public List<HintResVo> getDirectorsName(HintVo hintVo) {
+        List<HintResVo> directorsName = new ArrayList<>();
+        List<Director> directorsWithLimit= directorService.getFirstLikeDirector(hintVo);
+        for(Director director:directorsWithLimit) {
+            directorsName.add(new HintResVo(director.getName()));
+        }
+        return directorsName;
+    }
+
     @ApiOperation(value = "返回演员搜索结果")
     @GetMapping("/actors")
     @ResponseBody
     public ActorListVo getActors(SearchVo searchVo) {
         ActorListVo actorListVo = new ActorListVo();
         actorListVo.setMsg("3");
+        //查询到所有符合条件的演员
         List<Actor> actorsWithLimit =actorService.getLikeActorWithLimit(searchVo);
         long actorSize = actorService.getLikeActorCount(searchVo);
         List<ActorWithMovie> actorWithMovieList = new ArrayList<>();
+        //遍历每个演员
         for (Actor actor : actorsWithLimit) {
             ActorWithMovie actorWithMovie = new ActorWithMovie();
             actorWithMovie.setActor(actor);
-            List<SimpleMovie> movies = movieService.getMovieByActorId(actor.getId());
-            if(movies.size() > 5){
-                movies = movies.subList(0, 5);
-            }
-            actorWithMovie.setMovies(movies);
+
+            //加入参演电影
+            actorWithMovie.setAMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, actor.getId(), "Actor"));
+            //加入执导电影
+            actorWithMovie.setDMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, actor.getId(), "Director"));
+            //加入编剧电影
+            actorWithMovie.setSMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, actor.getId(), "Scenarist"));
             actorWithMovieList.add(actorWithMovie);
         }
         actorListVo.setActors(actorWithMovieList);
         actorListVo.setSize(actorSize);
         return actorListVo;
+    }
+
+    @ApiOperation(value = "返回演员名提示")
+    @GetMapping("/actors/name")
+    @ResponseBody
+    public List<HintResVo> getActorsName(HintVo hintVo) {
+        List<HintResVo> actorsName = new ArrayList<>();
+        List<Actor> actorsWithLimit = actorService.getFirstLikeActors(hintVo);
+        for(Actor actor:actorsWithLimit) {
+            actorsName.add(new HintResVo(actor.getName()));
+        }
+        return actorsName;
     }
 
     @ApiOperation(value = "返回编剧搜索结果")
@@ -139,6 +180,18 @@ public class SearchController {
         scenaristListVo.setScenarists(scenaristsWithLimit);
         scenaristListVo.setSize(scenaristSize);
         return scenaristListVo;
+    }
+
+    @ApiOperation(value = "返回编剧名提示")
+    @GetMapping("/scenarists/name")
+    @ResponseBody
+    public List<HintResVo> getScenaristsName(HintVo hintVo) {
+        List<HintResVo> scenaristsName = new ArrayList<>();
+        List<Scenarist> scenaristsWithLimit = scenaristService.getFirstLikeScenarist(hintVo);
+        for (Scenarist scenarist:scenaristsWithLimit) {
+            scenaristsName.add(new HintResVo(scenarist.getName()));
+        }
+        return scenaristsName;
     }
 
 }

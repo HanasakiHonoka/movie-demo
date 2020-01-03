@@ -1,5 +1,6 @@
 package com.xzx.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 
 import java.util.Date;
@@ -58,6 +59,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birthday;
 
     /**

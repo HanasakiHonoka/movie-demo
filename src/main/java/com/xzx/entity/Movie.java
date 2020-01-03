@@ -1,5 +1,6 @@
 package com.xzx.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 
 import java.util.Date;
@@ -40,6 +41,7 @@ public class Movie {
      *
      * @mbg.generated Wed Dec 11 17:11:59 CST 2019
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date releaseTime;
 
     /**
