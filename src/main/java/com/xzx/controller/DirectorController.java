@@ -1,9 +1,7 @@
 package com.xzx.controller;
 
 
-import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
-import com.xzx.servie.ActorService;
 import com.xzx.servie.DirectorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

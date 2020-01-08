@@ -2,6 +2,7 @@ package com.xzx.util;
 
 import com.xzx.dto.SimpleMovie;
 import com.xzx.entity.Actor;
+import com.xzx.entity.Movie;
 import com.xzx.servie.MovieService;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,5 +25,9 @@ public class SimpleMovieUtil {
             movies = movies.subList(0, 5);
         }
         return movies;
+    }
+
+    public static List<SimpleMovie> movieToSimpleMovie(List<Movie> movies) {
+
     }
 }
