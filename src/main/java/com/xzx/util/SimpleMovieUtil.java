@@ -28,6 +28,10 @@ public class SimpleMovieUtil {
     }
 
     public static List<SimpleMovie> movieToSimpleMovie(List<Movie> movies) {
-
+        List<SimpleMovie> simpleMovies = new ArrayList<>();
+        for (Movie movie: movies) {
+            simpleMovies.add(new SimpleMovie(movie.getId(), movie.getTitle()));
+        }
+        return simpleMovies;
     }
 }

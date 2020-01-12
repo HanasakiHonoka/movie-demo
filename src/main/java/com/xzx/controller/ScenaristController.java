@@ -1,8 +1,10 @@
 package com.xzx.controller;
 
+import com.xzx.dto.ScenaristWithMovie;
 import com.xzx.entity.Director;
 import com.xzx.entity.Scenarist;
 import com.xzx.servie.DirectorService;
+import com.xzx.servie.MovieService;
 import com.xzx.servie.ScenaristService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,10 +20,20 @@ public class ScenaristController {
     @Autowired
     private ScenaristService scenaristService;
 
+    @Autowired
+    private MovieService movieService;
+
     @ApiOperation("按id获取编剧信息")
     @GetMapping("/scenarist/{id}")
-    public Scenarist getScenarist(@PathVariable(value = "id") Integer id) {
+    public ScenaristWithMovie getScenarist(@PathVariable(value = "id") Integer id) {
 
-        return scenaristService.getScenarist(id);
+        Scenarist scenarist = scenaristService.getScenarist(id);
+        ScenaristWithMovie scenaristWithMovie = new ScenaristWithMovie();
+        scenaristWithMovie.setScenarist(scenarist);
+        scenaristWithMovie.setAMovies(movieService.getSimpleMovieByActorId(id));
+        scenaristWithMovie.setDMovies(movieService.getSimpleMovieByDirectorId(id));
+        scenaristWithMovie.setSMovies(movieService.getSimpleMovieByScenaristId(id));
+
+        return scenaristWithMovie;
     }
 }

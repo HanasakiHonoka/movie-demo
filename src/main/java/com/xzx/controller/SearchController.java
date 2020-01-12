@@ -126,9 +126,23 @@ public class SearchController {
     public DirectorListVo getDirectors(SearchVo searchVo) {
         DirectorListVo directorListVo = new DirectorListVo();
         directorListVo.setMsg("2");
+        //查找到所有符合条件的导演
         List<Director> directorsWithLimit =directorService.getLikeDirectorWithLimit(searchVo);
         long directorSize = directorService.getLikeDirectorCount(searchVo);
-        directorListVo.setDirectors(directorsWithLimit);
+        List<DirectorWithMovie> directorWithMovieList = new ArrayList<>();
+        //遍历每个导演
+        for (Director director:directorsWithLimit) {
+            DirectorWithMovie directorWithMovie = new DirectorWithMovie();
+            directorWithMovie.setDirector(director);
+            //加入参演电影
+            directorWithMovie.setAMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, director.getId(), "Actor"));
+            //加入执导电影
+            directorWithMovie.setDMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, director.getId(), "Director"));
+            //加入编剧电影
+            directorWithMovie.setSMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, director.getId(), "Scenarist"));
+            directorWithMovieList.add(directorWithMovie);
+        }
+        directorListVo.setDirectors(directorWithMovieList);
         directorListVo.setSize(directorSize);
         return directorListVo;
     }
@@ -193,7 +207,22 @@ public class SearchController {
         scenaristListVo.setMsg("4");
         List<Scenarist> scenaristsWithLimit =scenaristService.getLikeScenaristWithLimit(searchVo);
         long scenaristSize = scenaristService.getLikeScenaristCount(searchVo);
-        scenaristListVo.setScenarists(scenaristsWithLimit);
+        List<ScenaristWithMovie> scenaristWithMovieList = new ArrayList<>();
+
+        for(Scenarist scenarist: scenaristsWithLimit) {
+            ScenaristWithMovie scenaristWithMovie = new ScenaristWithMovie();
+            scenaristWithMovie.setScenarist(scenarist);
+
+            //加入参演电影
+            scenaristWithMovie.setAMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, scenarist.getId(), "Actor"));
+            //加入执导电影
+            scenaristWithMovie.setDMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, scenarist.getId(), "Director"));
+            //加入编剧电影
+            scenaristWithMovie.setSMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, scenarist.getId(), "Scenarist"));
+            scenaristWithMovieList.add(scenaristWithMovie);
+        }
+
+        scenaristListVo.setScenarists(scenaristWithMovieList);
         scenaristListVo.setSize(scenaristSize);
         return scenaristListVo;
     }
