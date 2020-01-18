@@ -9,9 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "ActorController", tags = "演员模块")
 @RestController
@@ -37,6 +35,23 @@ public class ActorController {
         return actorWithMovie;
     }
 
+    @ApiOperation("更新演员信息")
+    @PutMapping("/actor")
+    public Integer updateActor(Actor actor) {
+        return actorService.updateActor(actor);
+    }
+
+    @ApiOperation("添加演员")
+    @PostMapping("/actor")
+    public Integer insertActor(Actor actor) {
+        return actorService.insertActor(actor);
+    }
+
+    @ApiOperation("按id删除演员")
+    @DeleteMapping("/actor/{id}")
+    public  Integer delActor(@PathVariable(value = "id") Integer id) {
+        return actorService.delActor(id);
+    }
 
 
 

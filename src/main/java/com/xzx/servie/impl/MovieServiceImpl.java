@@ -59,6 +59,22 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Integer updateMovie(Movie movie) {
+
+        return movieMapper.updateByPrimaryKey(movie);
+    }
+
+    @Override
+    public Integer insertMovie(Movie movie) {
+        return movieMapper.insert(movie);
+    }
+
+    @Override
+    public Integer delMovie(Integer movieId) {
+        return movieMapper.deleteByPrimaryKey(movieId);
+    }
+
+    @Override
     public List<SimpleMovie> getSimpleMovieByActorId(Integer actorId) {
         List<Movie> movies = movieExtendMapper.getMovieByActorId(actorId);
         List<SimpleMovie> simpleMovies = SimpleMovieUtil.movieToSimpleMovie(movies);

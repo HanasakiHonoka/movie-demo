@@ -56,6 +56,21 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    public Integer updateActor(Actor actor) {
+        return actorMapper.updateByPrimaryKey(actor);
+    }
+
+    @Override
+    public Integer insertActor(Actor actor) {
+        return actorMapper.insert(actor);
+    }
+
+    @Override
+    public Integer delActor(Integer actorId) {
+        return actorMapper.deleteByPrimaryKey(actorId);
+    }
+
+    @Override
     public List<SimpleActor> getSimpleActorByMovieId(Integer movieId) {
         List<Actor> actors = actorExtendMapper.getActorByMovieId(movieId);
         List<SimpleActor> simpleActors = new ArrayList<>();

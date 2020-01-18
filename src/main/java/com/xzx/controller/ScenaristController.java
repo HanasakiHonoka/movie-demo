@@ -9,9 +9,7 @@ import com.xzx.servie.ScenaristService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "ScenaristController", tags = "编剧模块")
 @RestController
@@ -35,5 +33,23 @@ public class ScenaristController {
         scenaristWithMovie.setSMovies(movieService.getSimpleMovieByScenaristId(id));
 
         return scenaristWithMovie;
+    }
+
+    @ApiOperation("更新编剧信息")
+    @PutMapping("/scenarist")
+    public Integer updateScenarist(Scenarist scenarist) {
+        return scenaristService.updateScenarist(scenarist);
+    }
+
+    @ApiOperation("添加编剧")
+    @PostMapping("/scenarist")
+    public Integer insertScenarist(Scenarist scenarist) {
+        return scenaristService.insertScenarist(scenarist);
+    }
+
+    @ApiOperation("按id删除编剧")
+    @DeleteMapping("/scenarist/{id}")
+    public Integer delScenarist(@PathVariable(value = "id") Integer id) {
+        return scenaristService.delScenarist(id);
     }
 }

@@ -2,6 +2,7 @@ package com.xzx.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -41,6 +42,7 @@ public class Movie {
      *
      * @mbg.generated Wed Dec 11 17:11:59 CST 2019
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date releaseTime;
 
@@ -245,6 +247,7 @@ public class Movie {
      * @mbg.generated Wed Dec 11 17:11:59 CST 2019
      */
     public void setReleaseTime(Date releaseTime) {
+        //System.out.println(releaseTime);
         this.releaseTime = releaseTime;
     }
 

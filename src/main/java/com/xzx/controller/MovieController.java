@@ -1,6 +1,7 @@
 package com.xzx.controller;
 
 import com.xzx.dto.MovieWithPeople;
+import com.xzx.entity.Movie;
 import com.xzx.servie.ActorService;
 import com.xzx.servie.DirectorService;
 import com.xzx.servie.MovieService;
@@ -11,6 +12,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Api(value = "MovieController", tags = "电影模块")
@@ -42,6 +45,30 @@ public class MovieController {
         movieWithPeople.setDirectors(directorService.getSimpleDirectorByMovieId(Integer.parseInt(id)));
         movieWithPeople.setScenarists(scenaristService.getSimpleScenaristByMovieId(Integer.parseInt(id)));
         return movieWithPeople;
+    }
+
+    @ApiOperation("更新电影信息")
+    @PutMapping("/movie")
+    public Integer updateMovie(Movie movie) {
+        return movieService.updateMovie(movie);
+    }
+
+    @ApiOperation("添加电影")
+    @PostMapping("/movie")
+    public Integer insertMovie(Movie movie) {
+        return movieService.insertMovie(movie);
+    }
+
+    //@ApiOperation("批量添加电影")
+    //@PostMapping("/movies")
+    //public Integer insertMultiMovie(List<Movie> movies) {
+    //    return null;
+    //}
+
+    @ApiOperation("按id删除电影")
+    @DeleteMapping("/movie/{id}")
+    public Integer delMovie(@PathVariable(value = "id") String id) {
+        return movieService.delMovie(Integer.parseInt(id));
     }
 
 

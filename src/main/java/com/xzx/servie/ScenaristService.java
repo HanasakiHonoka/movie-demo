@@ -19,6 +19,12 @@ public interface ScenaristService {
 
     public Scenarist getScenarist(Integer id);
 
+    public Integer updateScenarist(Scenarist scenarist);
+
+    public Integer insertScenarist(Scenarist scenarist);
+
+    public Integer delScenarist(Integer scenaristId);
+
     public List<SimpleScenarist> getSimpleScenaristByMovieId(Integer movieId);
 
     public List<Scenarist> getScenaristByName(String name);

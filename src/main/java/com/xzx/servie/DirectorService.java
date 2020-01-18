@@ -19,6 +19,12 @@ public interface DirectorService {
 
     public Director getDirector(Integer id);
 
+    public Integer updateDirector(Director director);
+
+    public Integer insertDirector(Director director);
+
+    public Integer delDirector(Integer directorId);
+
     public List<SimpleDirector> getSimpleDirectorByMovieId(Integer movieId);
 
     public List<Director> getDirectorByName(String name);

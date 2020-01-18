@@ -56,6 +56,21 @@ public class ScenaristServiceImpl implements ScenaristService {
     }
 
     @Override
+    public Integer updateScenarist(Scenarist scenarist) {
+        return scenaristMapper.updateByPrimaryKey(scenarist);
+    }
+
+    @Override
+    public Integer insertScenarist(Scenarist scenarist) {
+        return scenaristMapper.insert(scenarist);
+    }
+
+    @Override
+    public Integer delScenarist(Integer scenaristId) {
+        return scenaristMapper.deleteByPrimaryKey(scenaristId);
+    }
+
+    @Override
     public List<SimpleScenarist> getSimpleScenaristByMovieId(Integer movieId) {
         List<Scenarist> scenarists = scenaristExtendMapper.getScenaristByMovieId(movieId);
         List<SimpleScenarist> simpleScenarists = new ArrayList<>();

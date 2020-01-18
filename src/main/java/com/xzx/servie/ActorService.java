@@ -17,6 +17,12 @@ public interface ActorService {
 
     public Actor getActor(Integer id);
 
+    public Integer updateActor(Actor actor);
+
+    public Integer insertActor(Actor actor);
+
+    public Integer delActor(Integer actorId);
+
     public List<SimpleActor> getSimpleActorByMovieId(Integer movieId);
 
     public List<Actor> getActorByName(String name);

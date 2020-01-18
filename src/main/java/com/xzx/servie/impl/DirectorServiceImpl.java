@@ -59,6 +59,21 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
+    public Integer updateDirector(Director director) {
+        return directorMapper.updateByPrimaryKey(director);
+    }
+
+    @Override
+    public Integer insertDirector(Director director) {
+        return directorMapper.insert(director);
+    }
+
+    @Override
+    public Integer delDirector(Integer directorId) {
+        return directorMapper.deleteByPrimaryKey(directorId);
+    }
+
+    @Override
     public List<SimpleDirector> getSimpleDirectorByMovieId(Integer movieId) {
         List<Director> directors = directorExtendMapper.getDirectorByMovieId(movieId);
         List<SimpleDirector> simpleDirectors = new ArrayList<>();

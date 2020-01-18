@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://10.103.244.129:3306/movie_data_analysis?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://10.103.244.129:3306/movie_data_analysis?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     type: com.mysql.cj.jdbc.MysqlDataSource
     username: root
     password: yang1290
