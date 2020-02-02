@@ -4,12 +4,16 @@ import com.xzx.dto.ActorWithMovie;
 import com.xzx.entity.Actor;
 import com.xzx.servie.ActorService;
 import com.xzx.servie.MovieService;
+import com.xzx.vo.MgtActorListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Api(value = "ActorController", tags = "演员模块")
 @RestController
@@ -54,6 +58,22 @@ public class ActorController {
     }
 
 
+    @ApiOperation("获取所有演员")
+    @GetMapping("/actors")
+    public MgtActorListVo getActors() {
+        List<ActorWithMovie> actorWithMovies = new ArrayList<>();
+
+        List<Actor> actors = actorService.getActors();
+
+        for (Actor actor: actors) {
+            ActorWithMovie actorWithMovie = new ActorWithMovie();
+            actorWithMovie.setActor(actor);
+            actorWithMovies.add(actorWithMovie);
+        }
+
+        return new MgtActorListVo(actorWithMovies);
+
+    }
 
 
 }

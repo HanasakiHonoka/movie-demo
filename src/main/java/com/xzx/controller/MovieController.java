@@ -6,6 +6,7 @@ import com.xzx.servie.ActorService;
 import com.xzx.servie.DirectorService;
 import com.xzx.servie.MovieService;
 import com.xzx.servie.ScenaristService;
+import com.xzx.vo.MgtMovieListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -69,6 +71,19 @@ public class MovieController {
     @DeleteMapping("/movie/{id}")
     public Integer delMovie(@PathVariable(value = "id") String id) {
         return movieService.delMovie(Integer.parseInt(id));
+    }
+
+    @ApiOperation("获取所有电影")
+    @GetMapping("/movies")
+    public MgtMovieListVo getMovies() {
+        List<MovieWithPeople> movieWithPeoples = new ArrayList<>();
+        List<Movie> movies = movieService.getMovies();
+        for (Movie movie:movies) {
+            MovieWithPeople movieWithPeople = new MovieWithPeople();
+            movieWithPeople.setMovie(movie);
+            movieWithPeoples.add(movieWithPeople);
+        }
+        return new MgtMovieListVo(movieWithPeoples);
     }
 
 

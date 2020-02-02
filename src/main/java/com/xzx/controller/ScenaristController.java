@@ -6,10 +6,14 @@ import com.xzx.entity.Scenarist;
 import com.xzx.servie.DirectorService;
 import com.xzx.servie.MovieService;
 import com.xzx.servie.ScenaristService;
+import com.xzx.vo.MgtScenaristListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Api(value = "ScenaristController", tags = "编剧模块")
 @RestController
@@ -51,5 +55,19 @@ public class ScenaristController {
     @DeleteMapping("/scenarist/{id}")
     public Integer delScenarist(@PathVariable(value = "id") Integer id) {
         return scenaristService.delScenarist(id);
+    }
+
+    @ApiOperation("获取所有编剧")
+    @GetMapping("/scenarists")
+    public MgtScenaristListVo getScenarists() {
+        List<ScenaristWithMovie> scenaristWithMovies = new ArrayList<>();
+
+        List<Scenarist> scenarists = scenaristService.getScenarists();
+        for (Scenarist scenarist:scenarists) {
+            ScenaristWithMovie scenaristWithMovie = new ScenaristWithMovie();
+            scenaristWithMovie.setScenarist(scenarist);
+            scenaristWithMovies.add(scenaristWithMovie);
+        }
+        return new MgtScenaristListVo(scenaristWithMovies);
     }
 }

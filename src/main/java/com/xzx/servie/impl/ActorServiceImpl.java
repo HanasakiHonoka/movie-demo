@@ -56,6 +56,11 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    public List<Actor> getActors() {
+        return actorMapper.selectByExample(new ActorExample());
+    }
+
+    @Override
     public Integer updateActor(Actor actor) {
         return actorMapper.updateByPrimaryKey(actor);
     }

@@ -59,6 +59,11 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
+    public List<Director> getDirectors() {
+        return directorMapper.selectByExample(new DirectorExample());
+    }
+
+    @Override
     public Integer updateDirector(Director director) {
         return directorMapper.updateByPrimaryKey(director);
     }

@@ -5,10 +5,14 @@ import com.xzx.dto.DirectorWithMovie;
 import com.xzx.entity.Director;
 import com.xzx.servie.DirectorService;
 import com.xzx.servie.MovieService;
+import com.xzx.vo.MgtDirectorListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Api(value = "DirectorController", tags = "导演模块")
 @RestController
@@ -49,6 +53,21 @@ public class DirectorController {
     @DeleteMapping("/director/{id}")
     public Integer delDirector(@PathVariable(value = "id") Integer id) {
         return directorService.delDirector(id);
+    }
+
+    @ApiOperation("获取所有导演")
+    @GetMapping("/directors")
+    public MgtDirectorListVo getDirectors() {
+        List<DirectorWithMovie> directorWithMovies = new ArrayList<>();
+
+        List<Director> directors = directorService.getDirectors();
+        for (Director director: directors) {
+            DirectorWithMovie directorWithMovie = new DirectorWithMovie();
+            directorWithMovie.setDirector(director);
+            directorWithMovies.add(directorWithMovie);
+        }
+
+        return new MgtDirectorListVo(directorWithMovies);
     }
 
 }

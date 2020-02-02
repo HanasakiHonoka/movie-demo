@@ -56,6 +56,11 @@ public class ScenaristServiceImpl implements ScenaristService {
     }
 
     @Override
+    public List<Scenarist> getScenarists() {
+        return scenaristMapper.selectByExample(new ScenaristExample());
+    }
+
+    @Override
     public Integer updateScenarist(Scenarist scenarist) {
         return scenaristMapper.updateByPrimaryKey(scenarist);
     }

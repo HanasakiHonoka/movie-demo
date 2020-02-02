@@ -17,6 +17,8 @@ public interface ActorService {
 
     public Actor getActor(Integer id);
 
+    public List<Actor> getActors();
+
     public Integer updateActor(Actor actor);
 
     public Integer insertActor(Actor actor);

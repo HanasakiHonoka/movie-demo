@@ -18,6 +18,8 @@ public interface MovieService {
 
     public Movie getMovie(Integer id);
 
+    public List<Movie> getMovies();
+
     public Integer updateMovie(Movie movie);
 
     public Integer insertMovie(Movie movie);

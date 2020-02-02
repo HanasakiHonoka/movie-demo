@@ -19,6 +19,8 @@ public interface ScenaristService {
 
     public Scenarist getScenarist(Integer id);
 
+    public List<Scenarist> getScenarists();
+
     public Integer updateScenarist(Scenarist scenarist);
 
     public Integer insertScenarist(Scenarist scenarist);

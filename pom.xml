@@ -19,7 +19,13 @@
             <id>Spring Plugins Repository</id>
             <url>https://repo.spring.io/plugins-release/</url>
         </repository>
+        <repository>
+            <id>alibab</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
     </repositories>
+
+
 
     <pluginRepositories>
         <pluginRepository>
@@ -52,6 +58,15 @@
             <artifactId>druid</artifactId>
             <version>1.1.21</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
         <dependency>

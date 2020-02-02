@@ -59,6 +59,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> getMovies() {
+        return movieMapper.selectByExample(new MovieExample());
+    }
+
+    @Override
     public Integer updateMovie(Movie movie) {
 
         return movieMapper.updateByPrimaryKey(movie);

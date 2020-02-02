@@ -44,9 +44,10 @@
         <!--    <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
         <!--</table>-->
         <!--<table tableName="movie_table" domainObjectName="Movie"></table>-->
-        <table tableName="scenarist_table" domainObjectName="Scenarist"></table>
-        <table tableName="actor_table" domainObjectName="Actor"></table>
-        <table tableName="director_table" domainObjectName="Director"></table>
+        <!--<table tableName="scenarist_table" domainObjectName="Scenarist"></table>-->
+        <!--<table tableName="actor_table" domainObjectName="Actor"></table>-->
+        <!--<table tableName="director_table" domainObjectName="Director"></table>-->
+        <table tableName="user_table" domainObjectName="User"></table>
 
     </context>
 </generatorConfiguration>

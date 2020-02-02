@@ -19,6 +19,8 @@ public interface DirectorService {
 
     public Director getDirector(Integer id);
 
+    public List<Director> getDirectors();
+
     public Integer updateDirector(Director director);
 
     public Integer insertDirector(Director director);
