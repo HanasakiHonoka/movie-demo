@@ -51,6 +51,11 @@ public class ScenaristServiceImpl implements ScenaristService {
     }
 
     @Override
+    public long getScenaristCount() {
+        return scenaristMapper.countByExample(new ScenaristExample());
+    }
+
+    @Override
     public Scenarist getScenarist(Integer id) {
         return scenaristMapper.selectByPrimaryKey(id);
     }

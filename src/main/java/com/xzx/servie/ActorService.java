@@ -15,6 +15,8 @@ public interface ActorService {
 
     public long getLikeActorCount(SearchVo searchVo);
 
+    public long getActorCount();
+
     public Actor getActor(Integer id);
 
     public List<Actor> getActors();

@@ -53,6 +53,11 @@ public class MovieServiceImpl implements MovieService {
         return movieMapper.countByExample(example);
     }
 
+    @Override
+    public long getMovieCount() {
+        return movieMapper.countByExample(new MovieExample());
+    }
+
     public Movie getMovie(Integer id) {
 
         return movieMapper.selectByPrimaryKey(id);

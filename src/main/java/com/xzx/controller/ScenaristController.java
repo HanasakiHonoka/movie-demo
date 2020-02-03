@@ -70,4 +70,10 @@ public class ScenaristController {
         }
         return new MgtScenaristListVo(scenaristWithMovies);
     }
+
+    @ApiOperation("获得编剧表总数")
+    @GetMapping("/scenarist/count")
+    public long getScenaristCount() {
+        return scenaristService.getScenaristCount();
+    }
 }

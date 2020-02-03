@@ -51,6 +51,11 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    public long getActorCount() {
+        return actorMapper.countByExample(new ActorExample());
+    }
+
+    @Override
     public Actor getActor(Integer id) {
         return actorMapper.selectByPrimaryKey(id);
     }

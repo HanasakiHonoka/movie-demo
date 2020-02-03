@@ -17,6 +17,8 @@ public interface ScenaristService {
 
     public long getLikeScenaristCount(SearchVo searchVo);
 
+    public long getScenaristCount();
+
     public Scenarist getScenarist(Integer id);
 
     public List<Scenarist> getScenarists();

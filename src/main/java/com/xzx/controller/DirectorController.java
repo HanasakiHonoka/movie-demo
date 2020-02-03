@@ -70,4 +70,10 @@ public class DirectorController {
         return new MgtDirectorListVo(directorWithMovies);
     }
 
+    @ApiOperation("获得导演表总数")
+    @GetMapping("/director/count")
+    public long getDirectorCount() {
+        return directorService.getDirectorCount();
+    }
+
 }

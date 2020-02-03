@@ -16,6 +16,8 @@ public interface MovieService {
 
     public long getLikeMovieCount(SearchVo searchVo);
 
+    public long getMovieCount();
+
     public Movie getMovie(Integer id);
 
     public List<Movie> getMovies();

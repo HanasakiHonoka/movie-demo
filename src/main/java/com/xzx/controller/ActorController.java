@@ -75,5 +75,11 @@ public class ActorController {
 
     }
 
+    @ApiOperation("获得演员表总数")
+    @GetMapping("/actor/count")
+    public long getActorCount() {
+        return actorService.getActorCount();
+    }
+
 
 }

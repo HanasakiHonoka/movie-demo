@@ -17,6 +17,8 @@ public interface DirectorService {
 
     public long getLikeDirectorCount(SearchVo searchVo);
 
+    public long getDirectorCount();
+
     public Director getDirector(Integer id);
 
     public List<Director> getDirectors();

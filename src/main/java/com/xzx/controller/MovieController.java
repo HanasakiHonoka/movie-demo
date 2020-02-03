@@ -86,5 +86,11 @@ public class MovieController {
         return new MgtMovieListVo(movieWithPeoples);
     }
 
+    @ApiOperation("获得电影表总数")
+    @GetMapping("/movie/count")
+    public long getMovieCount() {
+        return movieService.getMovieCount();
+    }
+
 
 }

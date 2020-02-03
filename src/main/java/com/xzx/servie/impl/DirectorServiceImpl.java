@@ -54,6 +54,11 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
+    public long getDirectorCount() {
+        return directorMapper.countByExample(new DirectorExample());
+    }
+
+    @Override
     public Director getDirector(Integer id) {
         return directorMapper.selectByPrimaryKey(id);
     }
