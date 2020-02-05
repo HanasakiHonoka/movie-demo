@@ -76,6 +76,11 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    public Integer insertMulti(List<Actor> actors) {
+        return actorExtendMapper.insertMulti(actors);
+    }
+
+    @Override
     public Integer delActor(Integer actorId) {
         return actorMapper.deleteByPrimaryKey(actorId);
     }

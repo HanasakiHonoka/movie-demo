@@ -76,6 +76,11 @@ public class ScenaristServiceImpl implements ScenaristService {
     }
 
     @Override
+    public Integer insertMulti(List<Scenarist> scenarists) {
+        return scenaristExtendMapper.insertMulti(scenarists);
+    }
+
+    @Override
     public Integer delScenarist(Integer scenaristId) {
         return scenaristMapper.deleteByPrimaryKey(scenaristId);
     }

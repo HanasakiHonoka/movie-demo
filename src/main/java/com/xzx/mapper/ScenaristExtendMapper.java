@@ -7,4 +7,6 @@ import java.util.List;
 public interface ScenaristExtendMapper {
 
     public List<Scenarist> getScenaristByMovieId(Integer movieId);
+
+    public Integer insertMulti(List<Scenarist> scenarists);
 }

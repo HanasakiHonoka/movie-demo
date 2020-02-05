@@ -1,8 +1,12 @@
 package com.xzx.controller;
 
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.DirectorWithMovie;
 import com.xzx.entity.Director;
+import com.xzx.entity.Scenarist;
 import com.xzx.servie.DirectorService;
 import com.xzx.servie.MovieService;
 import com.xzx.vo.MgtDirectorListVo;
@@ -10,7 +14,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,10 +77,29 @@ public class DirectorController {
         return new MgtDirectorListVo(directorWithMovies);
     }
 
-    @ApiOperation("获得导演表总数")
-    @GetMapping("/director/count")
-    public long getDirectorCount() {
-        return directorService.getDirectorCount();
+    @ApiOperation("csv文件导入导演数据")
+    @PostMapping("/director/csvInsert")
+    public Integer insertScenaristByCsv(MultipartFile file) throws IOException {
+        InputStreamReader in = new InputStreamReader(file.getInputStream(), "utf-8");
+        HeaderColumnNameMappingStrategy<Director> mapper = new HeaderColumnNameMappingStrategy<>();
+        mapper.setType(Director.class);
+        Integer res = 0;
+        CsvToBean<Director> build = new CsvToBeanBuilder<Director>(in).withMappingStrategy(mapper).build();
+        List<Director> directorList = build.parse();
+        try {
+            res = directorService.insertMulti(directorList);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            res = 0;
+        } finally {
+            return res;
+        }
     }
+
+    //@ApiOperation("获得导演表总数")
+    //@GetMapping("/director/count")
+    //public long getDirectorCount() {
+    //    return directorService.getDirectorCount();
+    //}
 
 }

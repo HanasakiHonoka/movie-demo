@@ -1,6 +1,9 @@
 package com.xzx.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+import com.xzx.convert.ConvertStringToDate;
 import io.swagger.annotations.ApiModel;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,6 +18,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @CsvBindByName()
     private Integer id;
 
     /**
@@ -24,6 +28,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @CsvBindByName()
     private String name;
 
     /**
@@ -33,6 +38,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @CsvBindByName()
     private String gender;
 
     /**
@@ -42,6 +48,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @CsvBindByName()
     private String occupation;
 
     /**
@@ -51,6 +58,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @CsvBindByName()
     private String constellation;
 
     /**
@@ -60,6 +68,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @CsvCustomBindByName(column = "release_time", converter = ConvertStringToDate.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birthday;
@@ -71,6 +80,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+    @CsvBindByName()
     private String location;
 
     /**
@@ -81,6 +91,7 @@ public class Scenarist {
      *
      * @mbg.generated Fri Dec 13 18:45:29 CST 2019
      */
+
     public Integer getId() {
         return id;
     }

@@ -1,5 +1,12 @@
 package com.xzx.controller;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.MovieWithPeople;
 import com.xzx.entity.Movie;
 import com.xzx.servie.ActorService;
@@ -13,9 +20,13 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Api(value = "MovieController", tags = "电影模块")
@@ -86,11 +97,33 @@ public class MovieController {
         return new MgtMovieListVo(movieWithPeoples);
     }
 
-    @ApiOperation("获得电影表总数")
-    @GetMapping("/movie/count")
-    public long getMovieCount() {
-        return movieService.getMovieCount();
+    @ApiOperation("csv文件导入电影数据")
+    @PostMapping("/movie/csvInsert")
+    public Integer insertMovieByCsv(MultipartFile file) throws IOException {
+        InputStreamReader in = new InputStreamReader(file.getInputStream(), "utf-8");
+        HeaderColumnNameMappingStrategy<Movie> mapper = new HeaderColumnNameMappingStrategy<>();
+        mapper.setType(Movie.class);
+        CsvToBean<Movie> build = new CsvToBeanBuilder<Movie>(in).withMappingStrategy(mapper).build();
+        List<Movie> movieList = build.parse();
+        for (int i = 0; i < movieList.size(); i++) {
+            //System.out.println(movieList.get(i));
+        }
+        Integer res = 0;
+        try {
+            res = movieService.insertMulti(movieList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        } finally {
+            return res;
+        }
     }
+
+    //@ApiOperation("获得电影表总数")
+    //@GetMapping("/movie/count")
+    //public long getMovieCount() {
+    //    return movieService.getMovieCount();
+    //}
 
 
 }

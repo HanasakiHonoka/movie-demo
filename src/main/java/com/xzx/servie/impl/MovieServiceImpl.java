@@ -69,6 +69,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Integer insertMulti(List<Movie> movies) {
+        return movieExtendMapper.insertMulti(movies);
+    }
+
+    @Override
     public Integer updateMovie(Movie movie) {
 
         return movieMapper.updateByPrimaryKey(movie);

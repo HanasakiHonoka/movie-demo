@@ -79,6 +79,11 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
+    public Integer insertMulti(List<Director> directors) {
+        return directorExtendMapper.insertMulti(directors);
+    }
+
+    @Override
     public Integer delDirector(Integer directorId) {
         return directorMapper.deleteByPrimaryKey(directorId);
     }

@@ -27,6 +27,8 @@ public interface DirectorService {
 
     public Integer insertDirector(Director director);
 
+    public Integer insertMulti(List<Director> directors);
+
     public Integer delDirector(Integer directorId);
 
     public List<SimpleDirector> getSimpleDirectorByMovieId(Integer movieId);

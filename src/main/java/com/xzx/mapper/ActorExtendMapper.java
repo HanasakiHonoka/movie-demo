@@ -7,4 +7,6 @@ import java.util.List;
 public interface ActorExtendMapper {
 
     public List<Actor> getActorByMovieId(Integer movieId);
+
+    public Integer insertMulti(List<Actor> actors);
 }

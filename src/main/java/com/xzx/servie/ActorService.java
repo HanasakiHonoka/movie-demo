@@ -25,6 +25,8 @@ public interface ActorService {
 
     public Integer insertActor(Actor actor);
 
+    public Integer insertMulti(List<Actor> actors);
+
     public Integer delActor(Integer actorId);
 
     public List<SimpleActor> getSimpleActorByMovieId(Integer movieId);

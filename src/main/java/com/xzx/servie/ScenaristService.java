@@ -27,6 +27,8 @@ public interface ScenaristService {
 
     public Integer insertScenarist(Scenarist scenarist);
 
+    public Integer insertMulti(List<Scenarist> scenarists);
+
     public Integer delScenarist(Integer scenaristId);
 
     public List<SimpleScenarist> getSimpleScenaristByMovieId(Integer movieId);

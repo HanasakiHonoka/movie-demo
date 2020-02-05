@@ -1,6 +1,10 @@
 package com.xzx.controller;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.ScenaristWithMovie;
+import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
 import com.xzx.entity.Scenarist;
 import com.xzx.servie.DirectorService;
@@ -11,7 +15,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,9 +78,27 @@ public class ScenaristController {
         return new MgtScenaristListVo(scenaristWithMovies);
     }
 
-    @ApiOperation("获得编剧表总数")
-    @GetMapping("/scenarist/count")
-    public long getScenaristCount() {
-        return scenaristService.getScenaristCount();
+    @ApiOperation("csv文件导入编剧数据")
+    @PostMapping("/scenarist/csvInsert")
+    public Integer insertScenaristByCsv(MultipartFile file) throws IOException {
+        InputStreamReader in = new InputStreamReader(file.getInputStream(), "utf-8");
+        HeaderColumnNameMappingStrategy<Scenarist> mapper = new HeaderColumnNameMappingStrategy<>();
+        mapper.setType(Scenarist.class);
+        Integer res = 0;
+        CsvToBean<Scenarist> build = new CsvToBeanBuilder<Scenarist>(in).withMappingStrategy(mapper).build();
+        List<Scenarist> scenaristList = build.parse();
+        try {
+            res = scenaristService.insertMulti(scenaristList);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            res = 0;
+        } finally {
+            return res;
+        }
     }
+    //@ApiOperation("获得编剧表总数")
+    //@GetMapping("/scenarist/count")
+    //public long getScenaristCount() {
+    //    return scenaristService.getScenaristCount();
+    //}
 }

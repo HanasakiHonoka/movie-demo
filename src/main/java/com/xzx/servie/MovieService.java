@@ -22,6 +22,8 @@ public interface MovieService {
 
     public List<Movie> getMovies();
 
+    public Integer insertMulti(List<Movie> movies);
+
     public Integer updateMovie(Movie movie);
 
     public Integer insertMovie(Movie movie);

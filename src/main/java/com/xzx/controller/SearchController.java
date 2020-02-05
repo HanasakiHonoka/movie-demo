@@ -17,9 +17,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class SearchController {
         }else {
             return null;
         }*/
-        if(searchVo.getType() == 1) {
+        if (searchVo.getType() == 1) {
             return "forward:/search/movies";
         } else if (searchVo.getType() == 2) {
             return "forward:/search/directors";
@@ -66,6 +68,7 @@ public class SearchController {
             return null;
         }
     }
+
     @ApiOperation(value = "返回电影搜索结果")
     @GetMapping("/movies")
     @ResponseBody
@@ -75,27 +78,27 @@ public class SearchController {
         List<Movie> moviesWithLimit = movieService.getLikeMovieWithLimit(searchVo);
         List<MovieWithPeople> movieWithPeopleList = new ArrayList<>();
         //遍历查询到的电影结果，加入演员编剧信息
-        for (Movie movie:moviesWithLimit) {
+        for (Movie movie : moviesWithLimit) {
             MovieWithPeople movieWithPeople = new MovieWithPeople();
             //加入电影自身
             movieWithPeople.setMovie(movie);
             //加入演员信息
             List<SimpleActor> actors = actorService.getSimpleActorByMovieId(movie.getId());
-            if(actors.size() > 5) {
+            if (actors.size() > 5) {
                 actors = actors.subList(0, 5);
             }
             movieWithPeople.setActors(actors);
 
             //加入导演信息
             List<SimpleDirector> directors = directorService.getSimpleDirectorByMovieId(movie.getId());
-            if(directors.size() > 2) {
+            if (directors.size() > 2) {
                 directors = directors.subList(0, 2);
             }
             movieWithPeople.setDirectors(directors);
 
             //加入编剧信息
             List<SimpleScenarist> scenarists = scenaristService.getSimpleScenaristByMovieId(movie.getId());
-            if(scenarists.size() > 3) {
+            if (scenarists.size() > 3) {
                 scenarists = scenarists.subList(0, 3);
             }
             movieWithPeople.setScenarists(scenarists);
@@ -114,7 +117,7 @@ public class SearchController {
     public List<HintResVo> getMoviesName(HintVo hintVo) {
         List<HintResVo> moviesName = new ArrayList<>();
         List<Movie> moviesWithLimit = movieService.getFirstLikeMovie(hintVo);
-        for(Movie movie:moviesWithLimit) {
+        for (Movie movie : moviesWithLimit) {
             moviesName.add(new HintResVo(movie.getTitle()));
         }
         return moviesName;
@@ -127,11 +130,11 @@ public class SearchController {
         DirectorListVo directorListVo = new DirectorListVo();
         directorListVo.setMsg("2");
         //查找到所有符合条件的导演
-        List<Director> directorsWithLimit =directorService.getLikeDirectorWithLimit(searchVo);
+        List<Director> directorsWithLimit = directorService.getLikeDirectorWithLimit(searchVo);
         long directorSize = directorService.getLikeDirectorCount(searchVo);
         List<DirectorWithMovie> directorWithMovieList = new ArrayList<>();
         //遍历每个导演
-        for (Director director:directorsWithLimit) {
+        for (Director director : directorsWithLimit) {
             DirectorWithMovie directorWithMovie = new DirectorWithMovie();
             directorWithMovie.setDirector(director);
             //加入参演电影
@@ -152,8 +155,8 @@ public class SearchController {
     @ResponseBody
     public List<HintResVo> getDirectorsName(HintVo hintVo) {
         List<HintResVo> directorsName = new ArrayList<>();
-        List<Director> directorsWithLimit= directorService.getFirstLikeDirector(hintVo);
-        for(Director director:directorsWithLimit) {
+        List<Director> directorsWithLimit = directorService.getFirstLikeDirector(hintVo);
+        for (Director director : directorsWithLimit) {
             directorsName.add(new HintResVo(director.getName()));
         }
         return directorsName;
@@ -166,7 +169,7 @@ public class SearchController {
         ActorListVo actorListVo = new ActorListVo();
         actorListVo.setMsg("3");
         //查询到所有符合条件的演员
-        List<Actor> actorsWithLimit =actorService.getLikeActorWithLimit(searchVo);
+        List<Actor> actorsWithLimit = actorService.getLikeActorWithLimit(searchVo);
         long actorSize = actorService.getLikeActorCount(searchVo);
         List<ActorWithMovie> actorWithMovieList = new ArrayList<>();
         //遍历每个演员
@@ -193,7 +196,7 @@ public class SearchController {
     public List<HintResVo> getActorsName(HintVo hintVo) {
         List<HintResVo> actorsName = new ArrayList<>();
         List<Actor> actorsWithLimit = actorService.getFirstLikeActors(hintVo);
-        for(Actor actor:actorsWithLimit) {
+        for (Actor actor : actorsWithLimit) {
             actorsName.add(new HintResVo(actor.getName()));
         }
         return actorsName;
@@ -205,11 +208,11 @@ public class SearchController {
     public ScenaristListVo getScenarists(SearchVo searchVo) {
         ScenaristListVo scenaristListVo = new ScenaristListVo();
         scenaristListVo.setMsg("4");
-        List<Scenarist> scenaristsWithLimit =scenaristService.getLikeScenaristWithLimit(searchVo);
+        List<Scenarist> scenaristsWithLimit = scenaristService.getLikeScenaristWithLimit(searchVo);
         long scenaristSize = scenaristService.getLikeScenaristCount(searchVo);
         List<ScenaristWithMovie> scenaristWithMovieList = new ArrayList<>();
 
-        for(Scenarist scenarist: scenaristsWithLimit) {
+        for (Scenarist scenarist : scenaristsWithLimit) {
             ScenaristWithMovie scenaristWithMovie = new ScenaristWithMovie();
             scenaristWithMovie.setScenarist(scenarist);
 
@@ -233,10 +236,50 @@ public class SearchController {
     public List<HintResVo> getScenaristsName(HintVo hintVo) {
         List<HintResVo> scenaristsName = new ArrayList<>();
         List<Scenarist> scenaristsWithLimit = scenaristService.getFirstLikeScenarist(hintVo);
-        for (Scenarist scenarist:scenaristsWithLimit) {
+        for (Scenarist scenarist : scenaristsWithLimit) {
             scenaristsName.add(new HintResVo(scenarist.getName()));
         }
         return scenaristsName;
+    }
+
+    @ApiOperation("获得各表总数")
+    @GetMapping("/count")
+    @ResponseBody
+    public CountVo getCount() {
+        CountVo countVo = new CountVo();
+        countVo.setMovieCount(movieService.getMovieCount());
+        countVo.setActorCount(actorService.getActorCount());
+        countVo.setDirectorCount(directorService.getDirectorCount());
+        countVo.setScenaristCount(scenaristService.getScenaristCount());
+        return countVo;
+    }
+
+    @ApiOperation("获得各表列名")
+    @GetMapping("/fields/{type}")
+    @ResponseBody
+    public List<String> getClassFields(@PathVariable(value = "type") Integer type) throws ClassNotFoundException {
+        Class<?> aClass = null;
+        if (type == 1) {
+            //movie
+            aClass = Class.forName("com.xzx.entity.Movie");
+        } else if (type == 2) {
+            //director
+            aClass = Class.forName("com.xzx.entity.Director");
+        } else if (type == 3) {
+            //actor
+            aClass = Class.forName("com.xzx.entity.Actor");
+        } else if (type == 4) {
+            //scenarist
+            aClass = Class.forName("com.xzx.entity.Scenarist");
+        }
+        List<String> res = new ArrayList<>();
+        Field[] declaredFields = aClass.getDeclaredFields();
+        for (Field field : declaredFields) {
+            //System.out.println(field.getName());
+            res.add(field.getName());
+        }
+
+        return res;
     }
 
 }

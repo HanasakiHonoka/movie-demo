@@ -11,5 +11,7 @@ public interface MovieExtendMapper {
     public List<Movie> getMovieByDirectorId(Integer directorId);
 
     public List<Movie> getMovieByScenaristId(Integer ScenaristId);
+
+    public Integer insertMulti(List<Movie> movies);
 }
 

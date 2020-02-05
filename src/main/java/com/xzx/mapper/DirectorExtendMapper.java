@@ -7,4 +7,6 @@ import java.util.List;
 public interface DirectorExtendMapper {
 
     public List<Director> getDirectorByMovieId(Integer movieId);
+
+    public Integer insertMulti(List<Director> directors);
 }
