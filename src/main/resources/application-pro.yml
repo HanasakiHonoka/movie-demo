@@ -4,6 +4,11 @@ spring:
     type: com.mysql.cj.jdbc.MysqlDataSource
     username: root
     password: yang1290
+  data:
+    neo4j:
+      uri: bolt://10.103.244.129:7687
+      username: neo4j
+      password: 123456
 
 
 mybatis:

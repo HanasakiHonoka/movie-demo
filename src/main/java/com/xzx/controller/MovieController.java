@@ -105,9 +105,6 @@ public class MovieController {
         mapper.setType(Movie.class);
         CsvToBean<Movie> build = new CsvToBeanBuilder<Movie>(in).withMappingStrategy(mapper).build();
         List<Movie> movieList = build.parse();
-        for (int i = 0; i < movieList.size(); i++) {
-            //System.out.println(movieList.get(i));
-        }
         Integer res = 0;
         try {
             res = movieService.insertMulti(movieList);
