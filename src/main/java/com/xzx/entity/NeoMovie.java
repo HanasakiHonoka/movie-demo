@@ -2,15 +2,15 @@ package com.xzx.entity;
 
 public class NeoMovie {
 
-    private String mid;
+    private String id;
     private String name;
 
-    public String getMid() {
-        return mid;
+    public String getId() {
+        return id;
     }
 
-    public NeoMovie(String mid, String name) {
-        this.mid = mid;
+    public NeoMovie(String id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -18,8 +18,8 @@ public class NeoMovie {
         super();
     }
 
-    public void setMid(String mid) {
-        this.mid = mid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

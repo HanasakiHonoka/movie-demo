@@ -18,13 +18,14 @@ public class Neo4jUtil {
         Neo4jUtil.driver = driver;
     }
 
-    public static Driver getDriver() {
-        //Session session = driver.session();
+    public static Session getSession() {
+        Session session = driver.session();
+
         //System.out.println(cql);
         //Result result = session.run(cql);
         //System.out.println("success");
         //session.close();
         //driver.close();
-        return driver;
+        return session;
     }
 }

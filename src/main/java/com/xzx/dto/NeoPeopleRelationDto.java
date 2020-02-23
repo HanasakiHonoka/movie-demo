@@ -2,20 +2,32 @@ package com.xzx.dto;
 
 import com.xzx.entity.NeoMovie;
 import com.xzx.entity.NeoPeople;
-import com.xzx.entity.NeoRelation;
 
 public class NeoPeopleRelationDto {
 
-    private NeoPeople neoPeople;
+    private NeoPeople start;
     private String neoRelation;
-    private NeoMovie neoMovie;
+    private NeoMovie end;
 
-    public NeoPeople getNeoPeople() {
-        return neoPeople;
+    @Override
+    public boolean equals(Object obj) {
+        NeoPeopleRelationDto nprd = (NeoPeopleRelationDto) obj;
+        return start.getName().equals(nprd.getStart().getName()) && end.getName().equals(nprd.getEnd().getName()) && neoRelation.equals(nprd.neoRelation);
+        //return super.equals(obj);
     }
 
-    public void setNeoPeople(NeoPeople neoPeople) {
-        this.neoPeople = neoPeople;
+    @Override
+    public int hashCode() {
+        return start.getName().hashCode() + end.getName().hashCode() + neoRelation.hashCode();
+        //return super.hashCode();
+    }
+
+    public NeoPeople getStart() {
+        return start;
+    }
+
+    public void setStart(NeoPeople start) {
+        this.start = start;
     }
 
 
@@ -27,11 +39,11 @@ public class NeoPeopleRelationDto {
         this.neoRelation = neoRelation;
     }
 
-    public NeoMovie getNeoMovie() {
-        return neoMovie;
+    public NeoMovie getEnd() {
+        return end;
     }
 
-    public void setNeoMovie(NeoMovie neoMovie) {
-        this.neoMovie = neoMovie;
+    public void setEnd(NeoMovie end) {
+        this.end = end;
     }
 }
