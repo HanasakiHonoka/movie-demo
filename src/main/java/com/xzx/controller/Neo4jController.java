@@ -31,4 +31,13 @@ public class Neo4jController {
         return neo4jService.getPeopleRelation(id);
 
     }
+
+    @ApiOperation("获得以电影为中心的关系")
+    @ApiImplicitParam(name = "id", defaultValue = "2931")
+    @GetMapping("/neo/movie/{id}")
+    public List<NeoPeopleRelationDto> getMovieRelation(@PathVariable("id")String id) {
+        return neo4jService.getMovieRelation(id);
+
+    }
+
 }

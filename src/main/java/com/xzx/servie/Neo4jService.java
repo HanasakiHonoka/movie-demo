@@ -7,4 +7,6 @@ import java.util.List;
 public interface Neo4jService {
 
     List<NeoPeopleRelationDto> getPeopleRelation(String uid);
+
+    List<NeoPeopleRelationDto> getMovieRelation(String mid);
 }

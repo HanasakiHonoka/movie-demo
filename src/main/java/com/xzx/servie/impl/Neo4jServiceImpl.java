@@ -117,4 +117,57 @@ public class Neo4jServiceImpl implements Neo4jService {
         return ListUtil.removeDuplicate(res);
         //return res;
     }
+
+    @Override
+    public List<NeoPeopleRelationDto> getMovieRelation(String mid) {
+        Session session = neo4jUtil.getSession();
+        String cql = String.format(
+                "match l = ((p)-[r]->(m)) " +
+                "where m.mid = '%s' " +
+                "return collect(l) as rela", mid);
+        Result result = session.run(cql);
+        List<NeoPeopleRelationDto> res = new ArrayList<>();
+        while (result.hasNext()) {
+            Record record = result.next();
+            for (String index:record.keys()) {
+                if (index.equals("rela")) {
+                    //设置限制返回的数量
+                    Map<String, Integer> countMapR2 = new HashMap<>();
+                    countMapR2.put("导演", 0);
+                    countMapR2.put("参演", 0);
+                    countMapR2.put("编写", 0);
+                    List<Object> pathList = record.get(index).asList();
+                    for (Object path1:pathList) {
+                        NeoPeopleRelationDto nprd = new NeoPeopleRelationDto();
+                        Path path = (Path) path1;
+                        //System.out.println(path.start().asMap().get("name"));
+                        String relationType2 = "";
+                        Iterator<Relationship> iterator = path.relationships().iterator();
+                        while (iterator.hasNext()) {
+                            Relationship rela = iterator.next();
+                            relationType2 = rela.asMap().get("relation").toString();
+                        }
+                        //System.out.println(relationType);
+                        Map<String, Object> peopleMap = path.start().asMap();
+                        Map<String, Object> movieMap = path.end().asMap();
+                        int relationCount2 = countMapR2.get(relationType2);
+                        if(relationType2.equals("导演") && relationCount2 > 0) continue;
+                        if(relationType2.equals("参演") && relationCount2 > 5) continue;
+                        if(relationType2.equals("编写") && relationCount2 > 0) continue;
+                        nprd.setStart(new NeoPeople("p" + peopleMap.get("uid").toString(), peopleMap.get("name").toString()));
+                        nprd.setEnd(new NeoMovie("m" + movieMap.get("mid").toString(), movieMap.get("name").toString()));
+                        nprd.setNeoRelation(relationType2);
+                        res.add(nprd);
+                        countMapR2.put(relationType2, relationCount2 + 1);
+                    }
+                }
+            }
+        }
+
+
+        session.close();
+        return res;
+    }
+
+
 }
