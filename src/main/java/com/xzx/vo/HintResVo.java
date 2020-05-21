@@ -3,6 +3,7 @@ package com.xzx.vo;
 public class HintResVo {
 
     private String value;
+    private Integer id;
 
 
 
@@ -14,12 +15,20 @@ public class HintResVo {
         this.value = value;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public HintResVo() {
         super();
     }
 
-    public HintResVo(String value) {
-
+    public HintResVo(Integer id, String value) {
         this.value = value;
+        this.id = id;
     }
 }

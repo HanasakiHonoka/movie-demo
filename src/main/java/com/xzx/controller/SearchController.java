@@ -118,7 +118,7 @@ public class SearchController {
         List<HintResVo> moviesName = new ArrayList<>();
         List<Movie> moviesWithLimit = movieService.getFirstLikeMovie(hintVo);
         for (Movie movie : moviesWithLimit) {
-            moviesName.add(new HintResVo(movie.getTitle()));
+            moviesName.add(new HintResVo(movie.getId(), movie.getTitle()));
         }
         return moviesName;
     }
@@ -157,7 +157,7 @@ public class SearchController {
         List<HintResVo> directorsName = new ArrayList<>();
         List<Director> directorsWithLimit = directorService.getFirstLikeDirector(hintVo);
         for (Director director : directorsWithLimit) {
-            directorsName.add(new HintResVo(director.getName()));
+            directorsName.add(new HintResVo(director.getId(), director.getName()));
         }
         return directorsName;
     }
@@ -197,7 +197,7 @@ public class SearchController {
         List<HintResVo> actorsName = new ArrayList<>();
         List<Actor> actorsWithLimit = actorService.getFirstLikeActors(hintVo);
         for (Actor actor : actorsWithLimit) {
-            actorsName.add(new HintResVo(actor.getName()));
+            actorsName.add(new HintResVo(actor.getId(), actor.getName()));
         }
         return actorsName;
     }
@@ -237,7 +237,7 @@ public class SearchController {
         List<HintResVo> scenaristsName = new ArrayList<>();
         List<Scenarist> scenaristsWithLimit = scenaristService.getFirstLikeScenarist(hintVo);
         for (Scenarist scenarist : scenaristsWithLimit) {
-            scenaristsName.add(new HintResVo(scenarist.getName()));
+            scenaristsName.add(new HintResVo(scenarist.getId(), scenarist.getName()));
         }
         return scenaristsName;
     }

@@ -19,9 +19,12 @@ __BasePath__ : /
 
 === Tags
 
+* Neo4j模块 : Neo 4j Controller
 * 导演模块 : Director Controller
 * 搜索模块 : Search Controller
+* 数据分析模块 : Data Science Controller
 * 演员模块 : Actor Controller
+* 用户模块 : User Controller
 * 电影模块 : Movie Controller
 * 编剧模块 : Scenarist Controller
 
@@ -30,6 +33,79 @@ __BasePath__ : /
 
 [[_paths]]
 == Resources
+
+[[_e868be5a4226a9ae78f98839fd838ed2]]
+=== Neo4j模块
+Neo 4j Controller
+
+
+[[_getmovierelationusingget]]
+==== 获得以电影为中心的关系
+....
+GET /neo/movie/{id}
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^4,.^2"]
+|===
+|Type|Name|Schema|Default
+|**Path**|**id** +
+__optional__|string|`"2931"`
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|< <<_neopeoplerelationdto,NeoPeopleRelationDto>> > array
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getpersonrelationusingget]]
+==== 获得以人为中心的关系
+....
+GET /neo/person/{id}
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^4,.^2"]
+|===
+|Type|Name|Schema|Default
+|**Path**|**id** +
+__optional__|string|`"1274297"`
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|< <<_neopeoplerelationdto,NeoPeopleRelationDto>> > array
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
 
 [[_9b043bd6e84fbf20f258524e66e219a9]]
 === 导演模块
@@ -140,6 +216,46 @@ __optional__|string
 * `*/*`
 
 
+[[_insertscenaristbycsvusingpost]]
+==== csv文件导入导演数据
+....
+POST /director/csvInsert
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**FormData**|**file** +
+__optional__|file|file
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|integer (int32)
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `multipart/form-data`
+
+
+===== Produces
+
+* `*/*`
+
+
 [[_getdirectorusingget]]
 ==== 按id获取导演信息
 ....
@@ -208,6 +324,30 @@ __required__|id|integer (int32)
 * `*/*`
 
 
+[[_getdirectorsusingget]]
+==== 获取所有导演
+....
+GET /directors
+....
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_mgtdirectorlistvo,MgtDirectorListVo>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
 [[_c40024e558be3335c126d476de1f66fb]]
 === 搜索模块
 Search Controller
@@ -251,7 +391,7 @@ __optional__|搜索关键词|string
 * `*/*`
 
 
-[[_getactorsusingget]]
+[[_getactorsusingget_1]]
 ==== 返回演员搜索结果
 ....
 GET /search/actors
@@ -325,7 +465,31 @@ __optional__|搜索关键词|string
 * `*/*`
 
 
-[[_getdirectorsusingget]]
+[[_getcountusingget]]
+==== 获得各表总数
+....
+GET /search/count
+....
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_countvo,CountVo>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getdirectorsusingget_1]]
 ==== 返回导演搜索结果
 ....
 GET /search/directors
@@ -399,7 +563,41 @@ __optional__|搜索关键词|string
 * `*/*`
 
 
-[[_getmoviesusingget]]
+[[_getclassfieldsusingget]]
+==== 获得各表列名
+....
+GET /search/fields/{type}
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**type** +
+__required__|type|integer (int32)
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|< string > array
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getmoviesusingget_1]]
 ==== 返回电影搜索结果
 ....
 GET /search/movies
@@ -473,7 +671,7 @@ __optional__|搜索关键词|string
 * `*/*`
 
 
-[[_getscenaristsusingget]]
+[[_getscenaristsusingget_1]]
 ==== 返回编剧搜索结果
 ....
 GET /search/scenarists
@@ -536,6 +734,69 @@ __optional__|搜索关键词|string
 |===
 |HTTP Code|Description|Schema
 |**200**|OK|< <<_hintresvo,HintResVo>> > array
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_34e9da23f928ba0eb8451ad59540460b]]
+=== 数据分析模块
+Data Science Controller
+
+
+[[_getboxvalueusingget]]
+==== 获得票房预测结果
+....
+GET /ds/boxValue
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**actors[0].id** +
+__optional__||integer (int32)
+|**Query**|**actors[0].name** +
+__optional__||string
+|**Query**|**budget** +
+__optional__|电影预算|integer (int32)
+|**Query**|**directors[0].id** +
+__optional__||integer (int32)
+|**Query**|**directors[0].name** +
+__optional__||string
+|**Query**|**duration** +
+__optional__|电影时长|integer (int32)
+|**Query**|**isIp** +
+__optional__|是否为Ip|boolean
+|**Query**|**isSequel** +
+__optional__|是否续集|boolean
+|**Query**|**releaseTime** +
+__optional__|上映时间|string (date-time)
+|**Query**|**scenarists[0].id** +
+__optional__||integer (int32)
+|**Query**|**scenarists[0].name** +
+__optional__||string
+|**Query**|**technology** +
+__optional__|电影制式|string
+|**Query**|**type** +
+__optional__|电影类型|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_boxresvo,BoxResVo>>
 |**401**|Unauthorized|No Content
 |**403**|Forbidden|No Content
 |**404**|Not Found|No Content
@@ -668,6 +929,46 @@ __optional__|integer (int32)
 * `*/*`
 
 
+[[_insertactorbycsvusingpost]]
+==== csv文件导入演员数据
+....
+POST /actor/csvInsert
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**FormData**|**file** +
+__optional__|file|file
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|integer (int32)
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `multipart/form-data`
+
+
+===== Produces
+
+* `*/*`
+
+
 [[_getactorusingget]]
 ==== 按id获取演员信息
 ....
@@ -728,6 +1029,241 @@ __required__|id|integer (int32)
 |**204**|No Content|No Content
 |**401**|Unauthorized|No Content
 |**403**|Forbidden|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getactorsusingget]]
+==== 获取所有演员
+....
+GET /actors
+....
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_mgtactorlistvo,MgtActorListVo>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_65bcfc1fd539b2cddf6276197767ec3e]]
+=== 用户模块
+User Controller
+
+
+[[_loginusingpost]]
+==== 登陆
+....
+POST /login
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^4"]
+|===
+|Type|Name|Schema
+|**Query**|**id** +
+__optional__|integer (int32)
+|**Query**|**loginTime** +
+__optional__|string (date-time)
+|**Query**|**password** +
+__optional__|string
+|**Query**|**registerTime** +
+__optional__|string (date-time)
+|**Query**|**role** +
+__optional__|boolean
+|**Query**|**status** +
+__optional__|boolean
+|**Query**|**username** +
+__optional__|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_loginvo,LoginVo>>
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `application/json`
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_insertuserusingput]]
+==== 添加普通用户
+....
+PUT /user
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^4"]
+|===
+|Type|Name|Schema
+|**Query**|**id** +
+__optional__|integer (int32)
+|**Query**|**loginTime** +
+__optional__|string (date-time)
+|**Query**|**password** +
+__optional__|string
+|**Query**|**registerTime** +
+__optional__|string (date-time)
+|**Query**|**role** +
+__optional__|boolean
+|**Query**|**status** +
+__optional__|boolean
+|**Query**|**username** +
+__optional__|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|integer (int32)
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `application/json`
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_updatepasswordusingput]]
+==== 修改密码
+....
+PUT /user/updatePwd
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^4"]
+|===
+|Type|Name|Schema
+|**Query**|**id** +
+__optional__|integer (int32)
+|**Query**|**nowPassword** +
+__optional__|string
+|**Query**|**pastPassword** +
+__optional__|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|integer (int32)
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `application/json`
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_deluserusingdelete]]
+==== 删除用户
+....
+DELETE /user/{id}
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**id** +
+__required__|id|string
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|integer (int32)
+|**204**|No Content|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getusersusingget]]
+==== 获得所有普通用户
+....
+GET /users
+....
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|< <<_simpleuser,SimpleUser>> > array
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
 |===
 
 
@@ -881,6 +1417,46 @@ __optional__|string
 * `*/*`
 
 
+[[_insertmoviebycsvusingpost]]
+==== csv文件导入电影数据
+....
+POST /movie/csvInsert
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**FormData**|**file** +
+__optional__|file|file
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|integer (int32)
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `multipart/form-data`
+
+
+===== Produces
+
+* `*/*`
+
+
 [[_getmovieusingget]]
 ==== 按id获取电影信息
 ....
@@ -941,6 +1517,30 @@ __required__|id|string
 |**204**|No Content|No Content
 |**401**|Unauthorized|No Content
 |**403**|Forbidden|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
+[[_getmoviesusingget]]
+==== 获取所有电影
+....
+GET /movies
+....
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_mgtmovielistvo,MgtMovieListVo>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
 |===
 
 
@@ -1058,6 +1658,46 @@ __optional__|string
 * `*/*`
 
 
+[[_insertscenaristbycsvusingpost_1]]
+==== csv文件导入编剧数据
+....
+POST /scenarist/csvInsert
+....
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**FormData**|**file** +
+__optional__|file|file
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|integer (int32)
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `multipart/form-data`
+
+
+===== Produces
+
+* `*/*`
+
+
 [[_getscenaristusingget]]
 ==== 按id获取编剧信息
 ....
@@ -1126,6 +1766,30 @@ __required__|id|integer (int32)
 * `*/*`
 
 
+[[_getscenaristsusingget]]
+==== 获取所有编剧
+....
+GET /scenarists
+....
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_mgtscenaristlistvo,MgtScenaristListVo>>
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `*/*`
+
+
 
 
 [[_definitions]]
@@ -1145,6 +1809,34 @@ __optional__|< <<_simplemovie,SimpleMovie>> > array
 __optional__|< <<_simplemovie,SimpleMovie>> > array
 |**smovies** +
 __optional__|< <<_simplemovie,SimpleMovie>> > array
+|===
+
+
+[[_boxresvo]]
+=== BoxResVo
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**boxValue** +
+__optional__|integer (int32)
+|===
+
+
+[[_countvo]]
+=== CountVo
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**actorCount** +
+__optional__|integer (int64)
+|**directorCount** +
+__optional__|integer (int64)
+|**movieCount** +
+__optional__|integer (int64)
+|**scenaristCount** +
+__optional__|integer (int64)
 |===
 
 
@@ -1176,6 +1868,63 @@ __optional__|string
 |===
 
 
+[[_loginvo]]
+=== LoginVo
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**msg** +
+__optional__|integer (int32)
+|**user** +
+__optional__|<<_user,User>>
+|===
+
+
+[[_mgtactorlistvo]]
+=== MgtActorListVo
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**actors** +
+__optional__|< <<_actorwithmovie,ActorWithMovie>> > array
+|===
+
+
+[[_mgtdirectorlistvo]]
+=== MgtDirectorListVo
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**directors** +
+__optional__|< <<_directorwithmovie,DirectorWithMovie>> > array
+|===
+
+
+[[_mgtmovielistvo]]
+=== MgtMovieListVo
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**movies** +
+__optional__|< <<_moviewithpeople,MovieWithPeople>> > array
+|===
+
+
+[[_mgtscenaristlistvo]]
+=== MgtScenaristListVo
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**scenarists** +
+__optional__|< <<_scenaristwithmovie,ScenaristWithMovie>> > array
+|===
+
+
 [[_moviewithpeople]]
 === MovieWithPeople
 
@@ -1190,6 +1939,47 @@ __optional__|< <<_simpledirector,SimpleDirector>> > array
 __optional__|<<_b22074a99a461072432c9de30dd80bf5,电影实体>>
 |**scenarists** +
 __optional__|< <<_simplescenarist,SimpleScenarist>> > array
+|===
+
+
+[[_neomovie]]
+=== NeoMovie
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|string
+|**name** +
+__optional__|string
+|===
+
+
+[[_neopeople]]
+=== NeoPeople
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|string
+|**name** +
+__optional__|string
+|===
+
+
+[[_neopeoplerelationdto]]
+=== NeoPeopleRelationDto
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**end** +
+__optional__|<<_neomovie,NeoMovie>>
+|**neoRelation** +
+__optional__|string
+|**start** +
+__optional__|<<_neopeople,NeoPeople>>
 |===
 
 
@@ -1262,6 +2052,42 @@ __optional__|string
 |**id** +
 __optional__|integer (int32)
 |**name** +
+__optional__|string
+|===
+
+
+[[_simpleuser]]
+=== SimpleUser
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer (int32)
+|**userName** +
+__optional__|string
+|===
+
+
+[[_user]]
+=== User
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer (int32)
+|**loginTime** +
+__optional__|string (date-time)
+|**password** +
+__optional__|string
+|**registerTime** +
+__optional__|string (date-time)
+|**role** +
+__optional__|boolean
+|**status** +
+__optional__|boolean
+|**username** +
 __optional__|string
 |===
 

@@ -7,6 +7,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "DataScienceController", tags = "数据分析模块")
@@ -17,8 +19,8 @@ public class DataScienceController {
     private DataScienceService dataScienceService;
 
     @ApiOperation("获得票房预测结果")
-    @GetMapping("/ds/boxValue")
-    public BoxResVo getBoxValue(BoxCalculateVo boxCalculateVo) {
+    @PostMapping("/ds/boxValue")
+    public BoxResVo getBoxValue(@RequestBody BoxCalculateVo boxCalculateVo) {
         BoxResVo boxResVo = dataScienceService.boxCalculate(boxCalculateVo);
         return boxResVo;
     }
