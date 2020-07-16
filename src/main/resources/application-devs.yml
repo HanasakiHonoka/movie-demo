@@ -15,7 +15,6 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
 
 server:
-  port: 8088
+  port: 10010
 
-dataScienceServer: "http://127.0.0.1:5000"
-
+dataScienceServer: "http://106.54.68.249:10012"

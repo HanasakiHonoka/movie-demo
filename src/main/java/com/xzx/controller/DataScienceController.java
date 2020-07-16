@@ -1,5 +1,6 @@
 package com.xzx.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xzx.servie.DataScienceService;
 import com.xzx.vo.BoxCalculateVo;
 import com.xzx.vo.BoxResVo;
@@ -20,7 +21,7 @@ public class DataScienceController {
 
     @ApiOperation("获得票房预测结果")
     @PostMapping("/ds/boxValue")
-    public BoxResVo getBoxValue(@RequestBody BoxCalculateVo boxCalculateVo) {
+    public BoxResVo getBoxValue(BoxCalculateVo boxCalculateVo) {
         BoxResVo boxResVo = dataScienceService.boxCalculate(boxCalculateVo);
         return boxResVo;
     }
