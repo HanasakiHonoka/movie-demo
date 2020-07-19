@@ -1,34 +1,14 @@
 package com.xzx.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class HintResVo {
 
-    private String value;
     private Integer id;
-
-
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public HintResVo() {
-        super();
-    }
-
-    public HintResVo(Integer id, String value) {
-        this.value = value;
-        this.id = id;
-    }
+    private String value;
 }

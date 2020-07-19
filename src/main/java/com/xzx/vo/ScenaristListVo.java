@@ -4,9 +4,11 @@ import com.xzx.dto.ScenaristWithMovie;
 import com.xzx.entity.Scenarist;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 @ApiModel(value = "编剧列表返回参数", description = "编剧列表返回参数")
 public class ScenaristListVo {
 
@@ -17,27 +19,4 @@ public class ScenaristListVo {
     @ApiModelProperty(value = "编剧总数")
     private long size;
 
-    public List<ScenaristWithMovie> getScenarists() {
-        return scenarists;
-    }
-
-    public void setScenarists(List<ScenaristWithMovie> scenarists) {
-        this.scenarists = scenarists;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
 }

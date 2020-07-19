@@ -3,7 +3,7 @@ package com.xzx.util;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.entity.Actor;
 import com.xzx.entity.Movie;
-import com.xzx.servie.MovieService;
+import com.xzx.servie.IMovieService;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SimpleMovieUtil {
 
-    public static List<SimpleMovie> Limit5SimpleMovie(MovieService movieService, Integer id, String identity) {
+    public static List<SimpleMovie> Limit5SimpleMovie(IMovieService movieService, Integer id, String identity) {
         List<SimpleMovie> movies = new ArrayList<>();
         if(identity.equals("Actor")) {
             movies = movieService.getSimpleMovieByActorId(id);

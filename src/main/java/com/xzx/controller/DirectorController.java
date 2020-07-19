@@ -6,9 +6,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.DirectorWithMovie;
 import com.xzx.entity.Director;
-import com.xzx.entity.Scenarist;
-import com.xzx.servie.DirectorService;
-import com.xzx.servie.MovieService;
+import com.xzx.servie.IDirectorService;
+import com.xzx.servie.IMovieService;
 import com.xzx.vo.MgtDirectorListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,16 +26,16 @@ import java.util.List;
 public class DirectorController {
 
     @Autowired
-    private DirectorService directorService;
+    private IDirectorService directorService;
 
     @Autowired
-    private MovieService movieService;
+    private IMovieService movieService;
 
     @ApiOperation("按id获取导演信息")
     @GetMapping("/director/{id}")
     public DirectorWithMovie getDirector(@PathVariable(value = "id") Integer id) {
 
-        Director director = directorService.getDirector(id);
+        Director director = directorService.getById(id);
         DirectorWithMovie directorWithMovie = new DirectorWithMovie();
         directorWithMovie.setDirector(director);
         directorWithMovie.setAMovies(movieService.getSimpleMovieByActorId(id));
@@ -46,20 +46,20 @@ public class DirectorController {
 
     @ApiOperation("更新导演信息")
     @PutMapping("/director")
-    public Integer updateDirector(Director director) {
-        return directorService.updateDirector(director);
+    public boolean updateDirector(Director director) {
+        return directorService.updateById(director);
     }
 
     @ApiOperation("添加导演")
     @PostMapping("/director")
-    public Integer insertDirector(Director director) {
-        return directorService.insertDirector(director);
+    public boolean insertDirector(Director director) {
+        return directorService.save(director);
     }
 
     @ApiOperation("按id删除导演")
     @DeleteMapping("/director/{id}")
-    public Integer delDirector(@PathVariable(value = "id") Integer id) {
-        return directorService.delDirector(id);
+    public boolean delDirector(@PathVariable(value = "id") Integer id) {
+        return directorService.removeById(id);
     }
 
     @ApiOperation("获取所有导演")
@@ -67,7 +67,7 @@ public class DirectorController {
     public MgtDirectorListVo getDirectors() {
         List<DirectorWithMovie> directorWithMovies = new ArrayList<>();
 
-        List<Director> directors = directorService.getDirectors();
+        List<Director> directors = directorService.list();
         for (Director director: directors) {
             DirectorWithMovie directorWithMovie = new DirectorWithMovie();
             directorWithMovie.setDirector(director);
@@ -79,21 +79,13 @@ public class DirectorController {
 
     @ApiOperation("csv文件导入导演数据")
     @PostMapping("/director/csvInsert")
-    public Integer insertScenaristByCsv(MultipartFile file) throws IOException {
-        InputStreamReader in = new InputStreamReader(file.getInputStream(), "utf-8");
+    public boolean insertScenaristByCsv(MultipartFile file) throws IOException {
+        InputStreamReader in = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
         HeaderColumnNameMappingStrategy<Director> mapper = new HeaderColumnNameMappingStrategy<>();
         mapper.setType(Director.class);
-        Integer res = 0;
         CsvToBean<Director> build = new CsvToBeanBuilder<Director>(in).withMappingStrategy(mapper).build();
         List<Director> directorList = build.parse();
-        try {
-            res = directorService.insertMulti(directorList);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            res = 0;
-        } finally {
-            return res;
-        }
+        return directorService.saveBatch(directorList);
     }
 
     //@ApiOperation("获得导演表总数")

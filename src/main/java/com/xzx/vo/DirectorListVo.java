@@ -5,9 +5,11 @@ import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 @ApiModel(value = "导演列表返回参数", description = "导演列表返回参数")
 public class DirectorListVo {
 
@@ -18,27 +20,4 @@ public class DirectorListVo {
     @ApiModelProperty(value = "导演总数")
     private long size;
 
-    public List<DirectorWithMovie> getDirectors() {
-        return directors;
-    }
-
-    public void setDirectors(List<DirectorWithMovie> directors) {
-        this.directors = directors;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
 }

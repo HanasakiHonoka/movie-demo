@@ -1,82 +1,53 @@
 package com.xzx.servie.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzx.entity.User;
-import com.xzx.entity.UserExample;
 import com.xzx.mapper.UserMapper;
-import com.xzx.servie.UserService;
-import io.swagger.annotations.Example;
+import com.xzx.servie.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
-
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author xzx
+ * @since 2020-07-18
+ */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     @Override
     public User login(User user) {
-        UserExample example = new UserExample();
-        UserExample.Criteria criteria = example.createCriteria();
-        criteria.andUsernameEqualTo(user.getUsername());
-        criteria.andPasswordEqualTo(user.getPassword());
-        List<User> users = userMapper.selectByExample(example);
-        if (users.size() == 0) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", user.getUsername());
+        wrapper.eq("password", user.getPassword());
+        List<User> userList = this.list(wrapper);
+        if (userList.size() == 0) {
             return null;
         } else {
-            User resUser = users.get(0);
-            //resUser.setLoginTime(new Date());
+            User resUser = userList.get(0);
             return resUser;
         }
     }
 
     @Override
-    public Integer loginUpdate(User user) {
-        return userMapper.updateByPrimaryKey(user);
-    }
-
-    @Override
-    public List<User> getUsers() {
-        UserExample example = new UserExample();
-        UserExample.Criteria criteria = example.createCriteria();
-        criteria.andRoleEqualTo(false);
-        return userMapper.selectByExample(example);
-    }
-
-    @Override
-    public Integer delUser(Integer userId) {
-        return userMapper.deleteByPrimaryKey(userId);
-    }
-
-    @Override
-    public Integer insertUser(User user) {
-        return userMapper.insert(user);
-    }
-
-    @Override
-    public Integer UpdateUser(User user) {
-        return userMapper.updateByPrimaryKey(user);
-    }
-
-    @Override
-    public User getUserByName(String userName) {
-        UserExample example = new UserExample();
-        UserExample.Criteria criteria = example.createCriteria();
-        criteria.andUsernameEqualTo(userName);
-        List<User> userList = userMapper.selectByExample(example);
-        if (userList.size() > 0 ) {
-            return userList.get(0);
-        } else {
+    public User getUserByName(String username) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", username);
+        List<User> userList = this.list(wrapper);
+        if (userList.size() == 0) {
             return null;
+        } else {
+            User resUser = userList.get(0);
+            return resUser;
         }
-    }
-
-    @Override
-    public User getUserById(Integer userId) {
-        return userMapper.selectByPrimaryKey(userId);
     }
 }

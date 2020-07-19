@@ -1,20 +1,19 @@
 spring:
   datasource:
-    url: jdbc:mysql://106.54.68.249:3326/movie_analysis?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://106.54.68.249:3326/movie_analysis_re?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     type: com.mysql.cj.jdbc.MysqlDataSource
     username: root
     password: movie@159357
   data:
     neo4j:
-      uri: bolt://106.54.68.249:7787
+      uri: bolt://47.95.11.44:7787
       username: neo4j
       password: movie@159357
 
 mybatis:
   config-location: classpath:/mybatis-config.xml
-  mapper-locations: classpath:mapper/*.xml
 
 server:
-  port: 10010
+  port: 10020
 
 dataScienceServer: "http://106.54.68.249:10012"

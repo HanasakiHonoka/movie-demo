@@ -1,5 +1,6 @@
 package com.xzx.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xzx.constant.MovieTypeEnum;
 import com.xzx.dto.SimpleActor;
 import com.xzx.dto.SimpleDirector;
@@ -22,6 +23,7 @@ public class BoxCalculateVo {
     private Integer duration;
     @ApiModelProperty(value = "上映时间", example = "2020-10-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date releaseTime;
     @ApiModelProperty(value = "是否为Ip", example = "false")
     private Boolean isIp;

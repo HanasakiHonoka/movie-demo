@@ -1,93 +1,37 @@
 package com.xzx.servie.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xzx.constant.ConstantParam;
 import com.xzx.dto.SimpleScenarist;
 import com.xzx.entity.Scenarist;
-import com.xzx.entity.ScenaristExample;
-import com.xzx.mapper.ScenaristExtendMapper;
 import com.xzx.mapper.ScenaristMapper;
-import com.xzx.servie.ScenaristService;
+import com.xzx.servie.IScenaristService;
 import com.xzx.vo.HintVo;
 import com.xzx.vo.SearchVo;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author xzx
+ * @since 2020-07-18
+ */
 @Service
-public class ScenaristServiceImpl implements ScenaristService {
+public class ScenaristServiceImpl extends ServiceImpl<ScenaristMapper, Scenarist> implements IScenaristService {
 
     @Autowired
-    private ScenaristMapper scenaristMapper;
-
-    @Autowired
-    private ScenaristExtendMapper scenaristExtendMapper;
-
-    @Override
-    public List<Scenarist> getLikeScenaristWithLimit(SearchVo searchVo) {
-        ScenaristExample example = new ScenaristExample();
-        ScenaristExample.Criteria criteria = example.createCriteria();
-        criteria.andNameLike("%" + searchVo.getWords() + "%");
-        RowBounds rowBounds = new RowBounds((Integer.parseInt(searchVo.getPage()) - 1) * 10,10);
-        return scenaristMapper.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    public List<Scenarist> getFirstLikeScenarist(HintVo hintVo) {
-        ScenaristExample example = new ScenaristExample();
-        ScenaristExample.Criteria criteria = example.createCriteria();
-        criteria.andNameLike(hintVo.getWords() + "%");
-        RowBounds rowBounds = new RowBounds(0,10);
-        return scenaristMapper.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    public long getLikeScenaristCount(SearchVo searchVo) {
-        ScenaristExample example = new ScenaristExample();
-        ScenaristExample.Criteria criteria = example.createCriteria();
-        criteria.andNameLike("%" + searchVo.getWords() + "%");
-        return scenaristMapper.countByExample(example);
-    }
-
-    @Override
-    public long getScenaristCount() {
-        return scenaristMapper.countByExample(new ScenaristExample());
-    }
-
-    @Override
-    public Scenarist getScenarist(Integer id) {
-        return scenaristMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public List<Scenarist> getScenarists() {
-        return scenaristMapper.selectByExample(new ScenaristExample());
-    }
-
-    @Override
-    public Integer updateScenarist(Scenarist scenarist) {
-        return scenaristMapper.updateByPrimaryKey(scenarist);
-    }
-
-    @Override
-    public Integer insertScenarist(Scenarist scenarist) {
-        return scenaristMapper.insert(scenarist);
-    }
-
-    @Override
-    public Integer insertMulti(List<Scenarist> scenarists) {
-        return scenaristExtendMapper.insertMulti(scenarists);
-    }
-
-    @Override
-    public Integer delScenarist(Integer scenaristId) {
-        return scenaristMapper.deleteByPrimaryKey(scenaristId);
-    }
+    ScenaristMapper scenaristMapper;
 
     @Override
     public List<SimpleScenarist> getSimpleScenaristByMovieId(Integer movieId) {
-        List<Scenarist> scenarists = scenaristExtendMapper.getScenaristByMovieId(movieId);
+        List<Scenarist> scenarists = scenaristMapper.getScenaristByMovieId(movieId);
         List<SimpleScenarist> simpleScenarists = new ArrayList<>();
         for(Scenarist scenarist:scenarists) {
             simpleScenarists.add(new SimpleScenarist(scenarist.getId(), scenarist.getName()));
@@ -96,10 +40,26 @@ public class ScenaristServiceImpl implements ScenaristService {
     }
 
     @Override
-    public List<Scenarist> getScenaristByName(String name) {
-        ScenaristExample example = new ScenaristExample();
-        ScenaristExample.Criteria criteria = example.createCriteria();
-        criteria.andNameEqualTo(name);
-        return scenaristMapper.selectByExample(example);
+    public List<Scenarist> getLikeScenaristWithLimit(SearchVo searchVo) {
+        int pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
+        QueryWrapper<Scenarist> wrapper = new QueryWrapper<>();
+        wrapper.like("name", searchVo.getWords());
+        wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);
+        return this.list(wrapper);
+    }
+
+    @Override
+    public long getLikeScenaristCount(SearchVo searchVo) {
+        QueryWrapper<Scenarist> wrapper = new QueryWrapper<>();
+        wrapper.like("name", searchVo.getWords());
+        return this.count(wrapper);
+    }
+
+    @Override
+    public List<Scenarist> getFirstLikeScenarist(HintVo hintVo) {
+        QueryWrapper<Scenarist> wrapper = new QueryWrapper<>();
+        wrapper.likeRight("name", hintVo.getWords());
+        wrapper.last("limit 0,10");
+        return this.list(wrapper);
     }
 }

@@ -4,9 +4,11 @@ import com.xzx.dto.ActorWithMovie;
 import com.xzx.entity.Actor;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 @ApiModel(value = "演员列表返回参数", description = "演员列表返回参数")
 public class ActorListVo {
 
@@ -16,28 +18,4 @@ public class ActorListVo {
     private String msg;
     @ApiModelProperty(value = "演员总数")
     private long size;
-
-    public List<ActorWithMovie> getActors() {
-        return actors;
-    }
-
-    public void setActors(List<ActorWithMovie> actors) {
-        this.actors = actors;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
 }

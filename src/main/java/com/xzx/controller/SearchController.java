@@ -6,10 +6,10 @@ import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
 import com.xzx.entity.Movie;
 import com.xzx.entity.Scenarist;
-import com.xzx.servie.ActorService;
-import com.xzx.servie.DirectorService;
-import com.xzx.servie.MovieService;
-import com.xzx.servie.ScenaristService;
+import com.xzx.servie.IActorService;
+import com.xzx.servie.IDirectorService;
+import com.xzx.servie.IMovieService;
+import com.xzx.servie.IScenaristService;
 import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.*;
 import io.swagger.annotations.Api;
@@ -31,13 +31,13 @@ import java.util.List;
 public class SearchController {
 
     @Autowired
-    private MovieService movieService;
+    private IMovieService movieService;
     @Autowired
-    private ActorService actorService;
+    private IActorService actorService;
     @Autowired
-    private DirectorService directorService;
+    private IDirectorService directorService;
     @Autowired
-    private ScenaristService scenaristService;
+    private IScenaristService scenaristService;
 
     @ApiOperation(value = "搜索转发")
     @GetMapping("/")
@@ -195,7 +195,7 @@ public class SearchController {
     @ResponseBody
     public List<HintResVo> getActorsName(HintVo hintVo) {
         List<HintResVo> actorsName = new ArrayList<>();
-        List<Actor> actorsWithLimit = actorService.getFirstLikeActors(hintVo);
+        List<Actor> actorsWithLimit = actorService.getFirstLikeActor(hintVo);
         for (Actor actor : actorsWithLimit) {
             actorsName.add(new HintResVo(actor.getId(), actor.getName()));
         }
@@ -247,10 +247,10 @@ public class SearchController {
     @ResponseBody
     public CountVo getCount() {
         CountVo countVo = new CountVo();
-        countVo.setMovieCount(movieService.getMovieCount());
-        countVo.setActorCount(actorService.getActorCount());
-        countVo.setDirectorCount(directorService.getDirectorCount());
-        countVo.setScenaristCount(scenaristService.getScenaristCount());
+        countVo.setMovieCount(movieService.count());
+        countVo.setActorCount(actorService.count());
+        countVo.setDirectorCount(directorService.count());
+        countVo.setScenaristCount(scenaristService.count());
         return countVo;
     }
 

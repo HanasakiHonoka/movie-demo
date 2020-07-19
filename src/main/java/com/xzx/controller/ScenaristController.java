@@ -4,12 +4,9 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.ScenaristWithMovie;
-import com.xzx.entity.Actor;
-import com.xzx.entity.Director;
 import com.xzx.entity.Scenarist;
-import com.xzx.servie.DirectorService;
-import com.xzx.servie.MovieService;
-import com.xzx.servie.ScenaristService;
+import com.xzx.servie.IMovieService;
+import com.xzx.servie.IScenaristService;
 import com.xzx.vo.MgtScenaristListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,16 +25,16 @@ import java.util.List;
 public class ScenaristController {
 
     @Autowired
-    private ScenaristService scenaristService;
+    private IScenaristService scenaristService;
 
     @Autowired
-    private MovieService movieService;
+    private IMovieService movieService;
 
     @ApiOperation("按id获取编剧信息")
     @GetMapping("/scenarist/{id}")
     public ScenaristWithMovie getScenarist(@PathVariable(value = "id") Integer id) {
 
-        Scenarist scenarist = scenaristService.getScenarist(id);
+        Scenarist scenarist = scenaristService.getById(id);
         ScenaristWithMovie scenaristWithMovie = new ScenaristWithMovie();
         scenaristWithMovie.setScenarist(scenarist);
         scenaristWithMovie.setAMovies(movieService.getSimpleMovieByActorId(id));
@@ -48,20 +46,20 @@ public class ScenaristController {
 
     @ApiOperation("更新编剧信息")
     @PutMapping("/scenarist")
-    public Integer updateScenarist(Scenarist scenarist) {
-        return scenaristService.updateScenarist(scenarist);
+    public boolean updateScenarist(Scenarist scenarist) {
+        return scenaristService.updateById(scenarist);
     }
 
     @ApiOperation("添加编剧")
     @PostMapping("/scenarist")
-    public Integer insertScenarist(Scenarist scenarist) {
-        return scenaristService.insertScenarist(scenarist);
+    public boolean insertScenarist(Scenarist scenarist) {
+        return scenaristService.save(scenarist);
     }
 
     @ApiOperation("按id删除编剧")
     @DeleteMapping("/scenarist/{id}")
-    public Integer delScenarist(@PathVariable(value = "id") Integer id) {
-        return scenaristService.delScenarist(id);
+    public boolean delScenarist(@PathVariable(value = "id") Integer id) {
+        return scenaristService.removeById(id);
     }
 
     @ApiOperation("获取所有编剧")
@@ -69,7 +67,7 @@ public class ScenaristController {
     public MgtScenaristListVo getScenarists() {
         List<ScenaristWithMovie> scenaristWithMovies = new ArrayList<>();
 
-        List<Scenarist> scenarists = scenaristService.getScenarists();
+        List<Scenarist> scenarists = scenaristService.list();
         for (Scenarist scenarist:scenarists) {
             ScenaristWithMovie scenaristWithMovie = new ScenaristWithMovie();
             scenaristWithMovie.setScenarist(scenarist);
@@ -80,21 +78,13 @@ public class ScenaristController {
 
     @ApiOperation("csv文件导入编剧数据")
     @PostMapping("/scenarist/csvInsert")
-    public Integer insertScenaristByCsv(MultipartFile file) throws IOException {
-        InputStreamReader in = new InputStreamReader(file.getInputStream(), "utf-8");
+    public boolean insertScenaristByCsv(MultipartFile file) throws IOException {
+        InputStreamReader in = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
         HeaderColumnNameMappingStrategy<Scenarist> mapper = new HeaderColumnNameMappingStrategy<>();
         mapper.setType(Scenarist.class);
-        Integer res = 0;
         CsvToBean<Scenarist> build = new CsvToBeanBuilder<Scenarist>(in).withMappingStrategy(mapper).build();
         List<Scenarist> scenaristList = build.parse();
-        try {
-            res = scenaristService.insertMulti(scenaristList);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            res = 0;
-        } finally {
-            return res;
-        }
+        return scenaristService.saveBatch(scenaristList);
     }
     //@ApiOperation("获得编剧表总数")
     //@GetMapping("/scenarist/count")

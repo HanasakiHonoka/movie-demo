@@ -1,8 +1,9 @@
 package com.xzx.controller;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.xzx.dto.SimpleUser;
 import com.xzx.entity.User;
-import com.xzx.servie.UserService;
+import com.xzx.servie.IUserService;
 import com.xzx.util.SimpleUserUtil;
 import com.xzx.vo.LoginVo;
 import com.xzx.vo.UpdatePasswordVo;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -19,18 +21,20 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @ApiOperation(value = "登陆")
     @PostMapping("/login")
     public LoginVo login(User user) {
         LoginVo loginVo = new LoginVo();
+        // 密码加密
+        user.setPassword(DigestUtil.md5Hex(user.getPassword()));
         User currUser = userService.login(user);
         if (currUser != null) {
-            currUser.setLoginTime(new Date());
+            currUser.setLoginTime(LocalDateTime.now());
             //currUser.setStatus(1);
             loginVo.setUser(currUser);
-            userService.loginUpdate(currUser);
+            userService.updateById(currUser);
             loginVo.setMsg(1);
         } else {
             loginVo.setMsg(0);
@@ -40,38 +44,43 @@ public class UserController {
 
     @ApiOperation(value = "修改密码")
     @PutMapping("/user/updatePwd")
-    public Integer updatePassword(UpdatePasswordVo updatePasswordVo) {
-        User user = userService.getUserById(updatePasswordVo.getId());
-        if(user.getPassword().equals(updatePasswordVo.getPastPassword())) {
-            user.setPassword(updatePasswordVo.getNowPassword());
-            return userService.UpdateUser(user);
+    public boolean updatePassword(UpdatePasswordVo updatePasswordVo) {
+        User user = userService.getById(updatePasswordVo.getId());
+        String pastPwd = DigestUtil.md5Hex(updatePasswordVo.getPastPassword());
+        String nowPwd = DigestUtil.md5Hex(updatePasswordVo.getNowPassword());
+        // 密码加密
+        if(user.getPassword().equals(pastPwd)) {
+            user.setPassword(nowPwd);
+            return userService.updateById(user);
         } else {
-            return 2;
+            return false;
         }
     }
 
     @ApiOperation(value = "获得所有普通用户")
     @GetMapping("/users")
     public List<SimpleUser> getUsers() {
-        return SimpleUserUtil.userToSimpleUser(userService.getUsers());
+        return SimpleUserUtil.userToSimpleUser(userService.list());
     }
 
     @ApiOperation(value = "删除用户")
     @DeleteMapping("/user/{id}")
-    public Integer delUser(@PathVariable(value = "id") String userId) {
-        return userService.delUser(Integer.parseInt(userId));
+    public boolean delUser(@PathVariable(value = "id") String userId) {
+        return userService.removeById(Integer.parseInt(userId));
     }
 
     @ApiOperation(value = "添加普通用户")
     @PutMapping("/user")
-    public Integer insertUser(User user) {
+    public boolean insertUser(User user) {
         User user1 = userService.getUserByName(user.getUsername());
         if(user1 == null) {
             user.setRole(false);
-            user.setRegisterTime(new Date());
-            return userService.insertUser(user);
+            user.setRegisterTime(LocalDateTime.now());
+            // 密码加密
+            user.setPassword(DigestUtil.md5Hex(user.getPassword()));
+            return userService.save(user);
         } else {
-            return 2;
+            return false;
         }
     }
 

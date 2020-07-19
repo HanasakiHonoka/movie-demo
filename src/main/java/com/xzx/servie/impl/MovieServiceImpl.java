@@ -1,113 +1,79 @@
 package com.xzx.servie.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xzx.constant.ConstantParam;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.entity.Movie;
-import com.xzx.entity.MovieExample;
-import com.xzx.mapper.MovieExtendMapper;
 import com.xzx.mapper.MovieMapper;
-import com.xzx.servie.MovieService;
+import com.xzx.servie.IMovieService;
 import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.HintVo;
 import com.xzx.vo.SearchVo;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author xzx
+ * @since 2020-07-18
+ */
 @Service
-public class MovieServiceImpl implements MovieService {
+public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements IMovieService {
 
     @Autowired
-    private MovieMapper movieMapper;
+    MovieMapper movieMapper;
 
-    @Autowired
-    private MovieExtendMapper movieExtendMapper;
-
-    @Override
-    public List<Movie> getLikeMovieWithLimit(SearchVo searchVo) {
-        MovieExample example = new MovieExample();
-        MovieExample.Criteria criteria = example.createCriteria();
-        criteria.andTitleLike("%" + searchVo.getWords() + "%");
-        //System.out.println(str);
-        RowBounds rowBounds = new RowBounds((Integer.parseInt(searchVo.getPage()) - 1) * 10,10);
-        return movieMapper.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    public List<Movie> getFirstLikeMovie(HintVo hintVo) {
-        MovieExample example = new MovieExample();
-        MovieExample.Criteria criteria = example.createCriteria();
-        criteria.andTitleLike(hintVo.getWords() + "%");
-        RowBounds rowBounds = new RowBounds(0,10);
-        return movieMapper.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    public long getLikeMovieCount(SearchVo searchVo) {
-
-        MovieExample example = new MovieExample();
-        MovieExample.Criteria criteria = example.createCriteria();
-        criteria.andTitleLike("%" + searchVo.getWords() + "%");
-        return movieMapper.countByExample(example);
-    }
-
-    @Override
-    public long getMovieCount() {
-        return movieMapper.countByExample(new MovieExample());
-    }
-
-    public Movie getMovie(Integer id) {
-
-        return movieMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public List<Movie> getMovies() {
-        return movieMapper.selectByExample(new MovieExample());
-    }
-
-    @Override
-    public Integer insertMulti(List<Movie> movies) {
-        return movieExtendMapper.insertMulti(movies);
-    }
-
-    @Override
-    public Integer updateMovie(Movie movie) {
-
-        return movieMapper.updateByPrimaryKey(movie);
-    }
-
-    @Override
-    public Integer insertMovie(Movie movie) {
-        return movieMapper.insert(movie);
-    }
-
-    @Override
-    public Integer delMovie(Integer movieId) {
-        return movieMapper.deleteByPrimaryKey(movieId);
-    }
 
     @Override
     public List<SimpleMovie> getSimpleMovieByActorId(Integer actorId) {
-        List<Movie> movies = movieExtendMapper.getMovieByActorId(actorId);
+        List<Movie> movies = movieMapper.getMovieByActorId(actorId);
         List<SimpleMovie> simpleMovies = SimpleMovieUtil.movieToSimpleMovie(movies);
         return simpleMovies;
     }
 
     @Override
     public List<SimpleMovie> getSimpleMovieByDirectorId(Integer directorId) {
-        List<Movie> movies = movieExtendMapper.getMovieByDirectorId(directorId);
+        List<Movie> movies = movieMapper.getMovieByDirectorId(directorId);
         List<SimpleMovie> simpleMovies = SimpleMovieUtil.movieToSimpleMovie(movies);
         return simpleMovies;
     }
 
     @Override
     public List<SimpleMovie> getSimpleMovieByScenaristId(Integer scenaristId) {
-        List<Movie> movies = movieExtendMapper.getMovieByScenaristId(scenaristId);
+        List<Movie> movies = movieMapper.getMovieByScenaristId(scenaristId);
         List<SimpleMovie> simpleMovies = SimpleMovieUtil.movieToSimpleMovie(movies);
         return simpleMovies;
+    }
+
+    @Override
+    public List<Movie> getLikeMovieWithLimit(SearchVo searchVo) {
+        int pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
+        QueryWrapper<Movie> wrapper = new QueryWrapper<>();
+        wrapper.like("title", searchVo.getWords());
+        wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);
+
+        return this.list(wrapper);
+    }
+
+    @Override
+    public long getLikeMovieCount(SearchVo searchVo) {
+        QueryWrapper<Movie> wrapper = new QueryWrapper<>();
+        wrapper.like("title", searchVo.getWords());
+        return this.count(wrapper);
+    }
+
+    @Override
+    public List<Movie> getFirstLikeMovie(HintVo hintVo) {
+        QueryWrapper<Movie> wrapper = new QueryWrapper<>();
+        wrapper.likeRight("title", hintVo.getWords());
+        wrapper.last("limit 0,10");
+        return this.list(wrapper);
     }
 
 }

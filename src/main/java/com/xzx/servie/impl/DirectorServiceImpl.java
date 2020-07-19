@@ -1,96 +1,37 @@
 package com.xzx.servie.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xzx.constant.ConstantParam;
 import com.xzx.dto.SimpleDirector;
 import com.xzx.entity.Director;
-import com.xzx.entity.DirectorExample;
-import com.xzx.entity.DirectorExample;
-import com.xzx.mapper.DirectorExtendMapper;
 import com.xzx.mapper.DirectorMapper;
-import com.xzx.mapper.DirectorMapper;
-import com.xzx.servie.DirectorService;
-import com.xzx.servie.DirectorService;
+import com.xzx.servie.IDirectorService;
 import com.xzx.vo.HintVo;
 import com.xzx.vo.SearchVo;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author xzx
+ * @since 2020-07-18
+ */
 @Service
-public class DirectorServiceImpl implements DirectorService {
+public class DirectorServiceImpl extends ServiceImpl<DirectorMapper, Director> implements IDirectorService {
 
     @Autowired
-    private DirectorMapper directorMapper;
-
-    @Autowired
-    private DirectorExtendMapper directorExtendMapper;
+    DirectorMapper directorMapper;
 
     @Override
-    public List<Director> getLikeDirectorWithLimit(SearchVo searchVo) {
-        DirectorExample example = new DirectorExample();
-        DirectorExample.Criteria criteria = example.createCriteria();
-        criteria.andNameLike("%" + searchVo.getWords() + "%");
-        RowBounds rowBounds = new RowBounds((Integer.parseInt(searchVo.getPage()) - 1) * 10,10);
-        return directorMapper.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    public List<Director> getFirstLikeDirector(HintVo hintVo) {
-        DirectorExample example = new DirectorExample();
-        DirectorExample.Criteria criteria = example.createCriteria();
-        criteria.andNameLike(hintVo.getWords() + "%");
-        RowBounds rowBounds = new RowBounds(0,10);
-        return directorMapper.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    public long getLikeDirectorCount(SearchVo searchVo) {
-        DirectorExample example = new DirectorExample();
-        DirectorExample.Criteria criteria = example.createCriteria();
-        criteria.andNameLike("%" + searchVo.getWords() + "%");
-        return directorMapper.countByExample(example);
-    }
-
-    @Override
-    public long getDirectorCount() {
-        return directorMapper.countByExample(new DirectorExample());
-    }
-
-    @Override
-    public Director getDirector(Integer id) {
-        return directorMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public List<Director> getDirectors() {
-        return directorMapper.selectByExample(new DirectorExample());
-    }
-
-    @Override
-    public Integer updateDirector(Director director) {
-        return directorMapper.updateByPrimaryKey(director);
-    }
-
-    @Override
-    public Integer insertDirector(Director director) {
-        return directorMapper.insert(director);
-    }
-
-    @Override
-    public Integer insertMulti(List<Director> directors) {
-        return directorExtendMapper.insertMulti(directors);
-    }
-
-    @Override
-    public Integer delDirector(Integer directorId) {
-        return directorMapper.deleteByPrimaryKey(directorId);
-    }
-
-    @Override
-    public List<SimpleDirector> getSimpleDirectorByMovieId(Integer movieId) {
-        List<Director> directors = directorExtendMapper.getDirectorByMovieId(movieId);
+    public List<SimpleDirector> getSimpleDirectorByMovieId(int movieId) {
+        List<Director> directors = directorMapper.getDirectorByMovieId(movieId);
         List<SimpleDirector> simpleDirectors = new ArrayList<>();
         for(Director director:directors) {
             simpleDirectors.add(new SimpleDirector(director.getId(), director.getName()));
@@ -99,10 +40,26 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public List<Director> getDirectorByName(String name) {
-        DirectorExample example = new DirectorExample();
-        DirectorExample.Criteria criteria = example.createCriteria();
-        criteria.andNameEqualTo(name);
-        return directorMapper.selectByExample(example);
+    public List<Director> getLikeDirectorWithLimit(SearchVo searchVo) {
+        int pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
+        QueryWrapper<Director> wrapper = new QueryWrapper<>();
+        wrapper.like("name", searchVo.getWords());
+        wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);
+        return this.list(wrapper);
+    }
+
+    @Override
+    public long getLikeDirectorCount(SearchVo searchVo) {
+        QueryWrapper<Director> wrapper = new QueryWrapper<>();
+        wrapper.like("name", searchVo.getWords());
+        return this.count(wrapper);
+    }
+
+    @Override
+    public List<Director> getFirstLikeDirector(HintVo hintVo) {
+        QueryWrapper<Director> wrapper = new QueryWrapper<>();
+        wrapper.likeRight("name", hintVo.getWords());
+        wrapper.last("limit 0,10");
+        return this.list(wrapper);
     }
 }

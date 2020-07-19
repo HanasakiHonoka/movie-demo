@@ -7,16 +7,17 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xzx.constant.MovieTypeEnum;
+import com.xzx.dto.SimpleMovie;
+import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
-import com.xzx.entity.Movie;
-import com.xzx.entity.MovieExample;
-import com.xzx.mapper.MovieMapper;
-import com.xzx.servie.ActorService;
-import com.xzx.servie.DirectorService;
-import com.xzx.servie.MovieService;
-import com.xzx.servie.ScenaristService;
+import com.xzx.entity.Scenarist;
+import com.xzx.servie.IActorService;
+import com.xzx.servie.IDirectorService;
+import com.xzx.servie.IMovieService;
+import com.xzx.servie.IScenaristService;
 import com.xzx.util.DataScienceUtil;
 import com.xzx.vo.BoxCalculateVo;
+import org.apache.ibatis.annotations.Param;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.neo4j.driver.AuthTokens;
@@ -38,13 +39,20 @@ class MovieDemoApplicationTests {
     private String dataScienceServer;
 
     @Autowired
-    private MovieService movieService;
+    private IMovieService movieService;
     @Autowired
-    private ActorService actorService;
+    private IActorService actorService;
     @Autowired
-    private DirectorService directorService;
+    private IDirectorService directorService;
     @Autowired
-    private ScenaristService scenaristService;
+    private IScenaristService scenaristService;
+
+
+    @Test
+    public void testMovie() {
+        List<SimpleMovie> simpleMovies = movieService.getSimpleMovieByActorId(1000525);
+        System.out.println(simpleMovies);
+    }
 
     @Test
     void contextLoads() {
@@ -245,39 +253,27 @@ class MovieDemoApplicationTests {
         //directors
         if (boxCalculateVo.getDirectors() != null && boxCalculateVo.getDirectors().size() > 0) {
             for (int i = 0; i < boxCalculateVo.getDirectors().size() && i < 2; i++) {
-                if (i == 0) {
-                    pyReqParam.put("director_1_amount", 0);
-                    pyReqParam.put("director_1_boxoffice", 0);
-                } else if (i == 1){
-                    pyReqParam.put("director_2_amount", 0);
-                    pyReqParam.put("director_2_boxoffice", 0);
-                }
+                Director director = directorService.getById(boxCalculateVo.getDirectors().get(i));
+                pyReqParam.put("director_" + (i + 1) + "_amount", director.getMovieAmount1());
+                pyReqParam.put("director_" + (i + 1) + "_boxoffice", director.getBoxofficeAmount1());
             }
         }
 
         //actors
         if (boxCalculateVo.getActors() != null && boxCalculateVo.getActors().size() > 0) {
             for (int i = 0; i < boxCalculateVo.getActors().size() && i < 2; i++) {
-                if (i == 0) {
-                    pyReqParam.put("actor_1_amount", 0);
-                    pyReqParam.put("actor_1_boxoffice", 0);
-                } else if (i == 1){
-                    pyReqParam.put("actor_2_amount", 0);
-                    pyReqParam.put("actor_2_boxoffice", 0);
-                }
+                Actor actor = actorService.getById(boxCalculateVo.getActors().get(i));
+                pyReqParam.put("actor_" + (i + 1) + "_amount", actor.getMovieAmount1());
+                pyReqParam.put("actor_" + (i + 1) + "_boxoffice", actor.getBoxofficeAmount1());
             }
         }
 
         //scenarists
         if (boxCalculateVo.getScenarists() != null && boxCalculateVo.getScenarists().size() > 0) {
             for (int i = 0; i < boxCalculateVo.getScenarists().size() && i < 2; i++) {
-                if (i == 0) {
-                    pyReqParam.put("scenarist_1_amount", 0);
-                    pyReqParam.put("scenarist_1_boxoffice", 0);
-                } else if (i == 1){
-                    pyReqParam.put("scenarist_2_amount", 0);
-                    pyReqParam.put("scenarist_2_boxoffice", 0);
-                }
+                Scenarist scenarist = scenaristService.getById(boxCalculateVo.getScenarists().get(i));
+                pyReqParam.put("scenarist_" + (i + 1) + "_amount", scenarist.getMovieAmount1());
+                pyReqParam.put("scenarist_" + (i + 1) + "_boxoffice", scenarist.getBoxofficeAmount1());
             }
         }
         JSONObject sendToPy = new JSONObject();

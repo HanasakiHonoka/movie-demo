@@ -1,18 +1,14 @@
 package com.xzx.controller;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.MovieWithPeople;
 import com.xzx.entity.Movie;
-import com.xzx.servie.ActorService;
-import com.xzx.servie.DirectorService;
-import com.xzx.servie.MovieService;
-import com.xzx.servie.ScenaristService;
+import com.xzx.servie.IActorService;
+import com.xzx.servie.IDirectorService;
+import com.xzx.servie.IMovieService;
+import com.xzx.servie.IScenaristService;
 import com.xzx.vo.MgtMovieListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,9 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 @Api(value = "MovieController", tags = "电影模块")
@@ -34,16 +30,16 @@ import java.util.UUID;
 public class MovieController {
 
     @Autowired
-    private MovieService movieService;
+    private IMovieService movieService;
 
     @Autowired
-    private ActorService actorService;
+    private IActorService actorService;
 
     @Autowired
-    private DirectorService directorService;
+    private IDirectorService directorService;
 
     @Autowired
-    private ScenaristService scenaristService;
+    private IScenaristService scenaristService;
 
 
     @ApiOperation("按id获取电影信息")
@@ -53,7 +49,7 @@ public class MovieController {
 
     public MovieWithPeople getMovie(@PathVariable(value = "id") String id) {
         MovieWithPeople movieWithPeople = new MovieWithPeople();
-        movieWithPeople.setMovie(movieService.getMovie(Integer.parseInt(id)));
+        movieWithPeople.setMovie(movieService.getById(Integer.parseInt(id)));
         movieWithPeople.setActors(actorService.getSimpleActorByMovieId(Integer.parseInt(id)));
         movieWithPeople.setDirectors(directorService.getSimpleDirectorByMovieId(Integer.parseInt(id)));
         movieWithPeople.setScenarists(scenaristService.getSimpleScenaristByMovieId(Integer.parseInt(id)));
@@ -62,14 +58,14 @@ public class MovieController {
 
     @ApiOperation("更新电影信息")
     @PutMapping("/movie")
-    public Integer updateMovie(Movie movie) {
-        return movieService.updateMovie(movie);
+    public boolean updateMovie(Movie movie) {
+        return movieService.updateById(movie);
     }
 
     @ApiOperation("添加电影")
     @PostMapping("/movie")
-    public Integer insertMovie(Movie movie) {
-        return movieService.insertMovie(movie);
+    public boolean insertMovie(Movie movie) {
+        return movieService.save(movie);
     }
 
     //@ApiOperation("批量添加电影")
@@ -80,15 +76,15 @@ public class MovieController {
 
     @ApiOperation("按id删除电影")
     @DeleteMapping("/movie/{id}")
-    public Integer delMovie(@PathVariable(value = "id") String id) {
-        return movieService.delMovie(Integer.parseInt(id));
+    public boolean delMovie(@PathVariable(value = "id") String id) {
+        return movieService.removeById(Integer.parseInt(id));
     }
 
     @ApiOperation("获取所有电影")
     @GetMapping("/movies")
     public MgtMovieListVo getMovies() {
         List<MovieWithPeople> movieWithPeoples = new ArrayList<>();
-        List<Movie> movies = movieService.getMovies();
+        List<Movie> movies = movieService.list();
         for (Movie movie:movies) {
             MovieWithPeople movieWithPeople = new MovieWithPeople();
             movieWithPeople.setMovie(movie);
@@ -99,21 +95,13 @@ public class MovieController {
 
     @ApiOperation("csv文件导入电影数据")
     @PostMapping("/movie/csvInsert")
-    public Integer insertMovieByCsv(MultipartFile file) throws IOException {
-        InputStreamReader in = new InputStreamReader(file.getInputStream(), "utf-8");
+    public boolean insertMovieByCsv(MultipartFile file) throws IOException {
+        InputStreamReader in = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
         HeaderColumnNameMappingStrategy<Movie> mapper = new HeaderColumnNameMappingStrategy<>();
         mapper.setType(Movie.class);
         CsvToBean<Movie> build = new CsvToBeanBuilder<Movie>(in).withMappingStrategy(mapper).build();
         List<Movie> movieList = build.parse();
-        Integer res = 0;
-        try {
-            res = movieService.insertMulti(movieList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            res = 0;
-        } finally {
-            return res;
-        }
+        return movieService.saveBatch(movieList);
     }
 
     //@ApiOperation("获得电影表总数")
