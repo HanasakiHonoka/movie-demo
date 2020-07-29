@@ -7,16 +7,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xzx.constant.MovieTypeEnum;
+import com.xzx.dto.NeoPeopleRelationDto;
 import com.xzx.dto.SimpleMovie;
-import com.xzx.entity.Actor;
-import com.xzx.entity.Director;
-import com.xzx.entity.Scenarist;
+import com.xzx.entity.*;
 import com.xzx.servie.IActorService;
 import com.xzx.servie.IDirectorService;
 import com.xzx.servie.IMovieService;
 import com.xzx.servie.IScenaristService;
 import com.xzx.util.DataScienceUtil;
 import com.xzx.vo.BoxCalculateVo;
+import com.xzx.vo.Neo4jPersonVo;
 import org.apache.ibatis.annotations.Param;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -47,6 +49,26 @@ class MovieDemoApplicationTests {
     @Autowired
     private IScenaristService scenaristService;
 
+    @Test
+    public void testNeo() {
+        NeoPeopleRelationDto nprd1 = new NeoPeopleRelationDto(new NeoPeople("123", "xzx"), "actor", new NeoMovie("456", "movie"));
+        NeoPeopleRelationDto nprd2 = new NeoPeopleRelationDto(new NeoPeople("123", "xzx"), "actor", new NeoMovie("456", "movie"));
+        NeoPeopleRelationDto nprd3 = new NeoPeopleRelationDto(new NeoPeople("1234", "xzx"), "actor", new NeoMovie("456", "movie"));
+        HashSet<NeoPeopleRelationDto> s = new HashSet<>();
+        s.add(nprd1);
+        s.add(nprd2);
+        s.add(nprd3);
+        for (Iterator<NeoPeopleRelationDto> iterator = s.iterator(); iterator.hasNext(); ) {
+            NeoPeopleRelationDto next = iterator.next();
+            System.out.println(next);
+        }
+    }
+
+    @Test
+    public void testNeoParam() {
+        Neo4jPersonVo neo4jPersonVo = new Neo4jPersonVo();
+        System.out.println(neo4jPersonVo);
+    }
 
     @Test
     public void testMovie() {

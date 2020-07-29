@@ -22,8 +22,7 @@ public class DataScienceController {
     @ApiOperation("获得票房预测结果")
     @PostMapping("/ds/boxValue")
     public BoxResVo getBoxValue(BoxCalculateVo boxCalculateVo) {
-        BoxResVo boxResVo = dataScienceService.boxCalculate(boxCalculateVo);
-        return boxResVo;
+        return dataScienceService.boxCalculate(boxCalculateVo);
     }
 
 }

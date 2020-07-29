@@ -16,10 +16,6 @@
 
     <repositories>
         <repository>
-            <id>Spring Plugins Repository</id>
-            <url>https://repo.spring.io/plugins-release/</url>
-        </repository>
-        <repository>
             <id>alibab</id>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>

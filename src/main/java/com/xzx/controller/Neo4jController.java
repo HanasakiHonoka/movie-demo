@@ -3,6 +3,8 @@ package com.xzx.controller;
 import com.xzx.dto.NeoPeopleRelationDto;
 import com.xzx.servie.Neo4jService;
 import com.xzx.util.Neo4jUtil;
+import com.xzx.vo.Neo4jMovieVo;
+import com.xzx.vo.Neo4jPersonVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,18 +27,16 @@ public class Neo4jController {
 
 
     @ApiOperation("获得以人为中心的关系")
-    @ApiImplicitParam(name = "id", defaultValue = "1274297")
-    @GetMapping("/neo/person/{id}")
-    public List<NeoPeopleRelationDto> getPersonRelation(@PathVariable("id")String id) {
-        return neo4jService.getPeopleRelation(id);
+    @GetMapping("/neo/person")
+    public List<NeoPeopleRelationDto> getPersonRelation(Neo4jPersonVo neo4jPersonVo) {
+        return neo4jService.getPeopleRelation(neo4jPersonVo);
 
     }
 
     @ApiOperation("获得以电影为中心的关系")
-    @ApiImplicitParam(name = "id", defaultValue = "2931")
     @GetMapping("/neo/movie/{id}")
-    public List<NeoPeopleRelationDto> getMovieRelation(@PathVariable("id")String id) {
-        return neo4jService.getMovieRelation(id);
+    public List<NeoPeopleRelationDto> getMovieRelation(Neo4jMovieVo neo4jMovieVo) {
+        return neo4jService.getMovieRelation(neo4jMovieVo);
 
     }
 

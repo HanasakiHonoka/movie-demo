@@ -1,31 +1,38 @@
 package com.xzx.servie.impl;
 
+import com.xzx.constant.ConstantParam;
 import com.xzx.dto.NeoPeopleRelationDto;
 import com.xzx.entity.NeoMovie;
 import com.xzx.entity.NeoPeople;
 import com.xzx.servie.Neo4jService;
-import com.xzx.util.ListUtil;
 import com.xzx.util.Neo4jUtil;
+import com.xzx.vo.Neo4jMovieVo;
+import com.xzx.vo.Neo4jPersonVo;
+import lombok.extern.slf4j.Slf4j;
 import org.neo4j.driver.*;
 import org.neo4j.driver.types.Path;
 import org.neo4j.driver.types.Relationship;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Slf4j
 @Service
 public class Neo4jServiceImpl implements Neo4jService {
 
-
-    @Autowired
-    private Neo4jUtil neo4jUtil;
-
-
     @Override
-    public List<NeoPeopleRelationDto> getPeopleRelation(String uid) {
+    public List<NeoPeopleRelationDto> getPeopleRelation(Neo4jPersonVo neo4jPersonVo) {
+        log.info(neo4jPersonVo.toString());
         //获得driver和session
-        Session session = neo4jUtil.getSession();
+        Session session = Neo4jUtil.getSession();
+        int actorNum = neo4jPersonVo.getActorNum();
+        int directorNum = neo4jPersonVo.getDirectorNum();
+        int scenaristNum = neo4jPersonVo.getScenaristNum();
+
+        int mActorNum = neo4jPersonVo.getMActorNum();
+        int mDirectorNum = neo4jPersonVo.getMDirectorNum();
+        int mScenaristNum = neo4jPersonVo.getMScenaristNum();
+
         //1274297
         String cql = String.format("match (p1:person)-[r1]->(m:movie)" +
                 "where p1.uid = '%s' " +
@@ -33,10 +40,10 @@ public class Neo4jServiceImpl implements Neo4jService {
                 "order by m " +
                 "match l=((p2:person)-[r2]->(m)) " +
                 "with l,p1,m,r1 " +
-                "return p1,r1,m,collect(l) as rela", uid);
+                "return p1,r1,m,collect(l) as rela", neo4jPersonVo.getId());
         //获得查询结果
         Result result = session.run(cql);
-        List<NeoPeopleRelationDto> res = new ArrayList<>();
+        HashSet<NeoPeopleRelationDto> resSet = new HashSet<>();
         Map<String, Integer> countMapR1 = new HashMap<>();
         countMapR1.put("导演", 0);
         countMapR1.put("参演", 0);
@@ -48,9 +55,9 @@ public class Neo4jServiceImpl implements Neo4jService {
             //先判断关系，确定是否达到上限
             String relationType = record.get("r1").asMap().get("relation").toString();
             int relationCount = countMapR1.get(relationType);
-            if(relationType.equals("参演") && relationCount > 5) continue;
-            if(relationType.equals("导演") && relationCount > 0) continue;
-            if(relationType.equals("编写") && relationCount > 0) continue;
+            if(relationType.equals("参演") && relationCount >= actorNum) continue;
+            if(relationType.equals("导演") && relationCount >= directorNum) continue;
+            if(relationType.equals("编写") && relationCount >= scenaristNum) continue;
             countMapR1.put(relationType, relationCount + 1);
             nprd1.setNeoRelation(relationType);
             //System.out.println("record = " + record);
@@ -88,43 +95,45 @@ public class Neo4jServiceImpl implements Neo4jService {
                         Path path = (Path) path1;
                         //System.out.println(path.start().asMap().get("name"));
                         String relationType2 = "";
-                        Iterator<Relationship> iterator = path.relationships().iterator();
-                        while (iterator.hasNext()) {
-                            Relationship rela = iterator.next();
+                        for (Relationship rela : path.relationships()) {
                             relationType2 = rela.asMap().get("relation").toString();
                         }
                         //System.out.println(relationType);
                         Map<String, Object> peopleMap = path.start().asMap();
                         Map<String, Object> movieMap = path.end().asMap();
                         int relationCount2 = countMapR2.get(relationType2);
-                        if(relationType2.equals("导演") && relationCount2 > 0) continue;
-                        if(relationType2.equals("参演") && relationCount2 > 0) continue;
-                        if(relationType2.equals("编写") && relationCount2 > 0) continue;
+                        if(relationType2.equals("参演") && relationCount2 >= mActorNum) continue;
+                        if(relationType2.equals("导演") && relationCount2 >= mDirectorNum) continue;
+                        if(relationType2.equals("编写") && relationCount2 >= mScenaristNum) continue;
                         nprd2.setStart(new NeoPeople("p" + peopleMap.get("uid").toString(), peopleMap.get("name").toString()));
                         nprd2.setEnd(new NeoMovie("m" + movieMap.get("mid").toString(), movieMap.get("name").toString()));
                         nprd2.setNeoRelation(relationType2);
-                        res.add(nprd2);
+                        resSet.add(nprd2);
                         countMapR2.put(relationType2, relationCount2 + 1);
                     }
 
                 }
             }
-            res.add(nprd1);
+            resSet.add(nprd1);
 
         }
         session.close();
 
-        return ListUtil.removeDuplicate(res);
-        //return res;
+        return new ArrayList<>(resSet);
     }
 
     @Override
-    public List<NeoPeopleRelationDto> getMovieRelation(String mid) {
-        Session session = neo4jUtil.getSession();
+    public List<NeoPeopleRelationDto> getMovieRelation(Neo4jMovieVo neo4jMovieVo) {
+        log.info(neo4jMovieVo.toString());
+        Session session = Neo4jUtil.getSession();
+        int actorNum = neo4jMovieVo.getActorNum();
+        int directorNum = neo4jMovieVo.getDirectorNum();
+        int scenaristNum = neo4jMovieVo.getScenaristNum();
+        
         String cql = String.format(
                 "match l = ((p)-[r]->(m)) " +
                 "where m.mid = '%s' " +
-                "return collect(l) as rela", mid);
+                "return collect(l) as rela", neo4jMovieVo.getId());
         Result result = session.run(cql);
         List<NeoPeopleRelationDto> res = new ArrayList<>();
         while (result.hasNext()) {
@@ -142,18 +151,16 @@ public class Neo4jServiceImpl implements Neo4jService {
                         Path path = (Path) path1;
                         //System.out.println(path.start().asMap().get("name"));
                         String relationType2 = "";
-                        Iterator<Relationship> iterator = path.relationships().iterator();
-                        while (iterator.hasNext()) {
-                            Relationship rela = iterator.next();
+                        for (Relationship rela : path.relationships()) {
                             relationType2 = rela.asMap().get("relation").toString();
                         }
                         //System.out.println(relationType);
                         Map<String, Object> peopleMap = path.start().asMap();
                         Map<String, Object> movieMap = path.end().asMap();
                         int relationCount2 = countMapR2.get(relationType2);
-                        if(relationType2.equals("导演") && relationCount2 > 0) continue;
-                        if(relationType2.equals("参演") && relationCount2 > 5) continue;
-                        if(relationType2.equals("编写") && relationCount2 > 0) continue;
+                        if(relationType2.equals("导演") && relationCount2 >= directorNum) continue;
+                        if(relationType2.equals("参演") && relationCount2 >= actorNum) continue;
+                        if(relationType2.equals("编写") && relationCount2 >= scenaristNum) continue;
                         nprd.setStart(new NeoPeople("p" + peopleMap.get("uid").toString(), peopleMap.get("name").toString()));
                         nprd.setEnd(new NeoMovie("m" + movieMap.get("mid").toString(), movieMap.get("name").toString()));
                         nprd.setNeoRelation(relationType2);

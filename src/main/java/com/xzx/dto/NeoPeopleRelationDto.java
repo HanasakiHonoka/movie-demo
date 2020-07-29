@@ -2,7 +2,13 @@ package com.xzx.dto;
 
 import com.xzx.entity.NeoMovie;
 import com.xzx.entity.NeoPeople;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class NeoPeopleRelationDto {
 
     private NeoPeople start;
@@ -11,39 +17,15 @@ public class NeoPeopleRelationDto {
 
     @Override
     public boolean equals(Object obj) {
+        if (!(obj instanceof NeoPeopleRelationDto)) return false;
         NeoPeopleRelationDto nprd = (NeoPeopleRelationDto) obj;
-        return start.getName().equals(nprd.getStart().getName()) && end.getName().equals(nprd.getEnd().getName()) && neoRelation.equals(nprd.neoRelation);
+        return start.getId().equals(nprd.getStart().getId()) && end.getId().equals(nprd.getEnd().getId()) && neoRelation.equals(nprd.neoRelation);
         //return super.equals(obj);
     }
 
     @Override
     public int hashCode() {
-        return start.getName().hashCode() + end.getName().hashCode() + neoRelation.hashCode();
+        return start.getId().hashCode() + end.getId().hashCode() + neoRelation.hashCode();
         //return super.hashCode();
-    }
-
-    public NeoPeople getStart() {
-        return start;
-    }
-
-    public void setStart(NeoPeople start) {
-        this.start = start;
-    }
-
-
-    public String getNeoRelation() {
-        return neoRelation;
-    }
-
-    public void setNeoRelation(String neoRelation) {
-        this.neoRelation = neoRelation;
-    }
-
-    public NeoMovie getEnd() {
-        return end;
-    }
-
-    public void setEnd(NeoMovie end) {
-        this.end = end;
     }
 }
