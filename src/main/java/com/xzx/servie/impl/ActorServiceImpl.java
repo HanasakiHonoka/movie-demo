@@ -41,7 +41,7 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
 
     @Override
     public List<Actor> getLikeActorWithLimit(SearchVo searchVo) {
-        int pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
+        int pageSize = searchVo.getPageSize();
         QueryWrapper<Actor> wrapper = new QueryWrapper<>();
         wrapper.like("name", searchVo.getWords());
         wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);

@@ -41,7 +41,7 @@ public class ScenaristServiceImpl extends ServiceImpl<ScenaristMapper, Scenarist
 
     @Override
     public List<Scenarist> getLikeScenaristWithLimit(SearchVo searchVo) {
-        int pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
+        int pageSize = searchVo.getPageSize();
         QueryWrapper<Scenarist> wrapper = new QueryWrapper<>();
         wrapper.like("name", searchVo.getWords());
         wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);

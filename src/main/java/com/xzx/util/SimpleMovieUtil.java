@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SimpleMovieUtil {
 
-    public static List<SimpleMovie> Limit5SimpleMovie(IMovieService movieService, Integer id, String identity) {
+    public static List<SimpleMovie> getSimpleMovieByPersonId(IMovieService movieService, Integer id, String identity, Integer movieNumLimit) {
         List<SimpleMovie> movies = new ArrayList<>();
         if(identity.equals("Actor")) {
             movies = movieService.getSimpleMovieByActorId(id);
@@ -21,8 +21,8 @@ public class SimpleMovieUtil {
             movies = movieService.getSimpleMovieByScenaristId(id);
         }
 
-        if(movies.size() > 5){
-            movies = movies.subList(0, 5);
+        if(movies.size() > movieNumLimit){
+            movies = movies.subList(0, movieNumLimit);
         }
         return movies;
     }

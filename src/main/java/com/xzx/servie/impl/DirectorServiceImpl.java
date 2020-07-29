@@ -41,7 +41,7 @@ public class DirectorServiceImpl extends ServiceImpl<DirectorMapper, Director> i
 
     @Override
     public List<Director> getLikeDirectorWithLimit(SearchVo searchVo) {
-        int pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
+        int pageSize = searchVo.getPageSize();
         QueryWrapper<Director> wrapper = new QueryWrapper<>();
         wrapper.like("name", searchVo.getWords());
         wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);

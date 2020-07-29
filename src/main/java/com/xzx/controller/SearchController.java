@@ -1,6 +1,7 @@
 package com.xzx.controller;
 
 
+import com.xzx.constant.SearchTypeEnum;
 import com.xzx.dto.*;
 import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
@@ -14,6 +15,7 @@ import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Api(value = "SearchController", tags = "搜索模块")
 @Controller
 @RequestMapping("/search")
@@ -42,27 +45,15 @@ public class SearchController {
     @ApiOperation(value = "搜索转发")
     @GetMapping("/")
     public String getTypeAndWords(SearchVo searchVo) {
-        /*if(searchVo.getType() == 1) {
-            MovieListVo movieListVo = new MovieListVo();
-            movieListVo.setMsg("1");
-            List<Movie> moviesWithLimit = movieService.getLikeMovieWithLimit(searchVo);
-            List<Movie> movies = movieService.getLikeMovie(searchVo);
-            movieListVo.setMovies(moviesWithLimit);
-            movieListVo.setSize(movies.size());
-            return new ResultVo<MovieListVo>(movieListVo);
-        }else if (searchVo.getType() == 2){
-
-            return null;
-        }else {
-            return null;
-        }*/
-        if (searchVo.getType() == 1) {
+        searchVo.setDefaultValue();
+        log.info(searchVo.toString());
+        if (searchVo.getType().equals(SearchTypeEnum.MOVIE.getValue())) {
             return "forward:/search/movies";
-        } else if (searchVo.getType() == 2) {
+        } else if (searchVo.getType().equals(SearchTypeEnum.DIRECTOR.getValue())) {
             return "forward:/search/directors";
-        } else if (searchVo.getType() == 3) {
+        } else if (searchVo.getType().equals(SearchTypeEnum.ACTOR.getValue())) {
             return "forward:/search/actors";
-        } else if (searchVo.getType() == 4) {
+        } else if (searchVo.getType().equals(SearchTypeEnum.SCENARIST.getValue())) {
             return "forward:/search/scenarists";
         } else {
             return null;
@@ -73,6 +64,7 @@ public class SearchController {
     @GetMapping("/movies")
     @ResponseBody
     public MovieListVo getMovies(SearchVo searchVo) {
+        searchVo.setDefaultValue();
         MovieListVo movieListVo = new MovieListVo();
         movieListVo.setMsg("1");
         List<Movie> moviesWithLimit = movieService.getLikeMovieWithLimit(searchVo);
@@ -84,22 +76,22 @@ public class SearchController {
             movieWithPeople.setMovie(movie);
             //加入演员信息
             List<SimpleActor> actors = actorService.getSimpleActorByMovieId(movie.getId());
-            if (actors.size() > 5) {
-                actors = actors.subList(0, 5);
+            if (actors.size() > searchVo.getActorNum()) {
+                actors = actors.subList(0, searchVo.getActorNum());
             }
             movieWithPeople.setActors(actors);
 
             //加入导演信息
             List<SimpleDirector> directors = directorService.getSimpleDirectorByMovieId(movie.getId());
-            if (directors.size() > 2) {
-                directors = directors.subList(0, 2);
+            if (directors.size() > searchVo.getDirectorNum()) {
+                directors = directors.subList(0, searchVo.getDirectorNum());
             }
             movieWithPeople.setDirectors(directors);
 
             //加入编剧信息
             List<SimpleScenarist> scenarists = scenaristService.getSimpleScenaristByMovieId(movie.getId());
-            if (scenarists.size() > 3) {
-                scenarists = scenarists.subList(0, 3);
+            if (scenarists.size() > searchVo.getScenaristNum()) {
+                scenarists = scenarists.subList(0, searchVo.getScenaristNum());
             }
             movieWithPeople.setScenarists(scenarists);
 
@@ -127,6 +119,7 @@ public class SearchController {
     @GetMapping("/directors")
     @ResponseBody
     public DirectorListVo getDirectors(SearchVo searchVo) {
+        searchVo.setDefaultValue();
         DirectorListVo directorListVo = new DirectorListVo();
         directorListVo.setMsg("2");
         //查找到所有符合条件的导演
@@ -138,11 +131,11 @@ public class SearchController {
             DirectorWithMovie directorWithMovie = new DirectorWithMovie();
             directorWithMovie.setDirector(director);
             //加入参演电影
-            directorWithMovie.setAMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, director.getId(), "Actor"));
+            directorWithMovie.setAMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, director.getId(), "Actor", searchVo.getActorNum()));
             //加入执导电影
-            directorWithMovie.setDMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, director.getId(), "Director"));
+            directorWithMovie.setDMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, director.getId(), "Director", searchVo.getDirectorNum()));
             //加入编剧电影
-            directorWithMovie.setSMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, director.getId(), "Scenarist"));
+            directorWithMovie.setSMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, director.getId(), "Scenarist", searchVo.getScenaristNum()));
             directorWithMovieList.add(directorWithMovie);
         }
         directorListVo.setDirectors(directorWithMovieList);
@@ -166,6 +159,7 @@ public class SearchController {
     @GetMapping("/actors")
     @ResponseBody
     public ActorListVo getActors(SearchVo searchVo) {
+        searchVo.setDefaultValue();
         ActorListVo actorListVo = new ActorListVo();
         actorListVo.setMsg("3");
         //查询到所有符合条件的演员
@@ -178,11 +172,11 @@ public class SearchController {
             actorWithMovie.setActor(actor);
 
             //加入参演电影
-            actorWithMovie.setAMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, actor.getId(), "Actor"));
+            actorWithMovie.setAMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, actor.getId(), "Actor", searchVo.getActorNum()));
             //加入执导电影
-            actorWithMovie.setDMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, actor.getId(), "Director"));
+            actorWithMovie.setDMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, actor.getId(), "Director", searchVo.getDirectorNum()));
             //加入编剧电影
-            actorWithMovie.setSMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, actor.getId(), "Scenarist"));
+            actorWithMovie.setSMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, actor.getId(), "Scenarist", searchVo.getDirectorNum()));
             actorWithMovieList.add(actorWithMovie);
         }
         actorListVo.setActors(actorWithMovieList);
@@ -206,6 +200,7 @@ public class SearchController {
     @GetMapping("/scenarists")
     @ResponseBody
     public ScenaristListVo getScenarists(SearchVo searchVo) {
+        searchVo.setDefaultValue();
         ScenaristListVo scenaristListVo = new ScenaristListVo();
         scenaristListVo.setMsg("4");
         List<Scenarist> scenaristsWithLimit = scenaristService.getLikeScenaristWithLimit(searchVo);
@@ -217,11 +212,11 @@ public class SearchController {
             scenaristWithMovie.setScenarist(scenarist);
 
             //加入参演电影
-            scenaristWithMovie.setAMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, scenarist.getId(), "Actor"));
+            scenaristWithMovie.setAMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, scenarist.getId(), "Actor", searchVo.getActorNum()));
             //加入执导电影
-            scenaristWithMovie.setDMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, scenarist.getId(), "Director"));
+            scenaristWithMovie.setDMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, scenarist.getId(), "Director", searchVo.getDirectorNum()));
             //加入编剧电影
-            scenaristWithMovie.setSMovies(SimpleMovieUtil.Limit5SimpleMovie(movieService, scenarist.getId(), "Scenarist"));
+            scenaristWithMovie.setSMovies(SimpleMovieUtil.getSimpleMovieByPersonId(movieService, scenarist.getId(), "Scenarist", searchVo.getScenaristNum()));
             scenaristWithMovieList.add(scenaristWithMovie);
         }
 
@@ -259,16 +254,16 @@ public class SearchController {
     @ResponseBody
     public List<String> getClassFields(@PathVariable(value = "type") Integer type) throws ClassNotFoundException {
         Class<?> aClass = null;
-        if (type == 1) {
+        if (type.equals(SearchTypeEnum.MOVIE.getValue())) {
             //movie
             aClass = Class.forName("com.xzx.entity.Movie");
-        } else if (type == 2) {
+        } else if (type.equals(SearchTypeEnum.DIRECTOR.getValue())) {
             //director
             aClass = Class.forName("com.xzx.entity.Director");
-        } else if (type == 3) {
+        } else if (type.equals(SearchTypeEnum.ACTOR.getValue())) {
             //actor
             aClass = Class.forName("com.xzx.entity.Actor");
-        } else if (type == 4) {
+        } else if (type.equals(SearchTypeEnum.SCENARIST.getValue())) {
             //scenarist
             aClass = Class.forName("com.xzx.entity.Scenarist");
         }

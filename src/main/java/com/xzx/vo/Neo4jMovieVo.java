@@ -16,13 +16,13 @@ import lombok.Data;
 @ApiModel(value = "以电影为中心的查询参数", description = "以电影为中心的查询参数")
 public class Neo4jMovieVo {
 
-    @ApiModelProperty(value = "电影id", example = "2931")
+    @ApiModelProperty(value = "电影id", example = "2931", required = true)
     private String id;
 
     @ApiModelProperty(value = "电影演员数")
-    private Integer actorNum = ConstantParam.DEFAULT_MOVIE_ACTOR_NUM;
+    private Integer actorNum = ConstantParam.NEO_DEFAULT_MOVIE_ACTOR_NUM;
     @ApiModelProperty(value = "电影导演数")
-    private Integer directorNum = ConstantParam.DEFAULT_MOVIE_DIRECTOR_NUM;
+    private Integer directorNum = ConstantParam.NEO_DEFAULT_MOVIE_DIRECTOR_NUM;
     @ApiModelProperty(value = "电影编剧数")
-    private Integer scenaristNum = ConstantParam.DEFAULT_MOVIE_SCENARIST_NUM;
+    private Integer scenaristNum = ConstantParam.NEO_DEFAULT_MOVIE_SCENARIST_NUM;
 }

@@ -53,7 +53,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
     @Override
     public List<Movie> getLikeMovieWithLimit(SearchVo searchVo) {
-        int pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
+        int pageSize = searchVo.getPageSize();
         QueryWrapper<Movie> wrapper = new QueryWrapper<>();
         wrapper.like("title", searchVo.getWords());
         wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);
