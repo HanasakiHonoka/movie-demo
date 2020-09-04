@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.ActorWithMovie;
+import com.xzx.dto.PeopleWithBox;
 import com.xzx.entity.Actor;
 import com.xzx.servie.IActorService;
 import com.xzx.servie.IMovieService;
@@ -93,6 +94,12 @@ public class ActorController {
         CsvToBean<Actor> build = new CsvToBeanBuilder<Actor>(in).withMappingStrategy(mapper).build();
         List<Actor> actorList = build.parse();
         return actorService.saveBatch(actorList);
+    }
+
+    @ApiOperation("获取票房top10演员")
+    @GetMapping("/actor/boxTop")
+    public List<PeopleWithBox> getTopActorWithBox() {
+        return actorService.getTopActorWithBox();
     }
 
     //@ApiOperation("获得演员表总数")

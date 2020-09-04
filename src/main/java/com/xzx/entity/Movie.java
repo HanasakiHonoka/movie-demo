@@ -65,16 +65,28 @@ public class Movie implements Serializable {
     private String type;
 
     @CsvBindByName
-    @ApiModelProperty(value = "二级类型")
-    private String secondType;
-
-    @CsvBindByName
     @ApiModelProperty(value = "电影票房")
     private Float boxoffice;
 
     @CsvBindByName
     @ApiModelProperty(value = "首周票房")
     private Float firstBoxoffice;
+
+    private Float prMovie;
+    private Float btMovie;
+    private Float clMovie;
+    private Float deMovie;
+    private Float prBoxRank;
+    private Float doubanRating;
+    private Integer baiduIndex;
+    private Integer ratingNumbers;
+    private Integer commentNumbers;
+    private Integer reviewNumbers;
+
+    @ApiModelProperty(value = "图片名")
+    private String imageName;
+
+
 
     @CsvBindByName
     @ApiModelProperty(value = "演员")
@@ -116,6 +128,12 @@ public class Movie implements Serializable {
     @TableField("director_1_boxoffice")
     private Float director1Boxoffice;
 
+    @TableField("director_1_pr_boxrank")
+    private Float director1PrBoxrank;
+
+    @TableField("director_1_baidu")
+    private Integer director1Baidu;
+
     @CsvBindByName
     @TableField("director_2_id")
     private Integer director2Id;
@@ -131,6 +149,12 @@ public class Movie implements Serializable {
     @CsvBindByName
     @TableField("director_2_boxoffice")
     private Float director2Boxoffice;
+
+    @TableField("director_2_pr_boxrank")
+    private Float director2PrBoxrank;
+
+    @TableField("director_2_baidu")
+    private Integer director2Baidu;
 
     @CsvBindByName
     @TableField("scenarist_1_id")
@@ -148,6 +172,12 @@ public class Movie implements Serializable {
     @TableField("scenarist_1_boxoffice")
     private Float scenarist1Boxoffice;
 
+    @TableField("scenarist_1_pr_boxrank")
+    private Float scenarist1PrBoxrank;
+
+    @TableField("scenarist_1_baidu")
+    private Integer scenarist1Baidu;
+
     @CsvBindByName
     @TableField("scenarist_2_id")
     private Integer scenarist2Id;
@@ -163,6 +193,12 @@ public class Movie implements Serializable {
     @CsvBindByName
     @TableField("scenarist_2_boxoffice")
     private Float scenarist2Boxoffice;
+
+    @TableField("scenarist_2_pr_boxrank")
+    private Float scenarist2PrBoxrank;
+
+    @TableField("scenarist_2_baidu")
+    private Integer scenarist2Baidu;
 
     @CsvBindByName
     @TableField("actor_1_id")
@@ -180,6 +216,15 @@ public class Movie implements Serializable {
     @TableField("actor_1_boxoffice")
     private Float actor1Boxoffice;
 
+    @TableField("actor_1_pr_boxrank")
+    private Float actor1PrBoxrank;
+
+    @TableField("actor_1_baidu")
+    private Integer actor1Baidu;
+
+    @TableField("actor_1_fans")
+    private Integer actor1Fans;
+
     @CsvBindByName
     @TableField("actor_2_id")
     private Integer actor2Id;
@@ -196,5 +241,19 @@ public class Movie implements Serializable {
     @TableField("actor_2_boxoffice")
     private Float actor2Boxoffice;
 
+    @TableField("actor_2_pr_boxrank")
+    private Float actor2PrBoxrank;
+
+    @TableField("actor_2_baidu")
+    private Integer actor2Baidu;
+
+    @TableField("actor_2_fans")
+    private Integer actor2Fans;
+
+    @TableField("issue_company_1_id")
+    private Integer issueCompany1Id;
+
+    @TableField("manu_company_1_id")
+    private Integer manuCompany1Id;
 
 }

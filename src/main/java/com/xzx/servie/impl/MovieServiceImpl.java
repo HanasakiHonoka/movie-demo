@@ -2,8 +2,8 @@ package com.xzx.servie.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xzx.constant.ConstantParam;
 import com.xzx.dto.SimpleMovie;
+import com.xzx.dto.YearBoxOffice;
 import com.xzx.entity.Movie;
 import com.xzx.mapper.MovieMapper;
 import com.xzx.servie.IMovieService;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -75,5 +76,36 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         wrapper.last("limit 0,10");
         return this.list(wrapper);
     }
+
+    @Override
+    public List<SimpleMovie> getTopMovie(String column) {
+        QueryWrapper<Movie> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc(column);
+        List<Movie> movieList = this.list(wrapper);
+
+        return SimpleMovieUtil.movieToSimpleMovie(movieList, 10);
+    }
+
+    @Override
+    public Integer getMovieCountByType(String type) {
+        QueryWrapper<Movie> wrapper = new QueryWrapper<>();
+        wrapper.like("type", type);
+        return this.count(wrapper);
+    }
+
+    @Override
+    public Double getMovieBoxByYear(Integer year) {
+        String year1 = year + "-01-01";
+        String year2 = year + "-12-31";
+        return movieMapper.getBoxByYear(year1, year2);
+    }
+
+    @Override
+    public List<YearBoxOffice> getBoxAllYear() {
+        List<YearBoxOffice> yearBoxOfficeList = movieMapper.getBoxAllYear();
+        yearBoxOfficeList.removeIf(yearBoxOffice -> yearBoxOffice.getBoxoffice() < 1000.0);
+        return yearBoxOfficeList;
+    }
+
 
 }

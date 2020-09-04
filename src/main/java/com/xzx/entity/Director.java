@@ -61,23 +61,15 @@ public class Director implements Serializable {
     @ApiModelProperty(value = "出生地区")
     private String location;
 
-    @TableField("movie_amount_1")
-    @CsvBindByName
     @ApiModelProperty(value = "指导电影数目")
-    private Integer movieAmount1;
+    private Integer amount;
 
-    @TableField("boxoffice_amount_1")
-    @CsvBindByName
-    @ApiModelProperty(value = "总票房")
-    private Integer boxofficeAmount1;
+    private Integer baiduIndex;
+    private Integer boxoffice;
+    private Float prBoxRank;
 
-    @CsvBindByName
-    @TableField("movie_amount_2")
-    private Integer movieAmount2;
-
-    @CsvBindByName
-    @TableField("boxoffice_amount_2")
-    private Integer boxofficeAmount2;
+    @ApiModelProperty(value = "图片名")
+    private String imageName;
 
 
 }

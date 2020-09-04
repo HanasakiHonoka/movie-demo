@@ -3,6 +3,7 @@ package com.xzx.servie.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzx.constant.ConstantParam;
+import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.SimpleScenarist;
 import com.xzx.entity.Scenarist;
 import com.xzx.mapper.ScenaristMapper;
@@ -61,5 +62,10 @@ public class ScenaristServiceImpl extends ServiceImpl<ScenaristMapper, Scenarist
         wrapper.likeRight("name", hintVo.getWords());
         wrapper.last("limit 0,10");
         return this.list(wrapper);
+    }
+
+    @Override
+    public List<PeopleWithBox> getTopScenaristWithBox() {
+        return scenaristMapper.getTopScenaristWithBox();
     }
 }

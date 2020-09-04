@@ -17,7 +17,10 @@ import java.util.List;
 @ApiModel(value = "票房预测请求参数", description = "票房预测请求参数")
 public class BoxCalculateVo {
 
-    @ApiModelProperty(value = "电影类型", example = "戏剧")
+    @ApiModelProperty(value = "是否使用Neo4j", example = "false")
+    private boolean isUseNeo4j = false;
+
+    @ApiModelProperty(value = "电影类型", example = "喜剧")
     private List<String> type;
     @ApiModelProperty(value = "电影时长", example = "120")
     private Integer duration;
@@ -39,5 +42,9 @@ public class BoxCalculateVo {
     private List<Integer> actors;
     @ApiModelProperty(value = "编剧列表")
     private List<Integer> scenarists;
+    @ApiModelProperty(value = "issueId")
+    private Integer issueId;
+    @ApiModelProperty(value = "manuId")
+    private Integer manuId;
 
 }

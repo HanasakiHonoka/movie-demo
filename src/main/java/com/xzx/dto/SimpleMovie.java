@@ -19,5 +19,6 @@ public class SimpleMovie {
     private Float boxoffice;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDate releaseTime;
+    private Float score;
 
 }

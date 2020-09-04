@@ -3,6 +3,7 @@ package com.xzx.controller;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.ScenaristWithMovie;
 import com.xzx.entity.Scenarist;
 import com.xzx.servie.IMovieService;
@@ -86,6 +87,13 @@ public class ScenaristController {
         List<Scenarist> scenaristList = build.parse();
         return scenaristService.saveBatch(scenaristList);
     }
+
+    @ApiOperation("获取票房top10编剧")
+    @GetMapping("/scenarist/boxTop")
+    public List<PeopleWithBox> getTopScenaristWithBox() {
+        return scenaristService.getTopScenaristWithBox();
+    }
+
     //@ApiOperation("获得编剧表总数")
     //@GetMapping("/scenarist/count")
     //public long getScenaristCount() {

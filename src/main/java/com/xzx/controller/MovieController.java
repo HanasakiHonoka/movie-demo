@@ -3,7 +3,10 @@ package com.xzx.controller;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.xzx.constant.MovieTypeEnum;
 import com.xzx.dto.MovieWithPeople;
+import com.xzx.dto.SimpleMovie;
+import com.xzx.dto.YearBoxOffice;
 import com.xzx.entity.Movie;
 import com.xzx.servie.IActorService;
 import com.xzx.servie.IDirectorService;
@@ -16,6 +19,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +28,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Api(value = "MovieController", tags = "电影模块")
@@ -59,12 +66,14 @@ public class MovieController {
 
     @ApiOperation("更新电影信息")
     @PutMapping("/movie")
+    @CacheEvict("movies")
     public boolean updateMovie(Movie movie) {
         return movieService.updateById(movie);
     }
 
     @ApiOperation("添加电影")
     @PostMapping("/movie")
+    @CacheEvict("movies")
     public boolean insertMovie(Movie movie) {
         return movieService.save(movie);
     }
@@ -77,12 +86,14 @@ public class MovieController {
 
     @ApiOperation("按id删除电影")
     @DeleteMapping("/movie/{id}")
+    @CacheEvict("movies")
     public boolean delMovie(@PathVariable(value = "id") String id) {
         return movieService.removeById(Integer.parseInt(id));
     }
 
     @ApiOperation("获取所有电影")
     @GetMapping("/movies")
+    @Cacheable("movies")
     public MgtMovieListVo getMovies() {
         List<MovieWithPeople> movieWithPeoples = new ArrayList<>();
         List<Movie> movies = movieService.list();
@@ -96,6 +107,7 @@ public class MovieController {
 
     @ApiOperation("csv文件导入电影数据")
     @PostMapping("/movie/csvInsert")
+    @CacheEvict("movies")
     public boolean insertMovieByCsv(MultipartFile file) throws IOException {
         InputStreamReader in = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
         HeaderColumnNameMappingStrategy<Movie> mapper = new HeaderColumnNameMappingStrategy<>();
@@ -103,6 +115,43 @@ public class MovieController {
         CsvToBean<Movie> build = new CsvToBeanBuilder<Movie>(in).withMappingStrategy(mapper).build();
         List<Movie> movieList = build.parse();
         return movieService.saveBatch(movieList);
+    }
+
+    @ApiOperation("获得票房top10电影")
+    @GetMapping("/movie/boxTop")
+    public List<SimpleMovie> getBoxTopMovie() {
+        return movieService.getTopMovie("boxoffice");
+    }
+
+    @ApiOperation("获取所有类型的电影数量")
+    @GetMapping("/movie/typeCount")
+    public Map<String, Integer> getMovieCountByType() {
+        Map<String, Integer> res = new HashMap<>();
+        for (MovieTypeEnum value : MovieTypeEnum.values()) {
+            res.put(value.getRawName(), movieService.getMovieCountByType(value.getRawName()));
+        }
+        return res;
+    }
+
+    @ApiOperation("获得评分top10电影")
+    @GetMapping("/movie/scoreTop")
+    public List<SimpleMovie> getScoreTopMovie() {
+        return movieService.getTopMovie("douban_rating");
+    }
+
+    @ApiOperation("获得各个年份电影票房总数")
+    @GetMapping("/movie/boxYear")
+    public List<YearBoxOffice> getMovieBoxOrderByYear() {
+        List<YearBoxOffice> boxAllYear = movieService.getBoxAllYear();
+        System.out.println(boxAllYear);
+        return boxAllYear;
+    }
+
+    @ApiOperation("删除电影缓存")
+    @DeleteMapping("/movie/delCache")
+    @CacheEvict("movies")
+    public void delCache() {
+
     }
 
     //@ApiOperation("获得电影表总数")

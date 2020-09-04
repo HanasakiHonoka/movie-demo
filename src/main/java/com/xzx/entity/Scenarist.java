@@ -61,25 +61,15 @@ public class Scenarist implements Serializable {
     @ApiModelProperty(value = "出生地区")
     private String location;
 
-    @TableField("movie_amount_1")
-    @CsvBindByName
-    @ApiModelProperty(value = "剧本数目")
-    private Integer movieAmount1;
+    @ApiModelProperty(value = "指导电影数目")
+    private Integer amount;
 
-    @TableField("boxoffice_amount_1")
-    @CsvBindByName
-    @ApiModelProperty(value = "总票房")
-    private Integer boxofficeAmount1;
+    private Integer baiduIndex;
+    private Integer boxoffice;
+    private Float prBoxRank;
 
-    @TableField("movie_amount_2")
-    @CsvBindByName
-    @ApiModelProperty(value = "作为副编剧剧本数目")
-    private Integer movieAmount2;
-
-    @TableField("boxoffice_amount_2")
-    @CsvBindByName
-    @ApiModelProperty(value = "作为副编剧总票房")
-    private Integer boxofficeAmount2;
+    @ApiModelProperty(value = "图片名")
+    private String imageName;
 
 
 }

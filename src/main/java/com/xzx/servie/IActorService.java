@@ -1,6 +1,7 @@
 package com.xzx.servie;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.SimpleActor;
 import com.xzx.entity.Actor;
 import com.xzx.vo.HintVo;
@@ -25,4 +26,6 @@ public interface IActorService extends IService<Actor> {
     long getLikeActorCount(SearchVo searchVo);
 
     List<Actor> getFirstLikeActor(HintVo hintVo);
+
+    List<PeopleWithBox> getTopActorWithBox();
 }

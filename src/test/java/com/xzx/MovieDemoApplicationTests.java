@@ -9,7 +9,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.xzx.constant.MovieTypeEnum;
 import com.xzx.dto.NeoPeopleRelationDto;
 import com.xzx.dto.SimpleMovie;
+import com.xzx.dto.YearBoxOffice;
 import com.xzx.entity.*;
+import com.xzx.mapper.MovieMapper;
 import com.xzx.servie.IActorService;
 import com.xzx.servie.IDirectorService;
 import com.xzx.servie.IMovieService;
@@ -18,6 +20,7 @@ import com.xzx.util.DataScienceUtil;
 import com.xzx.vo.BoxCalculateVo;
 import com.xzx.vo.Neo4jPersonVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.mapping.ResultMap;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.neo4j.driver.AuthTokens;
@@ -28,10 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,6 +41,9 @@ class MovieDemoApplicationTests {
     private String dataScienceServer;
 
     @Autowired
+    private MovieMapper movieMapper;
+
+    @Autowired
     private IMovieService movieService;
     @Autowired
     private IActorService actorService;
@@ -48,6 +51,19 @@ class MovieDemoApplicationTests {
     private IDirectorService directorService;
     @Autowired
     private IScenaristService scenaristService;
+
+    @Test
+    public void testYear() {
+        List<YearBoxOffice> boxAllYear = movieMapper.getBoxAllYear();
+        System.out.println(boxAllYear);
+    }
+
+    @Test
+    public void testMovieCount() {
+        String year1 = 2010 + "-01-01";
+        String year2 = 2010 + "-12-31";
+        System.out.println(movieMapper.getBoxByYear(year1, year2));
+    }
 
     @Test
     public void testNeo() {
@@ -72,9 +88,24 @@ class MovieDemoApplicationTests {
 
     @Test
     public void testMovie() {
-        List<SimpleMovie> simpleMovies = movieService.getSimpleMovieByActorId(1000525);
-        System.out.println(simpleMovies);
+        //List<SimpleMovie> simpleMovies = movieService.getSimpleMovieByActorId(1000525);
+        Movie movie = movieService.getById(132);
+        System.out.println(movie);
+        //System.out.println(simpleMovies);
     }
+
+    @Test
+    public void testMovie2() {
+        Actor actor = actorService.getById(1000525);
+        System.out.println(actor);
+
+        Movie movie = movieService.getById(10);
+        System.out.println(movie);
+
+        //List<SimpleMovie> simpleMovies = movieService.getSimpleMovieByActorId(1000525);
+        //System.out.println(simpleMovies);
+    }
+
 
     @Test
     void contextLoads() {
@@ -98,6 +129,8 @@ class MovieDemoApplicationTests {
         Driver driver = GraphDatabase.driver("bolt://106.54.68.249:7787", AuthTokens.basic("neo4j", "movie@159357"));
     }
 
+
+/*
     @Test
     public void dsTest() {
         String fro_json = "{\n" +
@@ -302,6 +335,6 @@ class MovieDemoApplicationTests {
         sendToPy.put("1", pyReqParam);
         String res = HttpRequest.post(dataScienceServer + "/data/box_value_person").body(sendToPy.toJSONString()).execute().body();
         System.out.println(res);
-    }
+    }*/
 
 }

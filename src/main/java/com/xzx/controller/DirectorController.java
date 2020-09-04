@@ -5,6 +5,7 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.DirectorWithMovie;
+import com.xzx.dto.PeopleWithBox;
 import com.xzx.entity.Director;
 import com.xzx.servie.IDirectorService;
 import com.xzx.servie.IMovieService;
@@ -86,6 +87,12 @@ public class DirectorController {
         CsvToBean<Director> build = new CsvToBeanBuilder<Director>(in).withMappingStrategy(mapper).build();
         List<Director> directorList = build.parse();
         return directorService.saveBatch(directorList);
+    }
+
+    @ApiOperation("获取票房top10导演")
+    @GetMapping("/director/boxTop")
+    public List<PeopleWithBox> getTopDirectorWithBox() {
+        return directorService.getTopDirectorWithBox();
     }
 
     //@ApiOperation("获得导演表总数")

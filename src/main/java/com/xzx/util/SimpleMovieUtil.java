@@ -30,7 +30,20 @@ public class SimpleMovieUtil {
     public static List<SimpleMovie> movieToSimpleMovie(List<Movie> movies) {
         List<SimpleMovie> simpleMovies = new ArrayList<>();
         for (Movie movie: movies) {
-            simpleMovies.add(new SimpleMovie(movie.getId(), movie.getTitle(), movie.getBoxoffice(), movie.getReleaseTime()));
+            simpleMovies.add(new SimpleMovie(movie.getId(), movie.getTitle(), movie.getBoxoffice(), movie.getReleaseTime(), movie.getDoubanRating()));
+        }
+        return simpleMovies;
+    }
+
+    public static List<SimpleMovie> movieToSimpleMovie(List<Movie> movies, Integer num) {
+        List<SimpleMovie> simpleMovies = new ArrayList<>();
+        for (Movie movie: movies) {
+            if (num != 0) {
+                num--;
+            } else {
+                break;
+            }
+            simpleMovies.add(new SimpleMovie(movie.getId(), movie.getTitle(), movie.getBoxoffice(), movie.getReleaseTime(), movie.getDoubanRating()));
         }
         return simpleMovies;
     }

@@ -1,11 +1,13 @@
 package com.xzx.servie.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xzx.constant.ConstantParam;
 import com.xzx.dto.NeoPeopleRelationDto;
 import com.xzx.entity.NeoMovie;
 import com.xzx.entity.NeoPeople;
 import com.xzx.servie.Neo4jService;
 import com.xzx.util.Neo4jUtil;
+import com.xzx.vo.BoxCalculateVo;
 import com.xzx.vo.Neo4jMovieVo;
 import com.xzx.vo.Neo4jPersonVo;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.neo4j.driver.types.Path;
 import org.neo4j.driver.types.Relationship;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -173,6 +176,81 @@ public class Neo4jServiceImpl implements Neo4jService {
 
 
         session.close();
+        return res;
+    }
+
+    @Override
+    public Double getMoviePrScore(BoxCalculateVo boxCalculateVo) {
+        List<Integer> actors = boxCalculateVo.getActors();
+        List<Integer> directors = boxCalculateVo.getDirectors();
+        List<Integer> scenarists = boxCalculateVo.getScenarists();
+
+        Session session = Neo4jUtil.getSession();
+        Double res = 0.15002;
+        Result result = null;
+
+        //check is exists graph
+        boolean isGraphExists = false;
+        try {
+            result = session.run("CALL gds.graph.exists('my-graph') YIELD exists;");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return res;
+        }
+        //if exists, drop it
+        while (result.hasNext()) {
+            Record record = result.next();
+            isGraphExists = record.get("exists").asBoolean();
+        }
+        if (isGraphExists) {
+            session.run("CALL gds.graph.drop('my-graph') YIELD graphName;");
+        }
+
+        //add node
+        Set<Integer> peopleSet = new HashSet<>();
+        if (actors != null) peopleSet.addAll(actors);
+        if (directors != null) peopleSet.addAll(directors);
+        if (scenarists != null) peopleSet.addAll(scenarists);
+        List<Integer> peopleList = new ArrayList<>(peopleSet);
+
+        String personTemp = "(p%d:person {person_id: '%d'}),";
+        StringBuffer personStr = new StringBuffer();
+        for (int i = 0; i < peopleList.size(); i++) {
+            personStr.append(String.format(personTemp, i, peopleList.get(i)));
+        }
+
+        String relationTemp = "create (m)-[:ACT{weight:0}]->(p%d)\n";
+        StringBuffer relationStr = new StringBuffer();
+        for (int i = 0; i < peopleList.size(); i++) {
+            relationStr.append(String.format(relationTemp, i));
+        }
+
+        String cql = String.format("match %s\n" +
+                "create (m:movie{movie_id:'xx'})\n" +
+                "%s", personStr.deleteCharAt(personStr.length() - 1).toString(), relationStr.toString());
+        System.out.println(cql);
+        session.run(cql);
+
+        //run pageRank
+        cql = "CALL gds.alpha.closeness.stream({\n" +
+                "  nodeQuery: 'MATCH (p) RETURN id(p) AS id',\n" +
+                "  relationshipQuery: 'MATCH (p1)-[]-(p2) RETURN id(p1) AS source, id(p2) AS target'\n" +
+                "}) YIELD nodeId, centrality WHERE gds.util.asNode(nodeId).movie_id = 'xx'\n" +
+                "RETURN gds.util.asNode(nodeId).movie_id AS id, centrality\n" +
+                "ORDER BY centrality DESC";
+        result = session.run(cql);
+        while (result.hasNext()) {
+            Record record = result.next();
+            res = record.get("centrality").asDouble();
+            System.out.println("centrality = " + res);
+        }
+
+        //del node
+        cql = "match (m:movie{movie_id:'xx'})-[r]-()\n" +
+                "delete r,m";
+        session.run(cql);
+
+
         return res;
     }
 

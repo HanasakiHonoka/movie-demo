@@ -1,6 +1,7 @@
 package com.xzx.servie;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.SimpleDirector;
 import com.xzx.entity.Director;
 import com.xzx.vo.HintVo;
@@ -25,4 +26,6 @@ public interface IDirectorService extends IService<Director> {
     long getLikeDirectorCount(SearchVo searchVo);
 
     List<Director> getFirstLikeDirector(HintVo hintVo);
+
+    List<PeopleWithBox> getTopDirectorWithBox();
 }
