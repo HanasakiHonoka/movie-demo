@@ -1,9 +1,11 @@
 package com.xzx.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.constant.MovieTypeEnum;
+import com.xzx.dto.MovieQueryDTO;
 import com.xzx.dto.MovieWithPeople;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.dto.YearBoxOffice;
@@ -12,7 +14,7 @@ import com.xzx.servie.IActorService;
 import com.xzx.servie.IDirectorService;
 import com.xzx.servie.IMovieService;
 import com.xzx.servie.IScenaristService;
-import com.xzx.vo.MgtMovieListVo;
+import com.xzx.vo.MgtMoviePageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,18 +92,18 @@ public class MovieController {
         return movieService.removeById(Integer.parseInt(id));
     }
 
-    @ApiOperation("获取所有电影")
-    @GetMapping("/movies")
+    @ApiOperation("分页获取所有电影")
+    @GetMapping("/moviePage")
     @Cacheable("movies")
-    public MgtMovieListVo getMovies() {
-        List<MovieWithPeople> movieWithPeoples = new ArrayList<>();
-        List<Movie> movies = movieService.list();
-        for (Movie movie:movies) {
-            MovieWithPeople movieWithPeople = new MovieWithPeople();
-            movieWithPeople.setMovie(movie);
-            movieWithPeoples.add(movieWithPeople);
-        }
-        return new MgtMovieListVo(movieWithPeoples);
+    public IPage<MgtMoviePageVO> getMoviePage(MovieQueryDTO movieQueryDTO) {
+        IPage<MgtMoviePageVO> moviePage = movieService.getMoviePage(movieQueryDTO);
+        return moviePage;
+    }
+
+    @ApiOperation("获得每年票房top10电影")
+    @GetMapping("/movie/boxTopYear")
+    public List<SimpleMovie> getBoxTopYearMovie(@RequestParam(value = "year") String year) {
+        return movieService.getYearBoxTopMovie(year);
     }
 
     @ApiOperation("csv文件导入电影数据")

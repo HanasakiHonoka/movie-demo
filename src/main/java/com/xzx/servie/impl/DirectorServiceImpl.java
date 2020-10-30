@@ -1,14 +1,19 @@
 package com.xzx.servie.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzx.constant.ConstantParam;
+import com.xzx.dto.DirectorQueryDTO;
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.SimpleDirector;
 import com.xzx.entity.Director;
 import com.xzx.mapper.DirectorMapper;
 import com.xzx.servie.IDirectorService;
 import com.xzx.vo.HintVo;
+import com.xzx.vo.MgtDirectorPageVO;
 import com.xzx.vo.SearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +34,25 @@ public class DirectorServiceImpl extends ServiceImpl<DirectorMapper, Director> i
 
     @Autowired
     DirectorMapper directorMapper;
+
+    @Override
+    public IPage<MgtDirectorPageVO> getDirectorPage(DirectorQueryDTO directorQueryDTO) {
+        Page<Director> page = new Page<>(directorQueryDTO.getPage(), directorQueryDTO.getPageSize());
+        QueryWrapper<Director> queryWrapper = new QueryWrapper<>();
+        Page<Director> data = directorMapper.selectPage(page, queryWrapper);
+        List<Director> directorList = data.getRecords();
+        List<MgtDirectorPageVO> voList = new ArrayList<>();
+        for (Director director : directorList) {
+            MgtDirectorPageVO mgtDirectorPageVO = BeanUtil.copyProperties(director, MgtDirectorPageVO.class);
+            voList.add(mgtDirectorPageVO);
+        }
+        IPage<MgtDirectorPageVO> res = new Page<>();
+        res.setTotal(data.getTotal());
+        res.setCurrent(data.getCurrent());
+        res.setSize(data.getSize());
+        res.setRecords(voList);
+        return res;
+    }
 
     @Override
     public List<SimpleDirector> getSimpleDirectorByMovieId(int movieId) {

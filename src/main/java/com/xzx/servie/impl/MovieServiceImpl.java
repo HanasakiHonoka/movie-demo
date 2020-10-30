@@ -1,7 +1,11 @@
 package com.xzx.servie.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xzx.dto.MovieQueryDTO;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.dto.YearBoxOffice;
 import com.xzx.entity.Movie;
@@ -9,10 +13,12 @@ import com.xzx.mapper.MovieMapper;
 import com.xzx.servie.IMovieService;
 import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.HintVo;
+import com.xzx.vo.MgtMoviePageVO;
 import com.xzx.vo.SearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +36,24 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     @Autowired
     MovieMapper movieMapper;
 
+    @Override
+    public IPage<MgtMoviePageVO> getMoviePage(MovieQueryDTO movieQueryDTO) {
+        Page page = new Page<>(movieQueryDTO.getPage(), movieQueryDTO.getPageSize());
+        QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
+        Page<Movie> data = baseMapper.selectPage(page, queryWrapper);
+        List<Movie> movieList = data.getRecords();
+        List<MgtMoviePageVO> voList = new ArrayList<>();
+        for (Movie movie : movieList) {
+            MgtMoviePageVO moviePageVO = BeanUtil.copyProperties(movie, MgtMoviePageVO.class);
+            voList.add(moviePageVO);
+        }
+        IPage<MgtMoviePageVO> res = new Page<>();
+        res.setTotal(data.getTotal());
+        res.setCurrent(data.getCurrent());
+        res.setSize(data.getSize());
+        res.setRecords(voList);
+        return res;
+    }
 
     @Override
     public List<SimpleMovie> getSimpleMovieByActorId(Integer actorId) {
@@ -91,6 +115,13 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         QueryWrapper<Movie> wrapper = new QueryWrapper<>();
         wrapper.like("type", type);
         return this.count(wrapper);
+    }
+
+    @Override
+    public List<SimpleMovie> getYearBoxTopMovie(String year) {
+        List<Movie> movieList = movieMapper.getTopBoxYearMovie(year);
+
+        return SimpleMovieUtil.movieToSimpleMovie(movieList);
     }
 
     @Override

@@ -1,14 +1,16 @@
 package com.xzx.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.xzx.dto.ActorQueryDTO;
 import com.xzx.dto.ActorWithMovie;
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.entity.Actor;
 import com.xzx.servie.IActorService;
 import com.xzx.servie.IMovieService;
-import com.xzx.vo.MgtActorListVo;
+import com.xzx.vo.MgtActorPageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -68,21 +69,11 @@ public class ActorController {
     }
 
 
-    @ApiOperation("获取所有演员")
-    @GetMapping("/actors")
-    public MgtActorListVo getActors() {
-        List<ActorWithMovie> actorWithMovies = new ArrayList<>();
-
-        List<Actor> actors = actorService.list();
-
-        for (Actor actor: actors) {
-            ActorWithMovie actorWithMovie = new ActorWithMovie();
-            actorWithMovie.setActor(actor);
-            actorWithMovies.add(actorWithMovie);
-        }
-
-        return new MgtActorListVo(actorWithMovies);
-
+    @ApiOperation("分页获取所有演员")
+    @GetMapping("/actorPage")
+    public IPage<MgtActorPageVO> getActorPage(ActorQueryDTO actorQueryDTO) {
+        IPage<MgtActorPageVO> actorPage = actorService.getActorPage(actorQueryDTO);
+        return actorPage;
     }
 
     @ApiOperation("csv文件导入演员数据")

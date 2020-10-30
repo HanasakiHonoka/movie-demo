@@ -43,6 +43,11 @@ public interface MovieMapper extends BaseMapper<Movie> {
             "GROUP BY YEAR(m.release_time) ORDER BY year")
     List<YearBoxOffice> getBoxAllYear();
 
+    @Select("SELECT * FROM movie_table " +
+            "WHERE YEAR(release_time) = '${year}' " +
+            "ORDER BY boxoffice desc " +
+            "LIMIT 10 ")
+    List<Movie> getTopBoxYearMovie(@Param("year")String year);
 }
 
 /*

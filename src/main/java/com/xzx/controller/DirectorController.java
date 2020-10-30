@@ -1,15 +1,17 @@
 package com.xzx.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.xzx.dto.DirectorQueryDTO;
 import com.xzx.dto.DirectorWithMovie;
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.entity.Director;
 import com.xzx.servie.IDirectorService;
 import com.xzx.servie.IMovieService;
-import com.xzx.vo.MgtDirectorListVo;
+import com.xzx.vo.MgtDirectorPageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "DirectorController", tags = "导演模块")
@@ -63,20 +64,13 @@ public class DirectorController {
         return directorService.removeById(id);
     }
 
-    @ApiOperation("获取所有导演")
-    @GetMapping("/directors")
-    public MgtDirectorListVo getDirectors() {
-        List<DirectorWithMovie> directorWithMovies = new ArrayList<>();
-
-        List<Director> directors = directorService.list();
-        for (Director director: directors) {
-            DirectorWithMovie directorWithMovie = new DirectorWithMovie();
-            directorWithMovie.setDirector(director);
-            directorWithMovies.add(directorWithMovie);
-        }
-
-        return new MgtDirectorListVo(directorWithMovies);
+    @ApiOperation("分页获取所有导演")
+    @GetMapping("/directorPage")
+    public IPage<MgtDirectorPageVO> getDirectorPage(DirectorQueryDTO directorQueryDTO) {
+        IPage<MgtDirectorPageVO> directorPage = directorService.getDirectorPage(directorQueryDTO);
+        return directorPage;
     }
+
 
     @ApiOperation("csv文件导入导演数据")
     @PostMapping("/director/csvInsert")

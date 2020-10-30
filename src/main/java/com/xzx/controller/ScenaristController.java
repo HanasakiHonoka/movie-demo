@@ -1,14 +1,16 @@
 package com.xzx.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.xzx.dto.PeopleWithBox;
+import com.xzx.dto.ScenaristQueryDTO;
 import com.xzx.dto.ScenaristWithMovie;
 import com.xzx.entity.Scenarist;
 import com.xzx.servie.IMovieService;
 import com.xzx.servie.IScenaristService;
-import com.xzx.vo.MgtScenaristListVo;
+import com.xzx.vo.MgtScenaristPageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "ScenaristController", tags = "编剧模块")
@@ -63,18 +64,11 @@ public class ScenaristController {
         return scenaristService.removeById(id);
     }
 
-    @ApiOperation("获取所有编剧")
-    @GetMapping("/scenarists")
-    public MgtScenaristListVo getScenarists() {
-        List<ScenaristWithMovie> scenaristWithMovies = new ArrayList<>();
-
-        List<Scenarist> scenarists = scenaristService.list();
-        for (Scenarist scenarist:scenarists) {
-            ScenaristWithMovie scenaristWithMovie = new ScenaristWithMovie();
-            scenaristWithMovie.setScenarist(scenarist);
-            scenaristWithMovies.add(scenaristWithMovie);
-        }
-        return new MgtScenaristListVo(scenaristWithMovies);
+    @ApiOperation("分页获取所有编剧")
+    @GetMapping("/scenaristPage")
+    public IPage<MgtScenaristPageVO> getScenarists(ScenaristQueryDTO scenaristQueryDTO) {
+        IPage<MgtScenaristPageVO> scenaristPage = scenaristService.getScenaristPage(scenaristQueryDTO);
+        return scenaristPage;
     }
 
     @ApiOperation("csv文件导入编剧数据")

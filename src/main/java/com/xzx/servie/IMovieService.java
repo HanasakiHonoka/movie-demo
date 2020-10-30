@@ -1,10 +1,13 @@
 package com.xzx.servie;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xzx.dto.MovieQueryDTO;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.dto.YearBoxOffice;
 import com.xzx.entity.Movie;
 import com.xzx.vo.HintVo;
+import com.xzx.vo.MgtMoviePageVO;
 import com.xzx.vo.SearchVo;
 
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.Map;
  */
 public interface IMovieService extends IService<Movie> {
 
+    IPage<MgtMoviePageVO> getMoviePage(MovieQueryDTO movieQueryDTO);
+
     List<SimpleMovie> getSimpleMovieByActorId(Integer actorId);
 
     List<SimpleMovie> getSimpleMovieByDirectorId(Integer directorId);
@@ -33,6 +38,8 @@ public interface IMovieService extends IService<Movie> {
     List<Movie> getFirstLikeMovie(HintVo hintVo);
 
     List<SimpleMovie> getTopMovie(String column);
+
+    List<SimpleMovie> getYearBoxTopMovie(String year);
 
     Integer getMovieCountByType(String type);
 
