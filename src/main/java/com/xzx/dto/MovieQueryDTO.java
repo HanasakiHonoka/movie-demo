@@ -1,5 +1,7 @@
 package com.xzx.dto;
 
+import com.xzx.constant.MovieTypeEnum;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -11,4 +13,10 @@ import lombok.Data;
  */
 @Data
 public class MovieQueryDTO extends QueryPageDTO{
+    @ApiModelProperty(value = "类型",required = false)
+    String type;
+    @ApiModelProperty(value = "票房0降序1升序",required = false)
+    Boolean boxoffice;
+    @ApiModelProperty(value = "上映日期0降序1升序",required = false)
+    Boolean releaseTime;
 }

@@ -256,4 +256,9 @@ public class Movie implements Serializable {
     @TableField("manu_company_1_id")
     private Integer manuCompany1Id;
 
+
+    public static final String TYPE = "type";
+    public static final String BOXOFFICE = "boxoffice";
+    public static final String RELEASE_TIME = "release_time";
+
 }

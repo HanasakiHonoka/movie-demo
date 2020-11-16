@@ -1,10 +1,8 @@
 package com.xzx.servie.impl;
 
 import cn.hutool.core.date.DateTime;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xzx.constant.ConstantParam;
 import com.xzx.constant.MovieTypeEnum;
@@ -29,12 +27,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -82,11 +77,11 @@ public class DataScienceServiceImpl implements DataScienceService {
         task.setStartTime(LocalDateTime.now());
         task.setUpdateTime(LocalDateTime.now());
         taskService.save(task);
-        try {
-            Thread.sleep(8000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        //try {
+        //    Thread.sleep(8000);
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
 
 
         boolean useNeo4j = boxCalculateVo.isUseNeo4j();
@@ -141,7 +136,7 @@ public class DataScienceServiceImpl implements DataScienceService {
                 pyReqParam.put("is_weekend", 1);
             }
             pyReqParam.put("year_mean_1000", DataScienceUtil.getYearMean(year));
-            if ((month == 1 && day > 20) ||(month == 2 && day <= 20)) {
+            if ((month == 1 && day > 20) || (month == 2 && day <= 20)) {
                 pyReqParam.put("springfestival", true);
             }
             if (month == 7 || month == 8) {
@@ -181,8 +176,10 @@ public class DataScienceServiceImpl implements DataScienceService {
         //directors
         if (boxCalculateVo.getDirectors() != null && boxCalculateVo.getDirectors().size() > 0) {
             Director director1 = directorService.getById(boxCalculateVo.getDirectors().get(0));
-            pyReqParam.put("director_boxoffice_average", director1.getBoxoffice() / director1.getAmount());
-            pyReqParam.put("director_amount", director1.getAmount());
+            if (director1.getAmount() > 0) {
+                pyReqParam.put("director_boxoffice_average", director1.getBoxoffice() / director1.getAmount());
+                pyReqParam.put("director_amount", director1.getAmount());
+            }
             if (useNeo4j) pyReqParam.put("director_1_pr_boxrank", director1.getPrBoxRank());
             if (boxCalculateVo.getDirectors().size() > 1) {
                 Director director2 = directorService.getById(boxCalculateVo.getDirectors().get(1));
@@ -191,20 +188,24 @@ public class DataScienceServiceImpl implements DataScienceService {
                     if (useNeo4j) pyReqParam.put("director_2_pr_boxrank", director2.getPrBoxRank());
                 }
             }
-                //pyReqParam.put("director_" + (i + 1) + "_amount", director.getMovieAmount1());
-                //pyReqParam.put("director_" + (i + 1) + "_boxoffice", director.getBoxofficeAmount1());
+            //pyReqParam.put("director_" + (i + 1) + "_amount", director.getMovieAmount1());
+            //pyReqParam.put("director_" + (i + 1) + "_boxoffice", director.getBoxofficeAmount1());
         }
 
         //actors
         if (boxCalculateVo.getActors() != null && boxCalculateVo.getActors().size() > 0) {
             Actor actor1 = actorService.getById(boxCalculateVo.getActors().get(0));
-            pyReqParam.put("actor_1_boxoffice_average", actor1.getBoxoffice() / actor1.getAmount());
-            pyReqParam.put("actor_amount", actor1.getAmount());
+            if (actor1.getAmount() > 0) {
+                pyReqParam.put("actor_1_boxoffice_average", actor1.getBoxoffice() / actor1.getAmount());
+                pyReqParam.put("actor_amount", actor1.getAmount());
+            }
             if (useNeo4j) pyReqParam.put("actor_1_pr_boxrank", actor1.getPrBoxRank());
             if (boxCalculateVo.getActors().size() > 1) {
                 Actor actor2 = actorService.getById(boxCalculateVo.getActors().get(1));
-                pyReqParam.put("actor_2_boxoffice_average", actor2.getBoxoffice() / actor2.getAmount());
-                pyReqParam.put("actor_amount", actor1.getAmount() + actor2.getAmount());
+                if (actor2.getAmount() > 0) {
+                    pyReqParam.put("actor_2_boxoffice_average", actor2.getBoxoffice() / actor2.getAmount());
+                    pyReqParam.put("actor_amount", actor1.getAmount() + actor2.getAmount());
+                }
                 if (useNeo4j) pyReqParam.put("actor_2_pr_boxrank", actor2.getPrBoxRank());
             }
         }
@@ -212,8 +213,10 @@ public class DataScienceServiceImpl implements DataScienceService {
         //scenarists
         if (boxCalculateVo.getScenarists() != null && boxCalculateVo.getScenarists().size() > 0) {
             Scenarist scenarist1 = scenaristService.getById(boxCalculateVo.getScenarists().get(0));
-            pyReqParam.put("scenarist_boxoffice_average", scenarist1.getBoxoffice() / scenarist1.getAmount());
-            pyReqParam.put("scenarist_amount", scenarist1.getAmount());
+            if (scenarist1.getAmount() > 0){
+                pyReqParam.put("scenarist_boxoffice_average", scenarist1.getBoxoffice() / scenarist1.getAmount());
+                pyReqParam.put("scenarist_amount", scenarist1.getAmount());
+            }
             if (useNeo4j) pyReqParam.put("scenarist_1_pr_boxrank", scenarist1.getPrBoxRank());
             if (boxCalculateVo.getScenarists().size() > 1) {
                 Scenarist scenarist2 = scenaristService.getById(boxCalculateVo.getScenarists().get(1));
@@ -254,7 +257,7 @@ public class DataScienceServiceImpl implements DataScienceService {
         System.out.println(res);
 
 
-        if(res != null) {
+        if (res != null) {
             BoxResVo boxResVo = JSON.parseObject(res).toJavaObject(BoxResVo.class);
             task.setResponse(JSON.toJSONString(boxResVo));
             task.setStatus(ConstantParam.SUCCESS_STATUS);
@@ -283,18 +286,45 @@ public class DataScienceServiceImpl implements DataScienceService {
         }
         //personIdList.add("1274331");
         //personIdList.add("1054424");
-        String personTemp = "(p%d:person {person_id: '%d'}),";
+        String personTemp = "(p%d:person {uid: '%d'}),";
+        String personWhereTemp = " and n.uid <> '%d'";
         StringBuffer personStr = new StringBuffer();
+        StringBuffer personWhereStr = new StringBuffer();
         for (int i = 0; i < personIdList.size(); i++) {
             personStr.append(String.format(personTemp, i, personIdList.get(i)));
+            personWhereStr.append(String.format(personWhereTemp, personIdList.get(i)));
         }
         String s1 = personStr.deleteCharAt(personStr.length() - 1).toString();
+        String s3 = personWhereStr.toString();
 
         StringBuffer personList = new StringBuffer();
         for (int i = 0; i < personIdList.size(); i++) {
             personList.append("p" + i + ",");
         }
         String s2 = personList.deleteCharAt(personList.length() - 1).toString();
+        Result result = null;
+
+        //check is exists graph
+        boolean isGraphExists = false;
+        try {
+            result = session.run("CALL gds.graph.exists('graph-person') YIELD exists;");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        //if exists, drop it
+        while (result.hasNext()) {
+            Record record = result.next();
+            isGraphExists = record.get("exists").asBoolean();
+        }
+        if (!isGraphExists) {
+            session.run("CALL gds.graph.create.cypher(\n" +
+                    "    'graph-person',\n" +
+                    "    'match (n:person) return id(n) as id',\n" +
+                    "    'match (p1:person)-[]->(m)<-[]-(p2:person) return id(p1) as source, id(p2) as target, count(m) as weight'\n" +
+                    ")\n" +
+                    "YIELD graphName, nodeCount, relationshipCount, createMillis;");
+        }
 
         String cql = String.format("MATCH %s\n" +
                 "CALL gds.pageRank.stream('graph-person', {\n" +
@@ -304,22 +334,21 @@ public class DataScienceServiceImpl implements DataScienceService {
                 "  sourceNodes: [%s]\n" +
                 "})\n" +
                 "YIELD nodeId, score\n" +
-                "where gds.util.asNode(nodeId).person_name is not null\n" +
-                "with gds.util.asNode(nodeId) as n, score\n" + 
-                "match (n)-[r]->(m) where r.relation='ACTrelation'\n" +
-                "return distinct n.person_name as person_name,  n.person_id as person_id, score " +
-                "ORDER BY score DESC", s1, s2);
+                "where gds.util.asNode(nodeId).name is not null\n" +
+                "with gds.util.asNode(nodeId) as n, score\n" +
+                "match (n)-[r]->(m) where r.relation='参演' %s\n" +
+                "return distinct n.name as person_name,  n.uid as person_id, score " +
+                "ORDER BY score DESC limit %d", s1, s2, s3, recommendParamVo.getPeopleNum());
         log.info("cql=" + cql);
-        Result result = null;
 
 
-        if (true) {
-            InputStream is = this.getClass().getResourceAsStream("/chaRecommendRes.json");
-            String s = IoUtil.read(is, StandardCharsets.UTF_8);
-            JSONArray jsonArray = JSONObject.parseArray(s);
-            System.out.println(jsonArray);
-            return jsonArray.toJavaList(RecommendVo.class);
-        }
+        //if (true) {
+        //    InputStream is = this.getClass().getResourceAsStream("/chaRecommendRes.json");
+        //    String s = IoUtil.read(is, StandardCharsets.UTF_8);
+        //    JSONArray jsonArray = JSONObject.parseArray(s);
+        //    System.out.println(jsonArray);
+        //    return jsonArray.toJavaList(RecommendVo.class);
+        //}
         try {
             result = session.run(cql);
         } catch (Exception e) {
@@ -329,16 +358,30 @@ public class DataScienceServiceImpl implements DataScienceService {
 
         int count = 0;
         List<RecommendVo> res = new ArrayList<>();
+        double totalScore = 0;
+        double maxScore = 0;
+        double minScore = 10000;
         while (result.hasNext()) {
             Record record = result.next();
             RecommendVo recommendVo = new RecommendVo();
             recommendVo.setId(record.get("person_id").toString().replaceAll("\"", ""));
             recommendVo.setName(record.get("person_name").toString().replaceAll("\"", ""));
-            recommendVo.setScore(record.get("score").toString().replaceAll("\"", ""));
+            recommendVo.setRawScore(record.get("score").toString().replaceAll("\"", ""));
+            double score = record.get("score").asDouble();
+            totalScore += score;
+            maxScore = Math.max(maxScore, score);
+            minScore = Math.min(minScore, score);
             res.add(recommendVo);
             count++;
             if (count > recommendParamVo.getPeopleNum()) break;
         }
+
+        for (RecommendVo re : res) {
+            double v = Double.parseDouble(re.getRawScore());
+            Double s = (v - minScore) / (maxScore - minScore) * 100;
+            re.setScore(s.intValue());
+        }
+
 
         return res;
     }

@@ -213,7 +213,7 @@ public class Neo4jServiceImpl implements Neo4jService {
         if (scenarists != null) peopleSet.addAll(scenarists);
         List<Integer> peopleList = new ArrayList<>(peopleSet);
 
-        String personTemp = "(p%d:person {person_id: '%d'}),";
+        String personTemp = "(p%d:person {uid: '%d'}),";
         StringBuffer personStr = new StringBuffer();
         for (int i = 0; i < peopleList.size(); i++) {
             personStr.append(String.format(personTemp, i, peopleList.get(i)));
@@ -224,10 +224,13 @@ public class Neo4jServiceImpl implements Neo4jService {
         for (int i = 0; i < peopleList.size(); i++) {
             relationStr.append(String.format(relationTemp, i));
         }
-
-        String cql = String.format("match %s\n" +
-                "create (m:movie{movie_id:'xx'})\n" +
-                "%s", personStr.deleteCharAt(personStr.length() - 1).toString(), relationStr.toString());
+        StringBuffer cqlSb = new StringBuffer();
+        cqlSb.append("create (m:movie{mid:'xx'})\n");
+        if (peopleList.size() > 0) {
+            cqlSb.insert(0, String.format("match %s\n", personStr.deleteCharAt(personStr.length() - 1).toString()));
+            cqlSb.append(String.format("%s", relationStr.toString()));
+        }
+        String cql = cqlSb.toString();
         System.out.println(cql);
         session.run(cql);
 
@@ -235,8 +238,8 @@ public class Neo4jServiceImpl implements Neo4jService {
         cql = "CALL gds.alpha.closeness.stream({\n" +
                 "  nodeQuery: 'MATCH (p) RETURN id(p) AS id',\n" +
                 "  relationshipQuery: 'MATCH (p1)-[]-(p2) RETURN id(p1) AS source, id(p2) AS target'\n" +
-                "}) YIELD nodeId, centrality WHERE gds.util.asNode(nodeId).movie_id = 'xx'\n" +
-                "RETURN gds.util.asNode(nodeId).movie_id AS id, centrality\n" +
+                "}) YIELD nodeId, centrality WHERE gds.util.asNode(nodeId).mid = 'xx'\n" +
+                "RETURN gds.util.asNode(nodeId).mid AS id, centrality\n" +
                 "ORDER BY centrality DESC";
         result = session.run(cql);
         while (result.hasNext()) {
@@ -246,7 +249,7 @@ public class Neo4jServiceImpl implements Neo4jService {
         }
 
         //del node
-        cql = "match (m:movie{movie_id:'xx'})-[r]-()\n" +
+        cql = "match (m:movie{mid:'xx'})-[r]-()\n" +
                 "delete r,m";
         session.run(cql);
 

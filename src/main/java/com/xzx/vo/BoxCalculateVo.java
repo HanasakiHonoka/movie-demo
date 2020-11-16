@@ -18,7 +18,7 @@ import java.util.List;
 public class BoxCalculateVo {
 
     @ApiModelProperty(value = "是否使用Neo4j", example = "false")
-    private boolean isUseNeo4j = false;
+    private boolean useNeo4j = false;
 
     @ApiModelProperty(value = "电影类型", example = "喜剧")
     private List<String> type;

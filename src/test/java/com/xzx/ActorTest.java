@@ -2,6 +2,7 @@ package com.xzx;
 
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.mapper.ActorMapper;
+import com.xzx.servie.IActorParticipateService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,17 @@ public class ActorTest {
     @Autowired
     ActorMapper actorMapper;
 
+    @Autowired
+    IActorParticipateService actorParticipateService;
+
     @Test
     public void topActorTest() {
         List<PeopleWithBox> topActorWithBox = actorMapper.getTopActorWithBox();
         System.out.println(topActorWithBox);
+    }
+
+    @Test
+    public void testap() {
+        System.out.println(actorParticipateService.getByMovieId(10).size());
     }
 }

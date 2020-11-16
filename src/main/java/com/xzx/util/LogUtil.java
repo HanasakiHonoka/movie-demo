@@ -10,7 +10,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -42,14 +45,17 @@ public class LogUtil {
         log.info("url: " + url.toString() + " method: " + method + " from: " + ip);
         log.info("class_method: " + class_method);
         JSONObject param = new JSONObject();
-        int len;
-        if (method.equals("POST")) {
-            len = Math.min(1, argNames.length);
-        } else {
-            len = argNames.length;
-        }
-        for (int i = 0; i < len; i++) {
-            param.put(argNames[i], args[i]);
+        for (int i = 0; i < argNames.length; i++) {
+            if (args[i] instanceof MultipartFile) {
+                MultipartFile arg = (MultipartFile) args[i];
+                String originalFilename = arg.getOriginalFilename();
+                param.put(argNames[i],originalFilename);
+                break;
+            } else if (args[i] instanceof ServletRequest || args[i] instanceof ServletResponse) {
+                continue;
+            } else {
+                param.put(argNames[i], args[i]);
+            }
         }
         log.info(param.toString());
         log.info("------------------------------------");

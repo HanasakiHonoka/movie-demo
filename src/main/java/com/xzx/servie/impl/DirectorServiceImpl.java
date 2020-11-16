@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xzx.constant.ConstantParam;
 import com.xzx.dto.DirectorQueryDTO;
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.SimpleDirector;
@@ -39,6 +38,12 @@ public class DirectorServiceImpl extends ServiceImpl<DirectorMapper, Director> i
     public IPage<MgtDirectorPageVO> getDirectorPage(DirectorQueryDTO directorQueryDTO) {
         Page<Director> page = new Page<>(directorQueryDTO.getPage(), directorQueryDTO.getPageSize());
         QueryWrapper<Director> queryWrapper = new QueryWrapper<>();
+        if (directorQueryDTO.getGender() != null) {
+            queryWrapper.eq(Director.GENDER, directorQueryDTO.getGender() ? "男":"女");
+        }
+        if (directorQueryDTO.getBirthday() != null) {
+            queryWrapper.orderBy(true, directorQueryDTO.getBirthday(), Director.BIRTHDAY);
+        }
         Page<Director> data = directorMapper.selectPage(page, queryWrapper);
         List<Director> directorList = data.getRecords();
         List<MgtDirectorPageVO> voList = new ArrayList<>();

@@ -9,6 +9,7 @@ import com.xzx.constant.ConstantParam;
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.ScenaristQueryDTO;
 import com.xzx.dto.SimpleScenarist;
+import com.xzx.entity.Director;
 import com.xzx.entity.Scenarist;
 import com.xzx.mapper.ScenaristMapper;
 import com.xzx.servie.IScenaristService;
@@ -39,6 +40,12 @@ public class ScenaristServiceImpl extends ServiceImpl<ScenaristMapper, Scenarist
     public IPage<MgtScenaristPageVO> getScenaristPage(ScenaristQueryDTO scenaristQueryDTO) {
         Page<Scenarist> page = new Page<>(scenaristQueryDTO.getPage(), scenaristQueryDTO.getPageSize());
         QueryWrapper<Scenarist> queryWrapper = new QueryWrapper<>();
+        if (scenaristQueryDTO.getGender() != null) {
+            queryWrapper.eq(Scenarist.GENDER, scenaristQueryDTO.getGender() ? "男":"女");
+        }
+        if (scenaristQueryDTO.getBirthday() != null) {
+            queryWrapper.orderBy(true, scenaristQueryDTO.getBirthday(), Scenarist.BIRTHDAY);
+        }
         Page<Scenarist> data = scenaristMapper.selectPage(page, queryWrapper);
         List<Scenarist> scenaristList = data.getRecords();
         List<MgtScenaristPageVO> voList = new ArrayList<>();

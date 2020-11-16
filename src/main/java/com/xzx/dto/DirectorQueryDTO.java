@@ -10,5 +10,5 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
-public class DirectorQueryDTO extends QueryPageDTO{
+public class DirectorQueryDTO extends PeopleQueryDTO{
 }

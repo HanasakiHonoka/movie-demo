@@ -1,5 +1,6 @@
 package com.xzx.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -14,6 +15,8 @@ public class RecommendVo {
 
     private String id;
     private String name;
-    private String score;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String rawScore;
+    private Integer score;
 
 }

@@ -10,6 +10,7 @@ import com.xzx.dto.ActorQueryDTO;
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.dto.SimpleActor;
 import com.xzx.entity.Actor;
+import com.xzx.entity.Director;
 import com.xzx.mapper.ActorMapper;
 import com.xzx.servie.IActorService;
 import com.xzx.vo.HintVo;
@@ -39,6 +40,12 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
     public IPage<MgtActorPageVO> getActorPage(ActorQueryDTO actorQueryDTO) {
         Page<Actor> page = new Page<>(actorQueryDTO.getPage(), actorQueryDTO.getPageSize());
         QueryWrapper<Actor> queryWrapper = new QueryWrapper<>();
+        if (actorQueryDTO.getGender() != null) {
+            queryWrapper.eq(Actor.GENDER, actorQueryDTO.getGender() ? "男":"女");
+        }
+        if (actorQueryDTO.getBirthday() != null) {
+            queryWrapper.orderBy(true, actorQueryDTO.getBirthday(), Actor.BIRTHDAY);
+        }
         Page<Actor> data = actorMapper.selectPage(page, queryWrapper);
         List<Actor> actorList = data.getRecords();
         List<MgtActorPageVO> voList = new ArrayList<>();

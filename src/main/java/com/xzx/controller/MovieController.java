@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -153,6 +154,17 @@ public class MovieController {
     @CacheEvict("movies")
     public void delCache() {
 
+    }
+
+    @ApiOperation("获取所有电影类型")
+    @GetMapping("/movie/types")
+    public List<String> getAllTypes() {
+        MovieTypeEnum[] types = MovieTypeEnum.values();
+        List<String> res = new ArrayList<>();
+        for (MovieTypeEnum type : types) {
+            res.add(type.getRawName());
+        }
+        return res;
     }
 
     //@ApiOperation("获得电影表总数")

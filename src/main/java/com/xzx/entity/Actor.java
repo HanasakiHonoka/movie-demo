@@ -83,5 +83,7 @@ public class Actor implements Serializable {
     @ApiModelProperty(value = "图片名")
     private String imageName;
 
+    public static final String GENDER = "gender";
 
+    public static final String BIRTHDAY = "birthday";
 }

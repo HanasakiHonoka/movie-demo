@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xzx.constant.MovieTypeEnum;
 import com.xzx.dto.MovieQueryDTO;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.dto.YearBoxOffice;
@@ -15,6 +16,7 @@ import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.HintVo;
 import com.xzx.vo.MgtMoviePageVO;
 import com.xzx.vo.SearchVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,14 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public IPage<MgtMoviePageVO> getMoviePage(MovieQueryDTO movieQueryDTO) {
         Page page = new Page<>(movieQueryDTO.getPage(), movieQueryDTO.getPageSize());
         QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
-        Page<Movie> data = baseMapper.selectPage(page, queryWrapper);
+        if (movieQueryDTO.getBoxoffice() != null) {
+            queryWrapper.orderBy(true, movieQueryDTO.getBoxoffice(), Movie.BOXOFFICE);
+        }
+        if (movieQueryDTO.getReleaseTime() != null) {
+            queryWrapper.orderBy(true, movieQueryDTO.getReleaseTime(), Movie.RELEASE_TIME);
+        }
+        queryWrapper.like(StringUtils.isNotBlank(movieQueryDTO.getType()), Movie.TYPE, movieQueryDTO.getType());
+        IPage<Movie> data = baseMapper.selectPage(page, queryWrapper);
         List<Movie> movieList = data.getRecords();
         List<MgtMoviePageVO> voList = new ArrayList<>();
         for (Movie movie : movieList) {
