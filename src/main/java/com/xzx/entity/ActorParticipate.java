@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("actor_participate")
-@ApiModel(value="Actor对象", description="")
+@ApiModel(value="ActorParticipate对象", description="")
 public class ActorParticipate {
     private static final long serialVersionUID = 1L;
 

@@ -3,6 +3,7 @@ package com.xzx.controller;
 import com.xzx.entity.Actor;
 import com.xzx.entity.ActorParticipate;
 import com.xzx.servie.IActorParticipateService;
+import com.xzx.vo.ActorParticipateVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +30,13 @@ public class ActorParticipateController {
 
     @ApiOperation("按电影id进行查找")
     @GetMapping("/getByMovieId")
-    public List<ActorParticipate> getByMovieId(Integer movieId) {
-        return actorParticipateService.getByMovieId(movieId);
+    public List<ActorParticipateVO> getByMovieId(Integer movieId) {
+        return actorParticipateService.getVOByMovieId(movieId);
     }
     @ApiOperation("按演员id查找")
     @GetMapping("/getByActorId")
-    public List<ActorParticipate> getByActorId(Integer actorId) {
-        return actorParticipateService.getByActorId(actorId);
+    public List<ActorParticipateVO> getByActorId(Integer actorId) {
+        return actorParticipateService.getVOByActorId(actorId);
     }
 
     @ApiOperation("更新")

@@ -95,7 +95,6 @@ public class MovieController {
 
     @ApiOperation("分页获取所有电影")
     @GetMapping("/moviePage")
-    @Cacheable("movies")
     public IPage<MgtMoviePageVO> getMoviePage(MovieQueryDTO movieQueryDTO) {
         IPage<MgtMoviePageVO> moviePage = movieService.getMoviePage(movieQueryDTO);
         return moviePage;
