@@ -36,4 +36,14 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Diction
         queryWrapper.eq(Dictionary.DIC_NO, dicNo);
         return baseMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public String getNameByDicNo(String dicNo) {
+        Dictionary dic = this.getByDicNo(dicNo);
+        if (dic != null) {
+            return dic.getDicName();
+        } else {
+            return null;
+        }
+    }
 }

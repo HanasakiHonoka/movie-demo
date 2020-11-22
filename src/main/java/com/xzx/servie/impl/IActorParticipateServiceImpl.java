@@ -82,11 +82,16 @@ public class IActorParticipateServiceImpl extends ServiceImpl<ActorParticipateMa
         if (actor != null) {
             actorParticipateVO.setActorName(actor.getName());
         }
-        Dictionary occuDic = dictionaryService.getByDicNo(actorParticipate.getRoleOccupation());
-        if (occuDic != null) actorParticipateVO.setRoleOccupationName(occuDic.getDicName());
-
-        Dictionary roleSetDic = dictionaryService.getByDicNo(actorParticipate.getRoleSet());
-        if (roleSetDic != null) actorParticipateVO.setRoleSetName(roleSetDic.getDicName());
+        //角色职业
+        actorParticipateVO.setRoleOccupationName(dictionaryService.getNameByDicNo(actorParticipate.getRoleOccupation()));
+        //人设
+        actorParticipateVO.setRoleSetName(dictionaryService.getNameByDicNo(actorParticipate.getRoleSet()));
+        //年龄段
+        actorParticipateVO.setRoleAgeName(dictionaryService.getNameByDicNo(actorParticipate.getRoleAge()));
+        //性别
+        actorParticipateVO.setRoleGenderName(dictionaryService.getNameByDicNo(actorParticipate.getRoleGender()));
+        //性格
+        actorParticipateVO.setRoleCharacterName(dictionaryService.getNameByDicNo(actorParticipate.getRoleCharacter()));
 
         return actorParticipateVO;
     }

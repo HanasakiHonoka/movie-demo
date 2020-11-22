@@ -18,4 +18,6 @@ public interface IDictionaryService extends IService<Dictionary> {
     List<Dictionary> getDictionaryList(DictionaryQueryDTO dictionaryQueryDTO);
 
     Dictionary getByDicNo(String dicNo);
+
+    String getNameByDicNo(String dicNo);
 }

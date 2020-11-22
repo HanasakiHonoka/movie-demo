@@ -29,7 +29,7 @@ public class ActorParticipate {
     private String actStyle;
     private String role;
     private String roleCharacter;
-    private Integer roleAge;
+    private String roleAge;
     private String roleOccupation;
     private String roleGender;
     private String roleLocalism;

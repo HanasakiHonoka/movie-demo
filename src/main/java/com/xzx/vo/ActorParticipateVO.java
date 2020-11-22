@@ -20,10 +20,13 @@ public class ActorParticipateVO {
     private String actStyle;
     private String role;
     private String roleCharacter;
-    private Integer roleAge;
+    private String roleCharacterName;
+    private String roleAge;
+    private String roleAgeName;
     private String roleOccupation;
     private String roleOccupationName;
     private String roleGender;
+    private String roleGenderName;
     private String roleLocalism;
     private String roleApperaence;
     private String roleSet;
