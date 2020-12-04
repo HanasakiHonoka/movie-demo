@@ -11,7 +11,7 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
-public class CompanyQueryDTO {
+public class CompanyQueryDTO extends QueryPageDTO{
 
     @ApiModelProperty("公司ID")
     private Integer companyId;

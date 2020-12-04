@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class CompanyVO {
-    private Integer companyId;
+    private Integer id;
 
-    private String companyName;
+    private String value;
 }

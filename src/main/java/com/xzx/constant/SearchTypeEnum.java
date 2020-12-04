@@ -6,7 +6,7 @@ public enum SearchTypeEnum {
     DIRECTOR(2),
     ACTOR(3),
     SCENARIST(4),
-
+    COMPANY(5),
     ;
 
     private Integer id;

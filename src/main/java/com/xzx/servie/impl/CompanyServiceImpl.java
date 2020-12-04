@@ -28,10 +28,13 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         QueryWrapper<Company> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(companyQueryDTO.getCompanyName()), Company.COMPANY_NAME, companyQueryDTO.getCompanyName());
         queryWrapper.eq(companyQueryDTO.getCompanyId() != null, Company.COMPANY_ID, companyQueryDTO.getCompanyId());
+        queryWrapper.last("limit 10");
         List<Company> companyList = baseMapper.selectList(queryWrapper);
         List<CompanyVO> voList = new ArrayList<>();
         for (Company company : companyList) {
             CompanyVO companyVO = BeanUtil.copyProperties(company, CompanyVO.class);
+            companyVO.setId(company.getCompanyId());
+            companyVO.setValue(company.getCompanyName());
             voList.add(companyVO);
         }
         return voList;

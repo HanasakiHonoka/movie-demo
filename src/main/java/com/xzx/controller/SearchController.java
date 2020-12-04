@@ -7,10 +7,7 @@ import com.xzx.entity.Actor;
 import com.xzx.entity.Director;
 import com.xzx.entity.Movie;
 import com.xzx.entity.Scenarist;
-import com.xzx.servie.IActorService;
-import com.xzx.servie.IDirectorService;
-import com.xzx.servie.IMovieService;
-import com.xzx.servie.IScenaristService;
+import com.xzx.servie.*;
 import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.*;
 import io.swagger.annotations.Api;
@@ -41,6 +38,8 @@ public class SearchController {
     private IDirectorService directorService;
     @Autowired
     private IScenaristService scenaristService;
+    @Autowired
+    private ICompanyService companyService;
 
     @ApiOperation(value = "搜索转发")
     @GetMapping("/")
@@ -55,9 +54,19 @@ public class SearchController {
             return "forward:/search/actors";
         } else if (searchVo.getType().equals(SearchTypeEnum.SCENARIST.getValue())) {
             return "forward:/search/scenarists";
+        } else if (searchVo.getType().equals(SearchTypeEnum.COMPANY.getValue())) {
+            return "forward:/search/companys";
         } else {
             return null;
         }
+    }
+
+    @GetMapping("/companys")
+    @ResponseBody
+    public List<CompanyVO> getCompanys(SearchVo searchVo) {
+        CompanyQueryDTO queryDTO = new CompanyQueryDTO();
+        queryDTO.setCompanyName(searchVo.getWords());
+        return companyService.getVOList(queryDTO);
     }
 
     @ApiOperation(value = "返回电影搜索结果")
