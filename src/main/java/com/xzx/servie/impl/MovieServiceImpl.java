@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzx.constant.MovieTypeEnum;
+import com.xzx.dto.DataListQueryDTO;
 import com.xzx.dto.MovieQueryDTO;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.dto.YearBoxOffice;
@@ -15,6 +16,7 @@ import com.xzx.servie.IMovieService;
 import com.xzx.util.SimpleMovieUtil;
 import com.xzx.vo.HintVo;
 import com.xzx.vo.MgtMoviePageVO;
+import com.xzx.vo.MovieDataListVO;
 import com.xzx.vo.SearchVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author xzx
@@ -89,7 +91,16 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public List<Movie> getLikeMovieWithLimit(SearchVo searchVo) {
         int pageSize = searchVo.getPageSize();
         QueryWrapper<Movie> wrapper = new QueryWrapper<>();
-        wrapper.like("title", searchVo.getWords());
+        if (searchVo.getBoxoffice() != null) {
+            wrapper.orderBy(true, searchVo.getBoxoffice(), Movie.BOXOFFICE);
+        }
+        if (searchVo.getReleaseTime() != null) {
+            wrapper.orderBy(true, searchVo.getReleaseTime(), Movie.RELEASE_TIME);
+        }
+        if (searchVo.getDoubanRating() != null) {
+            wrapper.orderBy(true, searchVo.getDoubanRating(), Movie.DOUBAN_RATING);
+        }
+        wrapper.like(StringUtils.isNotBlank(searchVo.getWords()), "title", searchVo.getWords());
         wrapper.last("limit " + (Integer.parseInt(searchVo.getPage()) - 1) * pageSize + "," + pageSize);
 
         return this.list(wrapper);
@@ -145,6 +156,30 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         List<YearBoxOffice> yearBoxOfficeList = movieMapper.getBoxAllYear();
         yearBoxOfficeList.removeIf(yearBoxOffice -> yearBoxOffice.getBoxoffice() < 1000.0);
         return yearBoxOfficeList;
+    }
+
+    @Override
+    public List<MovieDataListVO> getMovieDataListVO(DataListQueryDTO dataListQueryDTO) {
+        String type = dataListQueryDTO.getType();
+        QueryWrapper<Movie> wrapper = new QueryWrapper<>();
+        wrapper.like("type", type);
+        if (dataListQueryDTO.getBoxoffice() != null) {
+            wrapper.orderBy(true, dataListQueryDTO.getBoxoffice(), Movie.BOXOFFICE);
+        }
+        if (dataListQueryDTO.getReleaseTime() != null) {
+            wrapper.orderBy(true, dataListQueryDTO.getReleaseTime(), Movie.RELEASE_TIME);
+        }
+        if (dataListQueryDTO.getDoubanRating() != null) {
+            wrapper.orderBy(true, dataListQueryDTO.getDoubanRating(), Movie.DOUBAN_RATING);
+        }
+        wrapper.last("limit 10");
+        List<Movie> movies = baseMapper.selectList(wrapper);
+        List<MovieDataListVO> res = new ArrayList<>();
+        for (Movie movie : movies) {
+            MovieDataListVO movieDataListVO = BeanUtil.copyProperties(movie, MovieDataListVO.class);
+            res.add(movieDataListVO);
+        }
+        return res;
     }
 
 

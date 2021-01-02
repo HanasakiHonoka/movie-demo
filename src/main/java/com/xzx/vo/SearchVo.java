@@ -24,6 +24,12 @@ public class SearchVo {
     private Integer directorNum;
     @ApiModelProperty(value = "编剧数量")
     private Integer scenaristNum;
+    @ApiModelProperty(value = "评分0降序1升序",required = false)
+    Boolean doubanRating;
+    @ApiModelProperty(value = "票房0降序1升序",required = false)
+    Boolean boxoffice;
+    @ApiModelProperty(value = "上映日期0降序1升序",required = false)
+    Boolean releaseTime;
 
     public void setDefaultValue() {
         SearchTypeEnum type = SearchTypeEnum.getByValue(this.type);

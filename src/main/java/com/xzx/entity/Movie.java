@@ -260,5 +260,6 @@ public class Movie implements Serializable {
     public static final String TYPE = "type";
     public static final String BOXOFFICE = "boxoffice";
     public static final String RELEASE_TIME = "release_time";
+    public static final String DOUBAN_RATING = "douban_rating";
 
 }

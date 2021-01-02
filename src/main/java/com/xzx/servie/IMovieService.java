@@ -2,12 +2,14 @@ package com.xzx.servie;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xzx.dto.DataListQueryDTO;
 import com.xzx.dto.MovieQueryDTO;
 import com.xzx.dto.SimpleMovie;
 import com.xzx.dto.YearBoxOffice;
 import com.xzx.entity.Movie;
 import com.xzx.vo.HintVo;
 import com.xzx.vo.MgtMoviePageVO;
+import com.xzx.vo.MovieDataListVO;
 import com.xzx.vo.SearchVo;
 
 import java.util.List;
@@ -46,4 +48,6 @@ public interface IMovieService extends IService<Movie> {
     Double getMovieBoxByYear(Integer year);
 
     List<YearBoxOffice> getBoxAllYear();
+
+    List<MovieDataListVO> getMovieDataListVO(DataListQueryDTO dataListQueryDTO);
 }

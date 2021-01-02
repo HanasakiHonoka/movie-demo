@@ -41,6 +41,14 @@ public class SearchController {
     @Autowired
     private ICompanyService companyService;
 
+    @ApiOperation(value = "首页数据列表")
+    @GetMapping("/dataList")
+    @ResponseBody
+    public List<MovieDataListVO> getMovieDataList(DataListQueryDTO dataListQueryDTO) {
+        List<MovieDataListVO> movieDataListVO = movieService.getMovieDataListVO(dataListQueryDTO);
+        return movieDataListVO;
+    }
+
     @ApiOperation(value = "搜索转发")
     @GetMapping("/")
     public String getTypeAndWords(SearchVo searchVo) {
