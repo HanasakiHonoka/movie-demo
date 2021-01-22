@@ -70,6 +70,16 @@ public class DirectorServiceImpl extends ServiceImpl<DirectorMapper, Director> i
     }
 
     @Override
+    public List<SimpleDirector> getNotShownSimpleDirectorByMovieId(int movieId) {
+        List<Director> directors = directorMapper.getNotShownDirectorByMovieId(movieId);
+        List<SimpleDirector> simpleDirectors = new ArrayList<>();
+        for(Director director:directors) {
+            simpleDirectors.add(new SimpleDirector(director.getId(), director.getName()));
+        }
+        return simpleDirectors;
+    }
+
+    @Override
     public List<Director> getLikeDirectorWithLimit(SearchVo searchVo) {
         int pageSize = searchVo.getPageSize();
         QueryWrapper<Director> wrapper = new QueryWrapper<>();

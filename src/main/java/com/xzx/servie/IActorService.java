@@ -26,6 +26,8 @@ public interface IActorService extends IService<Actor> {
 
     List<SimpleActor> getSimpleActorByMovieId(int movieId);
 
+    List<SimpleActor> getNotShownSimpleActorByMovieId(int movieId);
+
     List<Actor> getLikeActorWithLimit(SearchVo searchVo);
 
     long getLikeActorCount(SearchVo searchVo);

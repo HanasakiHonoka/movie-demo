@@ -20,4 +20,6 @@ public class DataListQueryDTO {
     Boolean boxoffice;
     @ApiModelProperty(value = "上映日期0降序1升序",required = false)
     Boolean releaseTime;
+    @ApiModelProperty(value = "年份",required = false)
+    String year;
 }

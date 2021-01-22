@@ -23,6 +23,9 @@ public interface ScenaristMapper extends BaseMapper<Scenarist> {
     @Select("select s.* from d_s_participate dsp, scenarist_table s where dsp.movie_id=#{movieId} and dsp.person_occu = 2 and s.id = dsp.person_id")
     List<Scenarist> getScenaristByMovieId(@Param("movieId") Integer movieId);
 
+    @Select("select s.* from d_s_participate_notshown dsp, scenarist_table s where dsp.movie_id=#{movieId} and dsp.person_occu = 2 and s.id = dsp.person_id")
+    List<Scenarist> getNotShownScenaristByMovieId(@Param("movieId") Integer movieId);
+
     @Select("select a.id, a.`name`, a.boxoffice, a.amount from scenarist_table a " +
             "where a.boxoffice is NOT NULL and a.amount is not null " +
             "ORDER BY boxoffice DESC limit 10")

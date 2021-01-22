@@ -13,6 +13,8 @@ import lombok.Data;
  */
 @Data
 public class MovieQueryDTO extends QueryPageDTO{
+    @ApiModelProperty(value = "标题",required = false)
+    String title;
     @ApiModelProperty(value = "类型",required = false)
     String type;
     @ApiModelProperty(value = "票房0降序1升序",required = false)

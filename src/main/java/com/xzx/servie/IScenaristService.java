@@ -26,6 +26,8 @@ public interface IScenaristService extends IService<Scenarist> {
 
     List<SimpleScenarist> getSimpleScenaristByMovieId(Integer movieId);
 
+    List<SimpleScenarist> getNotShownSimpleScenaristByMovieId(Integer movieId);
+
     List<Scenarist> getLikeScenaristWithLimit(SearchVo searchVo);
 
     long getLikeScenaristCount(SearchVo searchVo);

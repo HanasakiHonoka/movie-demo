@@ -26,6 +26,8 @@ public interface IDirectorService extends IService<Director> {
 
     List<SimpleDirector> getSimpleDirectorByMovieId(int movieId);
 
+    List<SimpleDirector> getNotShownSimpleDirectorByMovieId(int movieId);
+
     List<Director> getLikeDirectorWithLimit(SearchVo searchVo);
 
     long getLikeDirectorCount(SearchVo searchVo);

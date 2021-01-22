@@ -72,6 +72,16 @@ public class ScenaristServiceImpl extends ServiceImpl<ScenaristMapper, Scenarist
     }
 
     @Override
+    public List<SimpleScenarist> getNotShownSimpleScenaristByMovieId(Integer movieId) {
+        List<Scenarist> scenarists = scenaristMapper.getNotShownScenaristByMovieId(movieId);
+        List<SimpleScenarist> simpleScenarists = new ArrayList<>();
+        for(Scenarist scenarist:scenarists) {
+            simpleScenarists.add(new SimpleScenarist(scenarist.getId(), scenarist.getName()));
+        }
+        return simpleScenarists;
+    }
+
+    @Override
     public List<Scenarist> getLikeScenaristWithLimit(SearchVo searchVo) {
         int pageSize = searchVo.getPageSize();
         QueryWrapper<Scenarist> wrapper = new QueryWrapper<>();

@@ -72,6 +72,16 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
     }
 
     @Override
+    public List<SimpleActor> getNotShownSimpleActorByMovieId(int movieId) {
+        List<Actor> actors = actorMapper.getNotShownActorByMovieId(movieId);
+        List<SimpleActor> simpleActors = new ArrayList<>();
+        for (Actor actor: actors) {
+            simpleActors.add(new SimpleActor(actor.getId(), actor.getName()));
+        }
+        return simpleActors;
+    }
+
+    @Override
     public List<Actor> getLikeActorWithLimit(SearchVo searchVo) {
         int pageSize = searchVo.getPageSize();
         QueryWrapper<Actor> wrapper = new QueryWrapper<>();

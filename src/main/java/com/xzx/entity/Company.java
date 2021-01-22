@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * @Classname Company
  * @Description
@@ -16,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @TableName("company_table")
 @ApiModel(value="Company对象", description="")
-public class Company {
+public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Integer companyId;

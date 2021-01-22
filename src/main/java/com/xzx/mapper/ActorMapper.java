@@ -23,6 +23,9 @@ public interface ActorMapper extends BaseMapper<Actor> {
     @Select("select a.* from actor_participate ap, actor_table a where ap.movie_id = #{movieId} and ap.actor_id = a.id")
     List<Actor> getActorByMovieId(@Param("movieId") Integer movieId);
 
+    @Select("select a.* from actor_participate_notshown ap, actor_table a where ap.movie_id = #{movieId} and ap.actor_id = a.id")
+    List<Actor> getNotShownActorByMovieId(@Param("movieId") Integer movieId);
+
     @Select("select a.id, a.`name`, a.boxoffice, a.amount from actor_table a " +
             "where a.boxoffice is NOT NULL and a.amount is not null " +
             "ORDER BY boxoffice DESC limit 10")
