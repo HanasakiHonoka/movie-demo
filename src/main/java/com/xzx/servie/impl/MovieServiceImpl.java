@@ -18,10 +18,12 @@ import com.xzx.vo.HintVo;
 import com.xzx.vo.MgtMoviePageVO;
 import com.xzx.vo.MovieDataListVO;
 import com.xzx.vo.SearchVo;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +164,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     public List<MovieDataListVO> getMovieDataListVO(DataListQueryDTO dataListQueryDTO) {
         String type = dataListQueryDTO.getType();
         QueryWrapper<Movie> wrapper = new QueryWrapper<>();
-        wrapper.like("type", type);
+        wrapper.like(StringUtils.isNotBlank(type), "type", type);
         if (dataListQueryDTO.getBoxoffice() != null) {
             wrapper.orderBy(true, dataListQueryDTO.getBoxoffice(), Movie.BOXOFFICE);
         }
@@ -172,6 +174,8 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
         if (dataListQueryDTO.getDoubanRating() != null) {
             wrapper.orderBy(true, dataListQueryDTO.getDoubanRating(), Movie.DOUBAN_RATING);
         }
+        wrapper.ge(StringUtils.isNotBlank(dataListQueryDTO.getYear()), "release_time", LocalDate.ofYearDay(Integer.parseInt(dataListQueryDTO.getYear()), 1));
+        wrapper.le(StringUtils.isNotBlank(dataListQueryDTO.getYear()), "release_time", LocalDate.ofYearDay(Integer.parseInt(dataListQueryDTO.getYear()), 365));
         wrapper.last("limit 10");
         List<Movie> movies = baseMapper.selectList(wrapper);
         List<MovieDataListVO> res = new ArrayList<>();
