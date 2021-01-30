@@ -1,6 +1,7 @@
 package com.xzx.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzx.dto.MoviePreQueryDTO;
 import com.xzx.dto.MovieQueryDTO;
 import com.xzx.entity.MoviePrediction;
 import com.xzx.servie.IMoviePredictionService;
@@ -30,7 +31,7 @@ public class MoviePredictionController {
 
     @ApiOperation("分页获取所有电影")
     @GetMapping("/moviePredictionPage")
-    public IPage<MoviePredictionPageVO> getMoviePredictionPage(MovieQueryDTO movieQueryDTO) {
+    public IPage<MoviePredictionPageVO> getMoviePredictionPage(MoviePreQueryDTO movieQueryDTO) {
         return moviePredictionService.getMoviePredictionPage(movieQueryDTO);
     }
 
