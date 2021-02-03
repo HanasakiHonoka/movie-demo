@@ -34,14 +34,6 @@ public class MoviePredictionPageVO {
     @ApiModelProperty(value = "电影时长")
     private Integer duration;
 
-    @ApiModelProperty(value = "电影现有票房")
-    private Float boxoffice;
-
-
-    @ApiModelProperty(value = "电影状态")
-    private String state;
-
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @ApiModelProperty(value = "上映日期")

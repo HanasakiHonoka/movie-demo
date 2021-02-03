@@ -45,6 +45,7 @@ public class MoviePredictionServiceImpl extends ServiceImpl<MoviePredictionMappe
     public IPage<MoviePredictionPageVO> getMoviePredictionPage(MoviePreQueryDTO movieQueryDTO) {
         Page page = new Page<>(movieQueryDTO.getPage(), movieQueryDTO.getPageSize());
         QueryWrapper<MoviePrediction> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(movieQueryDTO.getTitle()), "title", movieQueryDTO.getTitle());
         if (movieQueryDTO.getBoxoffice() != null) {
             queryWrapper.orderBy(true, movieQueryDTO.getBoxoffice(), MoviePrediction.EXPECTED_BOXOFFICE);
         }
@@ -54,7 +55,9 @@ public class MoviePredictionServiceImpl extends ServiceImpl<MoviePredictionMappe
         if (movieQueryDTO.getState() != null) {
             queryWrapper.eq("state", movieQueryDTO.getState());
         }
-        queryWrapper.like(StringUtils.isNotBlank(movieQueryDTO.getTitle()), "title", movieQueryDTO.getTitle());
+        if (movieQueryDTO.getAccuracy() != null) {
+            queryWrapper.last("ORDER BY ABS(predicted_boxoffice - boxoffice) / ((boxoffice + predicted_boxoffice + ABS(predicted_boxoffice - boxoffice))/2) DESC");
+        }
         IPage<MoviePrediction> data = baseMapper.selectPage(page, queryWrapper);
         List<MoviePredictionPageVO> voList = new ArrayList<>();
         List<MoviePrediction> records = data.getRecords();
