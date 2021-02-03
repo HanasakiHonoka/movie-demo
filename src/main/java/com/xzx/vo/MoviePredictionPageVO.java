@@ -1,6 +1,7 @@
 package com.xzx.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xzx.dto.SimpleActor;
@@ -58,8 +59,14 @@ public class MoviePredictionPageVO {
     @ApiModelProperty(value = "电影类型")
     private String type;
 
+    @ApiModelProperty(value = "电影现有票房")
+    private Float boxoffice;
+
     @ApiModelProperty(value = "电影预测票房")
     private Float expectedBoxoffice;
+
+    @ApiModelProperty(value = "电影状态")
+    private String state;
 
     private List<SimpleActor> actors;
     private List<SimpleDirector> directors;

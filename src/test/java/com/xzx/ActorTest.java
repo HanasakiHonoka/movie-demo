@@ -3,6 +3,7 @@ package com.xzx;
 import com.xzx.dto.PeopleWithBox;
 import com.xzx.mapper.ActorMapper;
 import com.xzx.servie.IActorParticipateService;
+import com.xzx.servie.IMoviePredictionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,14 @@ public class ActorTest {
 
     @Autowired
     IActorParticipateService actorParticipateService;
+
+    @Autowired
+    IMoviePredictionService moviePredictionService;
+
+    @Test
+    public void moviePreTest() {
+        System.out.println(moviePredictionService.getById(3335));
+    }
 
     @Test
     public void topActorTest() {

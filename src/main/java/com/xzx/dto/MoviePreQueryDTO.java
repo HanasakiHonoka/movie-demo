@@ -23,4 +23,8 @@ public class MoviePreQueryDTO extends QueryPageDTO {
     Boolean releaseTime;
     @ApiModelProperty(value = "影片状态, 1:映后已下线, 2:状态异常, 3:未上映",required = false)
     Integer state;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master
