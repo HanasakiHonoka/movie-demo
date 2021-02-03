@@ -93,6 +93,18 @@ public class ActorController {
         return actorService.getTopActorWithBox();
     }
 
+    @ApiOperation("获取票房top10女演员")
+    @GetMapping("/actor/boxFemaleTop")
+    public List<PeopleWithBox> getTopFemaleActorWithBox() {
+        return actorService.getTopFemaleActorWithBox();
+    }
+
+    @ApiOperation("获取票房top10男演员")
+    @GetMapping("/actor/boxMaleTop")
+    public List<PeopleWithBox> getTopMaleActorWithBox() {
+        return actorService.getTopMaleActorWithBox();
+    }
+
     //@ApiOperation("获得演员表总数")
     //@GetMapping("/actor/count")
     //public long getActorCount() {

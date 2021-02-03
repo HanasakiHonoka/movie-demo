@@ -106,6 +106,12 @@ public class MovieController {
         return movieService.getYearBoxTopMovie(year);
     }
 
+    @ApiOperation("获得类型票房top10电影")
+    @GetMapping("/movie/boxTopType")
+    public List<SimpleMovie> getTypeMovie(@RequestParam(value = "type") String type) {
+        return movieService.getMovieByType(type);
+    }
+
     @ApiOperation("csv文件导入电影数据")
     @PostMapping("/movie/csvInsert")
     @CacheEvict("movies")

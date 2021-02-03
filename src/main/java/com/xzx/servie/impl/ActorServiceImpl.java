@@ -106,7 +106,19 @@ public class ActorServiceImpl extends ServiceImpl<ActorMapper, Actor> implements
     }
 
     @Override
+    public List<PeopleWithBox> getTopFemaleActorWithBox() {
+        return actorMapper.getTopFemaleActorWithBox();
+    }
+
+    @Override
+    public List<PeopleWithBox> getTopMaleActorWithBox() {
+        return actorMapper.getTopMaleActorWithBox();
+    }
+
+    @Override
     public List<PeopleWithBox> getTopActorWithBox() {
         return actorMapper.getTopActorWithBox();
     }
+
+
 }

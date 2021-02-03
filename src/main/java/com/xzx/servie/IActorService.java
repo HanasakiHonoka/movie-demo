@@ -35,4 +35,9 @@ public interface IActorService extends IService<Actor> {
     List<Actor> getFirstLikeActor(HintVo hintVo);
 
     List<PeopleWithBox> getTopActorWithBox();
+
+    List<PeopleWithBox> getTopFemaleActorWithBox();
+
+    List<PeopleWithBox> getTopMaleActorWithBox();
+
 }

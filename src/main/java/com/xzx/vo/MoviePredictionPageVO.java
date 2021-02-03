@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xzx.dto.SimpleActor;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.xzx.dto.SimpleDirector;
 import com.xzx.dto.SimpleScenarist;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,6 +32,14 @@ public class MoviePredictionPageVO {
 
     @ApiModelProperty(value = "电影时长")
     private Integer duration;
+
+    @ApiModelProperty(value = "电影现有票房")
+    private Float boxoffice;
+
+
+    @ApiModelProperty(value = "电影状态")
+    private String state;
+
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")

@@ -43,6 +43,8 @@ public interface IMovieService extends IService<Movie> {
 
     List<SimpleMovie> getYearBoxTopMovie(String year);
 
+    List<SimpleMovie> getMovieByType(String type);
+
     Integer getMovieCountByType(String type);
 
     Double getMovieBoxByYear(Integer year);

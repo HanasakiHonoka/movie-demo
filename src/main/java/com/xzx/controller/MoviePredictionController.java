@@ -3,6 +3,7 @@ package com.xzx.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzx.dto.MovieQueryDTO;
 import com.xzx.entity.MoviePrediction;
+import com.xzx.dto.MoviePreQueryDTO;
 import com.xzx.servie.IMoviePredictionService;
 import com.xzx.vo.MoviePredictionPageVO;
 import io.swagger.annotations.Api;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
 
 /**
  * @ClassName MoviePredictionController
@@ -30,13 +33,17 @@ public class MoviePredictionController {
 
     @ApiOperation("分页获取所有电影")
     @GetMapping("/moviePredictionPage")
-    public IPage<MoviePredictionPageVO> getMoviePredictionPage(MovieQueryDTO movieQueryDTO) {
+    public IPage<MoviePredictionPageVO> getMoviePredictionPage(MoviePreQueryDTO movieQueryDTO) {
         return moviePredictionService.getMoviePredictionPage(movieQueryDTO);
     }
 
     @ApiOperation("按id获取电影")
     @GetMapping("/moviePrediction/{id}")
     public MoviePredictionPageVO getMoviePrediction(@PathVariable(value = "id") Integer movieId) {
+        HashMap<String,Integer> m;
+
         return moviePredictionService.getMoviePredictionVO(movieId);
     }
+
+
 }

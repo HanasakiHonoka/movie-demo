@@ -147,6 +147,13 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
     @Override
+    public List<SimpleMovie> getMovieByType(String type) {
+        List<Movie> movieList = movieMapper.getMovieByType(type);
+
+        return SimpleMovieUtil.movieToSimpleMovie(movieList);
+    }
+
+    @Override
     public Double getMovieBoxByYear(Integer year) {
         String year1 = year + "-01-01";
         String year2 = year + "-12-31";

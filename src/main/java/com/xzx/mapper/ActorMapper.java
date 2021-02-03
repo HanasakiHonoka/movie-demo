@@ -30,4 +30,14 @@ public interface ActorMapper extends BaseMapper<Actor> {
             "where a.boxoffice is NOT NULL and a.amount is not null " +
             "ORDER BY boxoffice DESC limit 10")
     List<PeopleWithBox> getTopActorWithBox();
+
+    @Select("select a.id, a.`name`, a.boxoffice, a.amount from actor_table a " +
+            "where a.boxoffice is NOT NULL and a.amount is not null and a.gender = '女' " +
+            "ORDER BY boxoffice DESC limit 10")
+    List<PeopleWithBox> getTopFemaleActorWithBox();
+
+    @Select("select a.id, a.`name`, a.boxoffice, a.amount from actor_table a " +
+            "where a.boxoffice is NOT NULL and a.amount is not null and a.gender = '男'" +
+            "ORDER BY boxoffice DESC limit 10")
+    List<PeopleWithBox> getTopMaleActorWithBox();
 }

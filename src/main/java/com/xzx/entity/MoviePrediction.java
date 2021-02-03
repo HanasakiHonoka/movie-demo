@@ -1,6 +1,7 @@
 package com.xzx.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,7 +25,7 @@ import java.time.LocalDate;
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("movie_prediction")
+@TableName("movie_prediction_since2019")
 @ApiModel(value="MoviePrediction对象", description="")
 public class MoviePrediction {
     private static final long serialVersionUID = 1L;
@@ -44,20 +45,27 @@ public class MoviePrediction {
     @ApiModelProperty(value = "上映日期")
     private LocalDate releaseTime;
 
-    @ApiModelProperty(value = "语言")
-    private String language;
+    //@ApiModelProperty(value = "语言")
+    //private String language;
 
-    @ApiModelProperty(value = "上映地区")
-    private String releaseArea;
+    //@ApiModelProperty(value = "上映地区")
+    //private String releaseArea;
 
-    @ApiModelProperty(value = "电影制式")
-    private String technology;
+    //@ApiModelProperty(value = "电影制式")
+    //private String technology;
 
     @ApiModelProperty(value = "电影类型")
     private String type;
 
+    @ApiModelProperty(value = "电影现有票房")
+    private Float boxoffice;
+
     @ApiModelProperty(value = "电影预测票房")
+    @TableField("predicted_boxoffice")
     private Float expectedBoxoffice;
+
+    @ApiModelProperty(value = "电影状态")
+    private Integer state;
 
     public static final String EXPECTED_BOXOFFICE = "expected_boxoffice";
 
