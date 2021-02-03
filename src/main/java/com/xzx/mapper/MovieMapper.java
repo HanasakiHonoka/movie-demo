@@ -50,6 +50,12 @@ public interface MovieMapper extends BaseMapper<Movie> {
     List<Movie> getTopBoxYearMovie(@Param("year")String year);
 
     @Select("SELECT * FROM movie_table " +
+            "WHERE YEAR(release_time) = '${year}' " +
+            "ORDER BY douban_rating desc " +
+            "LIMIT 10 ")
+    List<Movie> getScoreBoxYearMovie(@Param("year")String year);
+
+    @Select("SELECT * FROM movie_table " +
             "WHERE type = #{type}" +
             "ORDER BY douban_rating desc " +
             "LIMIT 10 ")

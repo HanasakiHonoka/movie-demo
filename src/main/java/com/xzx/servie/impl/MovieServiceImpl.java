@@ -140,6 +140,13 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     }
 
     @Override
+    public List<SimpleMovie> getScoreBoxTopMovie(String year) {
+        List<Movie> movieList = movieMapper.getScoreBoxYearMovie(year);
+
+        return SimpleMovieUtil.movieToSimpleMovie(movieList);
+    }
+
+    @Override
     public List<SimpleMovie> getYearBoxTopMovie(String year) {
         List<Movie> movieList = movieMapper.getTopBoxYearMovie(year);
 

@@ -52,4 +52,6 @@ public interface IMovieService extends IService<Movie> {
     List<YearBoxOffice> getBoxAllYear();
 
     List<MovieDataListVO> getMovieDataListVO(DataListQueryDTO dataListQueryDTO);
+
+    List<SimpleMovie> getScoreBoxTopMovie(String year);
 }

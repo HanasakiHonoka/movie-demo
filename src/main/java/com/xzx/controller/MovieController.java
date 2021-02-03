@@ -100,17 +100,8 @@ public class MovieController {
         return moviePage;
     }
 
-    @ApiOperation("获得每年票房top10电影")
-    @GetMapping("/movie/boxTopYear")
-    public List<SimpleMovie> getBoxTopYearMovie(@RequestParam(value = "year") String year) {
-        return movieService.getYearBoxTopMovie(year);
-    }
 
-    @ApiOperation("获得类型票房top10电影")
-    @GetMapping("/movie/boxTopType")
-    public List<SimpleMovie> getTypeMovie(@RequestParam(value = "type") String type) {
-        return movieService.getMovieByType(type);
-    }
+
 
     @ApiOperation("csv文件导入电影数据")
     @PostMapping("/movie/csvInsert")
@@ -124,11 +115,6 @@ public class MovieController {
         return movieService.saveBatch(movieList);
     }
 
-    @ApiOperation("获得票房top10电影")
-    @GetMapping("/movie/boxTop")
-    public List<SimpleMovie> getBoxTopMovie() {
-        return movieService.getTopMovie("boxoffice");
-    }
 
     @ApiOperation("获取所有类型的电影数量")
     @GetMapping("/movie/typeCount")
@@ -140,10 +126,34 @@ public class MovieController {
         return res;
     }
 
+    @ApiOperation("获得票房top10电影")
+    @GetMapping("/movie/boxTop")
+    public List<SimpleMovie> getBoxTopMovie() {
+        return movieService.getTopMovie("boxoffice");
+    }
+
+    @ApiOperation("获得每年票房top10电影")
+    @GetMapping("/movie/boxTopYear")
+    public List<SimpleMovie> getBoxTopYearMovie(@RequestParam(value = "year") String year) {
+        return movieService.getYearBoxTopMovie(year);
+    }
+
+    @ApiOperation("获得类型票房top10电影")
+    @GetMapping("/movie/boxTopType")
+    public List<SimpleMovie> getTypeMovie(@RequestParam(value = "type") String type) {
+        return movieService.getMovieByType(type);
+    }
+
     @ApiOperation("获得评分top10电影")
     @GetMapping("/movie/scoreTop")
     public List<SimpleMovie> getScoreTopMovie() {
         return movieService.getTopMovie("douban_rating");
+    }
+
+    @ApiOperation("获得每年评分top10电影")
+    @GetMapping("/movie/boxScoreYear")
+    public List<SimpleMovie> getScoreTopYearMovie(@RequestParam(value = "year") String year) {
+        return movieService.getScoreBoxTopMovie(year);
     }
 
     @ApiOperation("获得各个年份电影票房总数")
