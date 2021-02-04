@@ -56,7 +56,7 @@ public class MoviePredictionServiceImpl extends ServiceImpl<MoviePredictionMappe
             queryWrapper.eq("state", movieQueryDTO.getState());
         }
         if (movieQueryDTO.getAccuracy() != null) {
-            queryWrapper.last("ORDER BY ABS(predicted_boxoffice - boxoffice) / ((boxoffice + predicted_boxoffice + ABS(predicted_boxoffice - boxoffice))/2) DESC");
+            queryWrapper.orderBy(true, movieQueryDTO.getAccuracy(), "accuracy");
         }
         IPage<MoviePrediction> data = baseMapper.selectPage(page, queryWrapper);
         List<MoviePredictionPageVO> voList = new ArrayList<>();

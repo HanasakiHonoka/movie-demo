@@ -67,6 +67,8 @@ public class MoviePrediction {
     @ApiModelProperty(value = "电影状态")
     private Integer state;
 
+    private Float accuracy;
+
     public static final String EXPECTED_BOXOFFICE = "predicted_boxoffice";
 
 }
