@@ -56,7 +56,7 @@ public interface MovieMapper extends BaseMapper<Movie> {
     List<Movie> getScoreBoxYearMovie(@Param("year")String year);
 
     @Select("SELECT * FROM movie_table " +
-            "WHERE type = #{type}" +
+            "WHERE type like '%${type}%'" +
             "ORDER BY douban_rating desc " +
             "LIMIT 10 ")
     List<Movie> getMovieByType(@Param("type")String type);
