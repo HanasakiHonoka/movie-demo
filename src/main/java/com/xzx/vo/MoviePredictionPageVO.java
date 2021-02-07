@@ -60,6 +60,9 @@ public class MoviePredictionPageVO {
     @ApiModelProperty(value = "电影状态")
     private String state;
 
+    @ApiModelProperty(value = "准确度")
+    private Double accuracy;
+
     private List<SimpleActor> actors;
     private List<SimpleDirector> directors;
     private List<SimpleScenarist> scenarists;
