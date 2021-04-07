@@ -86,4 +86,5 @@ public class Actor implements Serializable {
     public static final String GENDER = "gender";
 
     public static final String BIRTHDAY = "birthday";
+
 }
