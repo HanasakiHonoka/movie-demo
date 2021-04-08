@@ -60,6 +60,9 @@ public class MoviePrediction {
     @ApiModelProperty(value = "电影现有票房")
     private Float boxoffice;
 
+    @ApiModelProperty(value = "电影封面")
+    private String imageName;
+
     @ApiModelProperty(value = "电影预测票房")
     @TableField("predicted_boxoffice")
     private Float expectedBoxoffice;

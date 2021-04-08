@@ -63,6 +63,9 @@ public class MoviePredictionPageVO {
     @ApiModelProperty(value = "准确度")
     private Double accuracy;
 
+    @ApiModelProperty(value = "电影封面")
+    private String imageName;
+
     private List<SimpleActor> actors;
     private List<SimpleDirector> directors;
     private List<SimpleScenarist> scenarists;

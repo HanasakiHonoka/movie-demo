@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzx.constant.MovieStateEnum;
 import com.xzx.dto.MoviePreQueryDTO;
+import com.xzx.dto.MovieScheduleDTO;
 import com.xzx.entity.Movie;
 import com.xzx.entity.MoviePrediction;
 import com.xzx.mapper.MoviePredictionMapper;
@@ -40,6 +41,9 @@ public class MoviePredictionServiceImpl extends ServiceImpl<MoviePredictionMappe
 
     @Autowired
     private IScenaristService scenaristService;
+
+    @Autowired
+    private MoviePredictionMapper moviePredictionMapper;
 
     @Override
     public IPage<MoviePredictionPageVO> getMoviePredictionPage(MoviePreQueryDTO movieQueryDTO) {
@@ -87,5 +91,47 @@ public class MoviePredictionServiceImpl extends ServiceImpl<MoviePredictionMappe
         moviePredictionPageVO.setDirectors(directorService.getNotShownSimpleDirectorByMovieId(movieId));
         moviePredictionPageVO.setScenarists(scenaristService.getNotShownSimpleScenaristByMovieId(movieId));
         return moviePredictionPageVO;
+    }
+
+//    @Override
+//    public  List<MoviePredictionPageVO> getMovieSchedulePage(MovieScheduleDTO movieQueryDTO) {
+//        Page page = new Page<>(movieQueryDTO.getPage(), movieQueryDTO.getPageSize());
+//        List<MoviePredictionPageVO> moviePredictions = moviePredictionMapper
+//                .scheduleSelection(movieQueryDTO.getDate1(), movieQueryDTO.getDate2());
+//        System.out.println(moviePredictions);
+//
+//
+//
+//        return moviePredictions;
+//    }
+
+    @Override
+    public IPage<MoviePredictionPageVO> getMovieSchedulePage(MovieScheduleDTO movieQueryDTO) {
+        Page page = new Page<>(movieQueryDTO.getPage(), movieQueryDTO.getPageSize());
+        QueryWrapper<MoviePrediction> queryWrapper = new QueryWrapper<>();
+
+
+        queryWrapper.ge("release_time",movieQueryDTO.getDate1());
+        queryWrapper.le("release_time",movieQueryDTO.getDate2());
+        queryWrapper.orderByDesc("boxoffice");
+
+        IPage<MoviePrediction> data = baseMapper.selectPage(page, queryWrapper);
+        List<MoviePredictionPageVO> voList = new ArrayList<>();
+        List<MoviePrediction> records = data.getRecords();
+        for (MoviePrediction record : records) {
+            MoviePredictionPageVO moviePredictionPageVO = BeanUtil.copyProperties(record, MoviePredictionPageVO.class);
+            int movieId = record.getId();
+            moviePredictionPageVO.setState(MovieStateEnum.getInfo(record.getState()));
+            moviePredictionPageVO.setActors(actorService.getNotShownSimpleActorByMovieId(movieId));
+            moviePredictionPageVO.setDirectors(directorService.getNotShownSimpleDirectorByMovieId(movieId));
+            moviePredictionPageVO.setScenarists(scenaristService.getNotShownSimpleScenaristByMovieId(movieId));
+            voList.add(moviePredictionPageVO);
+        }
+        IPage<MoviePredictionPageVO> res = new Page<>();
+        res.setTotal(data.getTotal());
+        res.setCurrent(data.getCurrent());
+        res.setSize(data.getSize());
+        res.setRecords(voList);
+        return res;
     }
 }

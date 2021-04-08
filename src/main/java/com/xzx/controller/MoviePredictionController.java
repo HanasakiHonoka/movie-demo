@@ -3,6 +3,7 @@ package com.xzx.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzx.dto.MoviePreQueryDTO;
 import com.xzx.dto.MovieQueryDTO;
+import com.xzx.dto.MovieScheduleDTO;
 import com.xzx.entity.MoviePrediction;
 import com.xzx.dto.MoviePreQueryDTO;
 import com.xzx.servie.IMoviePredictionService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @ClassName MoviePredictionController
@@ -45,6 +47,13 @@ public class MoviePredictionController {
 
         return moviePredictionService.getMoviePredictionVO(movieId);
     }
+
+    @ApiOperation("分页获取所有档期电影")
+    @GetMapping("/movieSchedulePage")
+    public IPage<MoviePredictionPageVO> getMovieSchedulePage(MovieScheduleDTO movieScheduleDTO) {
+        return moviePredictionService.getMovieSchedulePage(movieScheduleDTO);
+    }
+
 
 
 }
